@@ -1,6 +1,9 @@
 ﻿#include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+/// <summary>
+/// gitの確認用(使用する時は削除してください。
+/// </summary>
 
 GameScene::GameScene() {}
 
