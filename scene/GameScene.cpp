@@ -18,23 +18,59 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	textureHandle_ = TextureManager::Load("cube.jpg");
-	model_ = Model::Create();
+	/*textureHandle_ = TextureManager::Load("Box.png");*/
+	model_ = Model::CreateFromOBJ("Box",true);
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
+	/*viewProjection_.eye = { 0, 0, -50 };*/
+	/*viewProjection_.target = { 0, 0, 0 };*/
 	viewProjection_.Initialize();
-
 	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
 }
 
 void GameScene::Update() {
+	const float kEyeSpeed = 0.2f;
+	if (input_->PushKey(DIK_UP)) {
+		viewProjection_.eye = { 0, 50, -0.1 ,};
+	}
+	else {
+		viewProjection_.eye = { 0, 0, -50 };
+		viewProjection_.target = { 0, 0, 0 };
+	}
+	if (input_->PushKey(DIK_LEFT)) {
+		viewProjection_.eye = { -50, 0, 0 };
+	}
+	if (input_->PushKey(DIK_DOWN)) {
+		viewProjection_.eye = { 0, -50, -0.1 };
+	}
+	if (input_->PushKey(DIK_RIGHT)) {
+		viewProjection_.eye = { 50, 0, 0 };
+	}
+	if (input_->PushKey(DIK_W)) {
+		worldTransform_.rotation_ += {3.14f / 8.0f, 0.0f, 0.0f};
+		Affine::CreateAffine(worldTransform_);
+	}
 	if (input_->PushKey(DIK_A)) {
-		worldTransform_.rotation_ += {0.0f, 0.0f, 3.14f / 8.0f};
+		worldTransform_.rotation_ -= {0.0f, 3.14f / 8.0f, 0.0f};
+		Affine::CreateAffine(worldTransform_);
+	}
+	if (input_->PushKey(DIK_S)) {
+		worldTransform_.rotation_ -= {3.14f / 8.0f, 0.0f, 0.0f};
+		Affine::CreateAffine(worldTransform_);
+	}
+	if (input_->PushKey(DIK_D)) {
+		worldTransform_.rotation_ += {0.0f, 3.14f / 8.0f, 0.0f};
 		Affine::CreateAffine(worldTransform_);
 	}
 	worldTransform_.TransferMatrix();
+	viewProjection_.UpdateMatrix();
 	debugCamera_->Update();
+	//デバッグ用表示
+	/*debugText_->SetPos(50, 50);
+	debugText_->Printf("eye:(%f,%f, %f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
+	debugText_->SetPos(50, 70);
+	debugText_->Printf("target:(%f,%f, %f)", viewProjection_.target.x, viewProjection_.target.y, viewProjection_.target.z);*/
 }
 
 void GameScene::Draw() {
@@ -63,7 +99,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	model_->Draw(worldTransform_, viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
