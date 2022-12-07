@@ -18,8 +18,8 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	textureHandle_ = TextureManager::Load("cube.jpg");
-	model_ = Model::Create();
+	//textureHandle_ = TextureManager::Load("Box/Box.png");
+	model_ = Model::CreateFromOBJ("Box", true);
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
 	viewProjection_.Initialize();
@@ -29,10 +29,19 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	if (input_->PushKey(DIK_A)) {
-		worldTransform_.rotation_ += {0.0f, 0.0f, 3.14f / 8.0f};
-		Affine::CreateAffine(worldTransform_);
+	if (input_->TriggerKey(DIK_W)) {
+		worldTransform_.rotation_ += {-(3.14f / 2.0f), 0.0f, 0.0f};
 	}
+	if (input_->TriggerKey(DIK_A)) {
+		worldTransform_.rotation_ += {0.0f, -(3.14f / 2.0f), 0.0f};
+	}
+	if (input_->TriggerKey(DIK_S)) {
+		worldTransform_.rotation_ += {3.14f / 2.0f, 0.0f, 0.0f};
+	}
+	if (input_->TriggerKey(DIK_D)) {
+		worldTransform_.rotation_ += { 0.0f, 3.14f / 2.0f, 0.0f};
+	}
+	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
 	debugCamera_->Update();
 }
@@ -63,7 +72,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
+	model_->Draw(worldTransform_, debugCamera_->GetViewProjection());
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
