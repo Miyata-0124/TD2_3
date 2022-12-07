@@ -1,10 +1,14 @@
 ﻿#include "GameScene.h"
 #include "TextureManager.h"
+#include "Affine.h"
 #include <cassert>
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() {
+	delete model_;
+	delete debugCamera_;
+}
 
 void GameScene::Initialize() {
 
@@ -12,9 +16,26 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	debugText_ = DebugText::GetInstance();
+	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
+
+	textureHandle_ = TextureManager::Load("cube.jpg");
+	model_ = Model::Create();
+	worldTransform_.Initialize();
+	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
+	viewProjection_.Initialize();
+
+	Affine::CreateAffine(worldTransform_);
+	worldTransform_.TransferMatrix();
 }
 
-void GameScene::Update() {}
+void GameScene::Update() {
+	if (input_->PushKey(DIK_A)) {
+		worldTransform_.rotation_ += {0.0f, 0.0f, 3.14f / 8.0f};
+		Affine::CreateAffine(worldTransform_);
+	}
+	worldTransform_.TransferMatrix();
+	debugCamera_->Update();
+}
 
 void GameScene::Draw() {
 
@@ -42,6 +63,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	model_->Draw(worldTransform_, debugCamera_->GetViewProjection(), textureHandle_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
