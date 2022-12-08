@@ -21,7 +21,38 @@ void Affine::CreateMatScale(Matrix4& matrix, Vector3 scale)
 	matrix *= matScale;
 }
 
-void Affine::CreateMatRot(Matrix4& matrix, Vector3 rot)
+void Affine::CreateMatRotX(WorldTransform& worldTransform, Vector3 rot) {
+	Matrix4 matrotX;
+	CreateMatIdentity(matrotX);
+	matrotX.m[1][1] = cos(rot.x);
+	matrotX.m[1][2] = sin(rot.x);
+	matrotX.m[2][1] = -sin(rot.x);
+	matrotX.m[2][2] = cos(rot.x);
+
+	worldTransform.matWorld_ *= matrotX;
+}
+void Affine::CreateMatRotY(Matrix4& matrix, Vector3 rot) {
+	Matrix4 matrotY;
+	CreateMatIdentity(matrotY);
+	matrotY.m[1][1] = cos(rot.y);
+	matrotY.m[1][2] = sin(rot.y);
+	matrotY.m[2][1] = -sin(rot.y);
+	matrotY.m[2][2] = cos(rot.y);
+
+	matrix *= matrotY;
+}
+void Affine::CreateMatRotZ(WorldTransform& worldTransform, Vector3 rot) {
+	Matrix4 matrotZ;
+	CreateMatIdentity(matrotZ);
+	matrotZ.m[0][0] = cos(rot.z);
+	matrotZ.m[0][1] = sin(rot.z);
+	matrotZ.m[1][0] = -sin(rot.z);
+	matrotZ.m[1][1] = cos(rot.z);
+
+	worldTransform.matWorld_ *= matrotZ;
+}
+
+void Affine::CreateMatRot(Matrix4& matrix, Vector3 rot, int face)
 {
 	Matrix4 matrotX;
 	CreateMatIdentity(matrotX);
@@ -47,10 +78,18 @@ void Affine::CreateMatRot(Matrix4& matrix, Vector3 rot)
 	Matrix4 matRot;
 	CreateMatIdentity(matRot);
 
-	matRot *= matrotZ;
-	matRot *= matrotX;
-	matRot *= matrotY;
-	matrix *= matRot;
+	if (face == 0) {
+		matRot *= matrotY;
+		matRot *= matrotZ;
+		matRot *= matrotX;
+		matrix *= matRot;
+	}
+	else {
+		matRot *= matrotX;
+		matRot *= matrotZ;
+		matRot *= matrotY;
+		matrix *= matRot;
+	}
 }
 
 void Affine::CreateMatTrans(Matrix4& matrix, Vector3 trans)
@@ -64,11 +103,31 @@ void Affine::CreateMatTrans(Matrix4& matrix, Vector3 trans)
 	matrix *= matTrams;
 }
 
-void Affine::CreateAffine(WorldTransform& worldTransform)
+void Affine::CreateAffine(WorldTransform& worldTransform, int face)
 {
 	CreateMatIdentity(worldTransform.matWorld_);
 	CreateMatScale(worldTransform.matWorld_, worldTransform.scale_);
-	CreateMatRot(worldTransform.matWorld_, worldTransform.rotation_);
+	//CreateMatRot(worldTransform.matWorld_, worldTransform.rotation_,face);
+	CreateMatTrans(worldTransform.matWorld_, worldTransform.translation_);
+}
+
+void Affine::CreateAffineX(WorldTransform& worldTransform)
+{
+	CreateMatIdentity(worldTransform.matWorld_);
+	CreateMatScale(worldTransform.matWorld_, worldTransform.scale_);
+	//CreateMatRotZ(worldTransform.matWorld_, worldTransform.rotation_);
+	//CreateMatRotX(worldTransform.matWorld_, worldTransform.rotation_);
+	CreateMatRotY(worldTransform.matWorld_, worldTransform.rotation_);
+	CreateMatTrans(worldTransform.matWorld_, worldTransform.translation_);
+}
+
+void Affine::CreateAffineZ(WorldTransform& worldTransform)
+{
+	CreateMatIdentity(worldTransform.matWorld_);
+	CreateMatScale(worldTransform.matWorld_, worldTransform.scale_);
+	//CreateMatRotX(worldTransform.matWorld_, worldTransform.rotation_);
+	//CreateMatRotZ(worldTransform.matWorld_, worldTransform.rotation_);
+	CreateMatRotY(worldTransform.matWorld_, worldTransform.rotation_);
 	CreateMatTrans(worldTransform.matWorld_, worldTransform.translation_);
 }
 
