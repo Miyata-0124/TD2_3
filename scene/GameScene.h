@@ -34,6 +34,7 @@ class GameScene {
 
 	/// <summary>
 	/// 毎フレーム処理
+	float CameraMove;
 	/// </summary>
 	void Update();
 
