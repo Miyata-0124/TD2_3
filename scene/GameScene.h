@@ -51,10 +51,13 @@ class GameScene {
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-	 
+	//Box
 	uint32_t textureHandle_ = 0;
 	Model* model_ = nullptr;
 	WorldTransform worldTransform_;
+	//Core
+	Model* coreModel_ = nullptr;
+	WorldTransform coreTransform_;
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;
 };

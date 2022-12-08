@@ -2,11 +2,14 @@
 #include "TextureManager.h"
 #include "Affine.h"
 #include <cassert>
+#include <MathUtility.h>
+using namespace MathUtility;
 
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+	delete coreModel_;
 	delete debugCamera_;
 }
 
@@ -18,14 +21,22 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	//textureHandle_ = TextureManager::Load("Box/Box.png");
+	//Core
+	textureHandle_ = TextureManager::Load("Core.png");
+	coreModel_ = Model::Create();
+	coreTransform_.Initialize();
+	coreTransform_.scale_ = { 0.5f,0.5f,0.5f };
+	coreTransform_.translation_ = { 0.0f,5.5f,0.0f };
+	//Box
 	model_ = Model::CreateFromOBJ("Box", true);
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
-	viewProjection_.Initialize();
 
+	viewProjection_.Initialize();
 	Affine::CreateAffine(worldTransform_);
+	Affine::CreateAffine(coreTransform_);
 	worldTransform_.TransferMatrix();
+	coreTransform_.TransferMatrix();
 }
 
 void GameScene::Update() {
@@ -42,7 +53,9 @@ void GameScene::Update() {
 		worldTransform_.rotation_ += { 0.0f, 3.14f / 2.0f, 0.0f};
 	}
 	Affine::CreateAffine(worldTransform_);
+	Affine::CreateAffine(coreTransform_);
 	worldTransform_.TransferMatrix();
+	coreTransform_.TransferMatrix();
 	debugCamera_->Update();
 }
 
@@ -73,7 +86,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	model_->Draw(worldTransform_, debugCamera_->GetViewProjection());
-
+	coreModel_->Draw(coreTransform_, debugCamera_->GetViewProjection(),textureHandle_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
