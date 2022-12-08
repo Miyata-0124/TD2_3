@@ -34,6 +34,26 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	if (input_->PushKey(DIK_UP)) {
+		if (viewProjection_.eye.y < 50)
+		{
+			viewProjection_.eye.y += 2.5f;
+		}
+	}
+	else {
+		viewProjection_.eye = { 20.0f,20.0f,-30.0f };
+		viewProjection_.target = { 0, 0, 0 };
+	}
+	if (input_->PushKey(DIK_LEFT)) {
+		viewProjection_.eye = { -50, 0, 0 };
+	}
+	if (input_->PushKey(DIK_DOWN)) {
+		viewProjection_.eye = { 0, -50, -0.01 };
+	}
+	if (input_->PushKey(DIK_RIGHT)) {
+		viewProjection_.eye = { 50, 0, 0 };
+	}
+	viewProjection_.UpdateMatrix();
 	const float radian = 2.0f;
 
 	//箱の回転
