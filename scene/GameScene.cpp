@@ -19,118 +19,96 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	model_ = Model::CreateFromOBJ("Box",true);
-	worldTransformPearent_.Initialize();
-	worldTransformPearent_.scale_ = { 5.0f,5.0f,5.0f };
-
 	worldTransform_.Initialize();
-	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
-	worldTransform_.translation_ = { 0.0f,1.2f,0.0f };
-	worldTransform_.parent_ = &worldTransformPearent_;
+	worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
+
+	//プレイヤーの生成
+	player_ = new Player();
+	player_->Initialize(worldTransform_.scale_.y);
+
+
 
 	viewProjection_.Initialize();
-
-	Affine::CreateAffine(worldTransformPearent_, face);
-	Affine::CreateAffine(worldTransform_, face);
-	worldTransformPearent_.TransferMatrix();
+	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
+	viewProjection_.UpdateMatrix();
+	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
 }
 
 void GameScene::Update() {
-	const float radian = 8.0f;
+	const float radian = 2.0f;
 
-	if (input_->TriggerKey(DIK_A)) {
-		worldTransformPearent_.rotation_ = {0.0f, 0.0f, PI / radian};
-		Affine::CreateMatRotZ(worldTransformPearent_, worldTransformPearent_.rotation_);
+	//箱の回転
+	if (player_->GetWorldTransform().translation_.x > worldTransform_.scale_.x) {
+		worldTransform_.rotation_ = {0.0f, 0.0f, PI / radian};
+		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+	}
+	else if (player_->GetWorldTransform().translation_.x < -worldTransform_.scale_.x) {
+		//worldTransform_.translation_.x = 4.9f;
+		worldTransform_.rotation_ = { 0.0f, 0.0f, -PI / radian };
+		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+	}
+	else if (player_->GetWorldTransform().translation_.z > worldTransform_.scale_.z) {
+		//worldTransform_.translation_.z = -4.9f;
+		worldTransform_.rotation_ = { -PI / radian, 0.0f, 0.0f };
+		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+	}
+	else if (player_->GetWorldTransform().translation_.z < -worldTransform_.scale_.z) {
+		//worldTransform_.translation_.z = 4.9f;
+		worldTransform_.rotation_ = { PI / radian, 0.0f, 0.0f };
+		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+	}
+	player_->CheckRotate(worldTransform_.scale_.x,worldTransform_.scale_.z);
+	player_->Update();
+
+	if (input_->PushKey(DIK_A)) {
+		worldTransform_.rotation_ = {0.0f, 0.0f, PI / radian};
+		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 
 	}
-	if (input_->TriggerKey(DIK_D)) {
-		worldTransformPearent_.rotation_ = {0.0f, 0.0f, -PI / radian};
-		Affine::CreateMatRotZ(worldTransformPearent_, worldTransformPearent_.rotation_);
-		//Affine::CreateAffineZ(worldTransformPearent_);
+	if (input_->PushKey(DIK_D)) {
+		worldTransform_.rotation_ = {0.0f, 0.0f, -PI / radian};
+		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 		
+	}	
+	if (input_->PushKey(DIK_W)) {
+		worldTransform_.rotation_ = {PI / radian, 0.0f, 0.0f};
+		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+	}
+	if (input_->PushKey(DIK_S)) {
+		worldTransform_.rotation_ = {-PI / radian, 0.0f, 0.0f};
+		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
 	}
 	
-	if (input_->TriggerKey(DIK_W)) {
-		worldTransformPearent_.rotation_ = {PI / radian, 0.0f, 0.0f};
-		Affine::CreateMatRotX(worldTransformPearent_, worldTransformPearent_.rotation_);
-		//Affine::CreateAffineX(worldTransformPearent_);
-	}
-	if (input_->TriggerKey(DIK_S)) {
-		worldTransformPearent_.rotation_ = {-PI / radian, 0.0f, 0.0f};
-		Affine::CreateMatRotX(worldTransformPearent_, worldTransformPearent_.rotation_);
-		//Affine::CreateAffineX(worldTransformPearent_);
+	//一周したら0に戻す
+	if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
+		worldTransform_.rotation_.x = 0.0f;
 	}
 
-	if (input_->TriggerKey(DIK_Q)) {
-		worldTransformPearent_.rotation_ += {0.0f, PI / radian, 0.0f};
-		//Affine::CreateAffineZ(worldTransformPearent_);
-
-	}
-	if (input_->TriggerKey(DIK_E)) {
-		worldTransformPearent_.rotation_ -= {0.0f, PI / radian, 0.0f};
-		//Affine::CreateAffineZ(worldTransformPearent_);
-
-	}
-	
-	if (worldTransformPearent_.rotation_.x >= PI * 2 || worldTransformPearent_.rotation_.x <= -PI * 2) {
-		worldTransformPearent_.rotation_.x = 0.0f;
+	if (worldTransform_.rotation_.z >= PI * 2 || worldTransform_.rotation_.z <= -PI * 2) {
+		worldTransform_.rotation_.z = 0.0f;
 	}
 
-	if (worldTransformPearent_.rotation_.z >= PI * 2 || worldTransformPearent_.rotation_.z <= -PI * 2) {
-		worldTransformPearent_.rotation_.z = 0.0f;
-	}
-
-	if (input_->TriggerKey(DIK_SPACE)) {
-		if (face == 0) {
-			face = 1;
-		}
-		else {
-			face = 0;
-		}
-	}
-	////実移動
-	//worldTransform_.translation_ = {
-	//	-sin(PI * radianX) * 10.0f,
-	//	-cos(PI * radianY) * 10.0f,
-	//	-cos(PI * radianZ) * 1.0f,
-	//};
-
-	////移動に合わせて回転
-	//worldTransform_.rotation_ = {
-	//	0.0f,
-	//	radian * PI,
-	//	0.0f,
-	//};
-
-	/*if (worldTransformPearent_.rotation_.z != 0.0f && worldTransform_.translation_.x < 1.5f) {
-		worldTransform_.translation_.x += 0.1f;
-	}
-	if (worldTransformPearent_.rotation_.x != 0.0f && worldTransform_.translation_.z > -1.5f) {
-		worldTransform_.translation_.z -= 0.1f;
-	}*/
-
-	if (input_->TriggerKey(DIK_X)) {
-		worldTransform_.translation_.y -= 0.1f;
-	}
-	if (worldTransform_.translation_.y < 1.2f && worldTransform_.translation_.y >= -1.2f) {
-		worldTransform_.translation_.y -= 0.1f;
-	}
-
-	//Affine::CreateAffine(worldTransformPearent_, face);
-	worldTransformPearent_.TransferMatrix();
+	//Affine::CreateAffine(worldTransformPearent_);
+	worldTransform_.TransferMatrix();
 	//worldTransformPearent_.TransferMatrix();
 
-	Affine::CreateAffine(worldTransform_, face);
-	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
-	worldTransform_.TransferMatrix();
+
+	//worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
+	//worldTransform_.TransferMatrix();
 
 	debugCamera_->Update();
 
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("%f,%f,%f",
-		worldTransformPearent_.rotation_.x,
-		worldTransformPearent_.rotation_.y,
-		worldTransformPearent_.rotation_.z);
+		worldTransform_.rotation_.x,
+		worldTransform_.rotation_.y,
+		worldTransform_.rotation_.z);
+	debugText_->SetPos(20, 40);
+	debugText_->Printf("%f,%f,%f",
+		player_->GetWorldTransform().translation_.x,
+		player_->GetWorldTransform().translation_.y,
+		player_->GetWorldTransform().translation_.z);
 
 }
 
@@ -160,8 +138,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	model_->Draw(worldTransformPearent_, debugCamera_->GetViewProjection());
-	model_->Draw(worldTransform_, debugCamera_->GetViewProjection());
+	model_->Draw(worldTransform_, viewProjection_);
+	player_->Draw(&viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
