@@ -4,7 +4,7 @@
 #include <cassert>
 #include <MathUtility.h>
 using namespace MathUtility;
-
+// 回転処理
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
