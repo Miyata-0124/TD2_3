@@ -37,11 +37,10 @@ namespace Affine
 	/// </summary>
 	/// <param name="matrix"></param>
 	/// <param name="trans"></param>
-	void CreateMatTrans(Matrix4& matrix, Vector3 trans);
+	void CreateMatTransA(Matrix4& matrix, Vector3 trans);
+	void CreateMatTrans(WorldTransform& worldTransform, Vector3 trans);
 
 	void CreateAffine(WorldTransform& worldTransform);
-	void CreateAffineX(WorldTransform& worldTransform);
-	void CreateAffineZ(WorldTransform& worldTransform);
 
 	/// <summary>
 	/// ベクトルと行列の掛け算
