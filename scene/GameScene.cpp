@@ -43,21 +43,46 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	//キー操作
+#pragma region キー操作
 	if (input_->TriggerKey(DIK_W)) {
 		worldTransform_.rotation_ += {-(3.14f / 2.0f), 0.0f, 0.0f};
+		if (worldTransform_.rotation_.x < -4.71f)
+		{
+			worldTransform_.rotation_.x = 0.0f;
+		}
 	}
 	if (input_->TriggerKey(DIK_A)) {
 		worldTransform_.rotation_ += {0.0f, -(3.14f / 2.0f), 0.0f};
+		if (worldTransform_.rotation_.y < -4.71f)
+		{
+			worldTransform_.rotation_.y = 0.0f;
+		}
 	}
 	if (input_->TriggerKey(DIK_S)) {
 		worldTransform_.rotation_ += {3.14f / 2.0f, 0.0f, 0.0f};
+		if (worldTransform_.rotation_.x > 4.71f)
+		{
+			worldTransform_.rotation_.x = 0.0f;
+		}
 	}
 	if (input_->TriggerKey(DIK_D)) {
 		worldTransform_.rotation_ += { 0.0f, 3.14f / 2.0f, 0.0f};
+		if (worldTransform_.rotation_.y > 4.71f)
+		{
+			worldTransform_.rotation_.y = 0.0f;
+		}
 	}
+	coreTransform_.rotation_ = worldTransform_.rotation_;
+	
+
+
+#pragma endregion
 	Affine::CreateAffine(worldTransform_);
 	Affine::CreateAffine(coreTransform_);
+	//親子構造
 	coreTransform_.matWorld_ *= worldTransform_.matWorld_;
+
 	worldTransform_.TransferMatrix();
 	coreTransform_.TransferMatrix();
 	debugCamera_->Update();
@@ -73,6 +98,7 @@ void GameScene::Draw() {
 	Sprite::PreDraw(commandList);
 
 	/// <summary>
+	/// 
 	/// ここに背景スプライトの描画処理を追加できる
 	/// </summary>
 
@@ -102,7 +128,19 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
+#pragma region デバッグテキスト
 
+	debugText_->SetPos(10, 10);
+	debugText_->Printf("BoxRotation{%f,%f,%f}\n", worldTransform_.rotation_.x, worldTransform_.rotation_.y, worldTransform_.rotation_.z);
+	debugText_->SetPos(10, 30);
+	debugText_->Printf("BoxTranslation{%f,%f,%f}\n", worldTransform_.translation_.x, worldTransform_.translation_.y, worldTransform_.translation_.z);
+	debugText_->SetPos(400, 10);
+	debugText_->Printf("CoreRotation{%f,%f,%f}\n", coreTransform_.rotation_.x, coreTransform_.rotation_.y, coreTransform_.rotation_.z);
+	debugText_->SetPos(400, 30);
+	debugText_->Printf("CoreTranslation{%f,%f,%f}\n", coreTransform_.translation_.x, coreTransform_.translation_.y, coreTransform_.translation_.z);
+
+#pragma endregion
+	
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
 	//
