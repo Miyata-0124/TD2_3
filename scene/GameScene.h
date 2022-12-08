@@ -16,10 +16,10 @@
 /// </summary>
 class GameScene {
 
-  public: // メンバ関数
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
+public: // メンバ関数
+  /// <summary>
+  /// コンストクラタ
+  /// </summary>
 	GameScene();
 
 	/// <summary>
@@ -32,9 +32,10 @@ class GameScene {
 	/// </summary>
 	void Initialize();
 
+	WorldTransform GetWorldTransform() { return worldTransform_; }
+
 	/// <summary>
 	/// 毎フレーム処理
-	float CameraMove;
 	/// </summary>
 	void Update();
 
@@ -43,7 +44,7 @@ class GameScene {
 	/// </summary>
 	void Draw();
 
-  private: // メンバ変数
+private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
@@ -52,9 +53,14 @@ class GameScene {
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-	 
-	uint32_t textureHandle_ = 0;
+	const float PI = 3.14159f;
+	float radianX = 0.0f;
+	float radianY = 0.0f;
+	float radianZ = 0.0f;
+
+	int face = 0;
 	Model* model_ = nullptr;
+	WorldTransform worldTransformPearent_;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;
