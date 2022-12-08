@@ -21,16 +21,16 @@ void Player::Initialize(float y) {
 void Player::Update() {
 
 	//Ž©‹@‚ÌˆÚ“®
-	if (input_->PushKey(DIK_LEFT)) {
+	if (input_->PushKey(DIK_A)) {
 		worldTransform_.translation_.x -= 0.2f;
 	}
-	if (input_->PushKey(DIK_RIGHT)) {
+	if (input_->PushKey(DIK_D)) {
 		worldTransform_.translation_.x += 0.2f;
 	}
-	if (input_->PushKey(DIK_UP)) {
+	if (input_->PushKey(DIK_W)) {
 		worldTransform_.translation_.z += 0.2f;
 	}
-	if (input_->PushKey(DIK_DOWN)) {
+	if (input_->PushKey(DIK_S)) {
 		worldTransform_.translation_.z -= 0.2f;
 	}
 	

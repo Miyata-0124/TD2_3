@@ -61,7 +61,7 @@ void GameScene::Update() {
 	player_->CheckRotate(worldTransform_.scale_.x,worldTransform_.scale_.z);
 	player_->Update();
 
-	if (input_->PushKey(DIK_A)) {
+	/*if (input_->PushKey(DIK_A)) {
 		worldTransform_.rotation_ = {0.0f, 0.0f, PI / radian};
 		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 
@@ -78,7 +78,7 @@ void GameScene::Update() {
 	if (input_->PushKey(DIK_S)) {
 		worldTransform_.rotation_ = {-PI / radian, 0.0f, 0.0f};
 		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
-	}
+	}*/
 	
 	//一周したら0に戻す
 	if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
