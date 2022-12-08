@@ -40,8 +40,8 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	Affine::CreateAffine(worldTransformPearent_, face);
-	Affine::CreateAffine(worldTransform_, face);
-  Affine::CreateAffine(coreTransform_);
+	Affine::CreateAffine(worldTransformPearent_, face);
+	Affine::CreateAffine(coreTransform_,face);
   
 	worldTransformPearent_.TransferMatrix();
 	worldTransform_.TransferMatrix();
@@ -110,16 +110,16 @@ void GameScene::Update() {
 		worldTransform_.translation_.y -= 0.1f;
 	}
   
-	Affine::CreateAffine(worldTransform_);
-	Affine::CreateAffine(coreTransform_);
-  
-  Affine::CreateAffine(worldTransform_, face);
+	Affine::CreateAffine(worldTransform_, face);
+	Affine::CreateAffine(coreTransform_,face);
+	Affine::CreateAffine(worldTransform_, face);
+
 	//親子構造
 	coreTransform_.matWorld_ *= worldTransform_.matWorld_;
-  worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
+	worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
 	worldTransform_.TransferMatrix();
   
-  worldTransformPearent_.TransferMatrix();
+	worldTransformPearent_.TransferMatrix();
 	worldTransform_.TransferMatrix();
 	coreTransform_.TransferMatrix();
   
@@ -128,9 +128,9 @@ void GameScene::Update() {
 
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("%f,%f,%f",
-		worldTransformPearent_.rotation_.x,
-		worldTransformPearent_.rotation_.y,
-		worldTransformPearent_.rotation_.z);
+	worldTransformPearent_.rotation_.x,
+	worldTransformPearent_.rotation_.y,
+	worldTransformPearent_.rotation_.z);
 
 }
 
