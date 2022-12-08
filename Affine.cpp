@@ -52,7 +52,7 @@ void Affine::CreateMatRotZ(WorldTransform& worldTransform, Vector3 rot) {
 	worldTransform.matWorld_ *= matrotZ;
 }
 
-void Affine::CreateMatRot(Matrix4& matrix, Vector3 rot, int face)
+void Affine::CreateMatRot(Matrix4& matrix, Vector3 rot)
 {
 	Matrix4 matrotX;
 	CreateMatIdentity(matrotX);
@@ -78,18 +78,11 @@ void Affine::CreateMatRot(Matrix4& matrix, Vector3 rot, int face)
 	Matrix4 matRot;
 	CreateMatIdentity(matRot);
 
-	if (face == 0) {
-		matRot *= matrotY;
-		matRot *= matrotZ;
-		matRot *= matrotX;
-		matrix *= matRot;
-	}
-	else {
-		matRot *= matrotX;
-		matRot *= matrotZ;
-		matRot *= matrotY;
-		matrix *= matRot;
-	}
+	matRot *= matrotY;
+	matRot *= matrotZ;
+	matRot *= matrotX;
+	matrix *= matRot;
+
 }
 
 void Affine::CreateMatTrans(Matrix4& matrix, Vector3 trans)
@@ -103,7 +96,7 @@ void Affine::CreateMatTrans(Matrix4& matrix, Vector3 trans)
 	matrix *= matTrams;
 }
 
-void Affine::CreateAffine(WorldTransform& worldTransform, int face)
+void Affine::CreateAffine(WorldTransform& worldTransform)
 {
 	CreateMatIdentity(worldTransform.matWorld_);
 	CreateMatScale(worldTransform.matWorld_, worldTransform.scale_);
