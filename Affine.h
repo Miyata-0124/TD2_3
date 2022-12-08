@@ -27,7 +27,10 @@ namespace Affine
 	/// </summary>
 	/// <param name="matrix"></param>
 	/// <param name="rot"></param>
-	void CreateMatRot(Matrix4& matrix, Vector3 rot);
+	void CreateMatRotX(WorldTransform& worldTransform, Vector3 rot);
+	void CreateMatRotY(Matrix4& matrix, Vector3 rot);
+	void CreateMatRotZ(WorldTransform& worldTransform, Vector3 rot);
+	void CreateMatRot(Matrix4& matrix, Vector3 rot, int face);
 
 	/// <summary>
 	/// 平行移動
@@ -36,7 +39,9 @@ namespace Affine
 	/// <param name="trans"></param>
 	void CreateMatTrans(Matrix4& matrix, Vector3 trans);
 
-	void CreateAffine(WorldTransform& worldTransform);
+	void CreateAffine(WorldTransform& worldTransform, int face);
+	void CreateAffineX(WorldTransform& worldTransform);
+	void CreateAffineZ(WorldTransform& worldTransform);
 
 	/// <summary>
 	/// ベクトルと行列の掛け算
