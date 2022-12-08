@@ -21,16 +21,19 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	//Core
-	textureHandle_ = TextureManager::Load("Core.png");
-	coreModel_ = Model::Create();
-	coreTransform_.Initialize();
-	coreTransform_.scale_ = { 0.5f,0.5f,0.5f };
-	coreTransform_.translation_ = { 0.0f,5.5f,0.0f };
 	//Box
 	model_ = Model::CreateFromOBJ("Box", true);
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
+
+	//Core
+	textureHandle_ = TextureManager::Load("Core.png");
+	coreModel_ = Model::Create();
+	coreTransform_.Initialize();
+	coreTransform_.scale_ = { 0.2f,0.2f,0.2f };
+	coreTransform_.translation_ = { 0.0f,1.2f,0.0f };
+	coreTransform_.parent_ = &worldTransform_;
+
 
 	viewProjection_.Initialize();
 	Affine::CreateAffine(worldTransform_);
@@ -54,6 +57,7 @@ void GameScene::Update() {
 	}
 	Affine::CreateAffine(worldTransform_);
 	Affine::CreateAffine(coreTransform_);
+	coreTransform_.matWorld_ *= worldTransform_.matWorld_;
 	worldTransform_.TransferMatrix();
 	coreTransform_.TransferMatrix();
 	debugCamera_->Update();
