@@ -20,7 +20,9 @@ public:
 
 	void CheckRotate(float scale_x, float scale_z);
 
-	WorldTransform GetWorldTransform() { return worldTransform_; }
+	WorldTransform GetWorldTransform();
+
+	void SetWorldTransform(WorldTransform worldTransform);
 
 private:
 	Input* input_ = nullptr;

@@ -37,10 +37,6 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 	const float radian = PI / 100.0f;
-	worldTransform_.translation_ = { 0.0f,-1.0f,0.0f };
-	if (input_->PushKey(DIK_DOWN)) {
-		Affine::CreateMatTrans(worldTransform_, worldTransform_.translation_);
-	}
 
 	//箱の回転
 	if (player_->GetWorldTransform().translation_.x > worldTransform_.scale_.x) {
@@ -59,8 +55,10 @@ void GameScene::Update() {
 		worldTransform_.rotation_ = { radian, 0.0f, 0.0f };
 		isRotateX = 1;
 	}
-
-	player_->CheckRotate(worldTransform_.scale_.x, worldTransform_.scale_.z);
+	
+	//ステージ回転時、プレイヤーも一緒に回転する
+	player_->SetWorldTransform(worldTransform_);
+	
 	if (isRotateZ) {
 		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 	}
@@ -81,26 +79,6 @@ void GameScene::Update() {
 		}
 	}
 
-
-	//if (input_->PushKey(DIK_LEFT)) {
-	//	worldTransform_.rotation_ = {0.0f, 0.0f, PI / radian};
-	//	Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
-
-	//}
-	//if (input_->PushKey(DIK_RIGHT)) {
-	//	worldTransform_.rotation_ = {0.0f, 0.0f, -PI / radian};
-	//	Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
-	//	
-	//}	
-	//if (input_->PushKey(DIK_UP)) {
-	//	worldTransform_.rotation_ = {PI / radian, 0.0f, 0.0f};
-	//	Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
-	//}
-	//if (input_->PushKey(DIK_DOWN)) {
-	//	worldTransform_.rotation_ = {-PI / radian, 0.0f, 0.0f};
-	//	Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
-	//}
-	
 	//一周したら0に戻す
 	if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
 		worldTransform_.rotation_.x = 0.0f;
@@ -112,19 +90,15 @@ void GameScene::Update() {
 
 
 	worldTransform_.TransferMatrix();
-	//worldTransformPearent_.TransferMatrix();
-
-
-	//worldTransform_.matWorld_ *= worldTransform_.parent_->matWorld_;
-	//worldTransform_.TransferMatrix();
 
 	debugCamera_->Update();
 
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("%f,%f,%f",
-		worldTransform_.rotation_.x,
-		worldTransform_.rotation_.y,
-		worldTransform_.rotation_.z);
+		player_->GetWorldTransform().translation_.x,
+		player_->GetWorldTransform().translation_.y,
+		player_->GetWorldTransform().translation_.z
+	);
 	debugText_->SetPos(20, 40);
 	debugText_->Printf("%f,%f,%f",
 		worldTransform_.matWorld_.m[0][0],
