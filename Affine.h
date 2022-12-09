@@ -30,7 +30,7 @@ namespace Affine
 	void CreateMatRotX(WorldTransform& worldTransform, Vector3 rot);
 	void CreateMatRotY(Matrix4& matrix, Vector3 rot);
 	void CreateMatRotZ(WorldTransform& worldTransform, Vector3 rot);
-	void CreateMatRot(Matrix4& matrix, Vector3 rot, int face);
+	void CreateMatRot(Matrix4& matrix, Vector3 rot);
 
 	/// <summary>
 	/// ïΩçsà⁄ìÆ
@@ -39,7 +39,7 @@ namespace Affine
 	/// <param name="trans"></param>
 	void CreateMatTrans(Matrix4& matrix, Vector3 trans);
 
-	void CreateAffine(WorldTransform& worldTransform, int face);
+	void CreateAffine(WorldTransform& worldTransform);
 	void CreateAffineX(WorldTransform& worldTransform);
 	void CreateAffineZ(WorldTransform& worldTransform);
 
