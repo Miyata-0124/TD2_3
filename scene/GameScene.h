@@ -10,7 +10,9 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+// 作成したクラス
 #include "Player.h"
+#include "Core.h"
 
 
 /// <summary>
@@ -63,5 +65,6 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 
 	Player* player_ = nullptr;
+	Core* core_ = nullptr;
 };
 
