@@ -9,6 +9,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete debugCamera_;
+	delete core_;
 }
 
 void GameScene::Initialize() {
@@ -19,14 +20,18 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	model_ = Model::CreateFromOBJ("Box",true);
+	model_ = Model::CreateFromOBJ("Box", true);
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
-	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
+  	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
 
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(worldTransform_.scale_.y);
+
+	//コアの生成
+	core_ = new Core();
+	core_->Initialize(worldTransform_.scale_.y,worldTransform_);
 
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
@@ -79,7 +84,7 @@ void GameScene::Update() {
 			rotateTimer = 0;
 		}
 	}
-
+  
 	//一周したら0に戻す
 	if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
 		worldTransform_.rotation_.x = 0.0f;
@@ -95,7 +100,11 @@ void GameScene::Update() {
 
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("%f,%f,%f",
-
+		worldTransform_.rotation_.x,
+		worldTransform_.rotation_.y,
+		worldTransform_.rotation_.z);
+	debugText_->SetPos(20, 40);
+	debugText_->Printf("%f,%f,%f",
 		player_->GetWorldTransform().translation_.x,
 		player_->GetWorldTransform().translation_.y,
 		player_->GetWorldTransform().translation_.z
@@ -139,6 +148,7 @@ void GameScene::Draw() {
 	/// </summary>
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
+	core_->Draw(&viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

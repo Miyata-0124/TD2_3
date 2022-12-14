@@ -20,7 +20,6 @@ void Player::Initialize(float y) {
 
 void Player::Update() {
 
-	//Ž©‹@‚ÌˆÚ“®
 	if (input_->PushKey(DIK_A)) {
 		worldTransform_.translation_.x -= 0.2f;
 	}
@@ -40,7 +39,7 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection* viewProjection) {
 	playerModel_->Draw(worldTransform_, *viewProjection, textureHandle_);
-}
+
 
 void Player::CheckRotate(float scale_x, float scale_z) {
 	//” ‚Ì‰ñ“]

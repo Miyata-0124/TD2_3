@@ -7,15 +7,13 @@
 class Player
 {
 public:
-	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
 	/// </summary>
 	~Player();
 
 	void Initialize(float y);
 
 	void Update();
-
+  
 	void Draw(ViewProjection *viewProjection);
 
 	void CheckRotate(float scale_x, float scale_z);
