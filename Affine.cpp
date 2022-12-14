@@ -95,7 +95,9 @@ void Affine::CreateMatTrans(WorldTransform& worldTransform, Vector3 trans)
 	worldTransform.matWorld_ *= matTrams;
 }
 
+
 void Affine::CreateMatTransA(Matrix4& matrix, Vector3 trans)
+
 {
 	Matrix4  matTrams;
 	CreateMatIdentity(matTrams);

@@ -8,7 +8,7 @@ class Player
 {
 public:
 	/// <summary>
-	/// デストラクタ
+	/// ﾆ断ﾆ湛ﾆ暖ﾆ停ｰﾆ誰ﾆ耽
 	/// </summary>
 	~Player();
 

@@ -36,6 +36,7 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
 	const float radian = PI / 100.0f;
 
 	//箱の回転
@@ -88,13 +89,13 @@ void GameScene::Update() {
 		worldTransform_.rotation_.z = 0.0f;
 	}
 
-
 	worldTransform_.TransferMatrix();
 
 	debugCamera_->Update();
 
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("%f,%f,%f",
+
 		player_->GetWorldTransform().translation_.x,
 		player_->GetWorldTransform().translation_.y,
 		player_->GetWorldTransform().translation_.z
@@ -105,7 +106,7 @@ void GameScene::Update() {
 		worldTransform_.matWorld_.m[0][1],
 		worldTransform_.matWorld_.m[0][2]
 	);
-
+  
 	debugText_->SetPos(20, 60);
 	debugText_->Printf("%f,%d",rotateTimer,isRotateZ);
 }
