@@ -39,6 +39,7 @@ void Player::Update() {
 
 void Player::Draw(ViewProjection* viewProjection) {
 	playerModel_->Draw(worldTransform_, *viewProjection, textureHandle_);
+}
 
 
 void Player::CheckRotate(float scale_x, float scale_z) {

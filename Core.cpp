@@ -1,27 +1,23 @@
 #include "Core.h"
 #include "Affine.h"
 
-void Core::Initialize(float y, WorldTransform boxTransform)
+void Core::Initialize(float y)
 {
 	textureHandle_ = TextureManager::Load("Core.png");
 	coreModel_ = Model::Create();
 
 	worldTransform_.Initialize();
 	//ÉçÅ[ÉJÉãç¿ïW
-	worldTransform_.scale_ = { 0.1f,0.1f,0.1f };
-	worldTransform_.translation_ = { 0.0f, 1.1f, 0.0f };
-	worldTransform_.parent_ = &boxTransform;
+	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
+	worldTransform_.translation_ = { 0.0f, y + 0.5f, 0.0f };
 
 	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
 }
 
-void Core::Update(Matrix4 boxMat)
+void Core::Update()
 {
 	Affine::CreateAffine(worldTransform_);
-
-	worldTransform_.matWorld_ *= boxMat;
-
 	worldTransform_.TransferMatrix();
 }
 

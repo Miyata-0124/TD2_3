@@ -96,14 +96,6 @@ void Affine::CreateMatTrans(WorldTransform& worldTransform, Vector3 trans)
 	worldTransform.matWorld_ *= matTrams;
 }
 
-void Affine::CreateAffine(WorldTransform& worldTransform)
-{
-	CreateMatIdentity(worldTransform.matWorld_);
-	CreateMatScale(worldTransform.matWorld_, worldTransform.scale_);
-	//CreateMatRot(worldTransform.matWorld_, worldTransform.rotation_,face);
-	CreateMatTrans(worldTransform.matWorld_, worldTransform.translation_);
-}
-
 void Affine::CreateMatTransA(Matrix4& matrix, Vector3 trans)
 
 {
