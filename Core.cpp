@@ -25,3 +25,33 @@ void Core::Draw(ViewProjection* viewProjection)
 {
 	coreModel_->Draw(worldTransform_, *viewProjection, textureHandle_);
 }
+
+void Core::CheckRotate(float scale_x, float scale_z)
+{
+	//‰ñ“]ŽžCore‚ª‰ñ“]Œã‚Ì–Ê‚É‚¢‚é‚æ‚¤‚É‚·‚é
+	if (worldTransform_.translation_.x > scale_x) {
+		worldTransform_.translation_.x = -scale_x + 0.1f;
+	}
+	else if (worldTransform_.translation_.x < -scale_x) {
+		worldTransform_.translation_.x = scale_x - 0.1f;
+	}
+	else if (worldTransform_.translation_.z > scale_z) {
+		worldTransform_.translation_.z = -scale_z + 0.1f;
+	}
+	else if (worldTransform_.translation_.z < -scale_z) {
+		worldTransform_.translation_.z = scale_z - 0.1f;
+	}
+
+	//Affine::CreateAffine(worldTransform_);
+	worldTransform_.TransferMatrix();
+}
+
+void Core::SetWorldTransform(WorldTransform worldTransform)
+{
+	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
+	Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
+	worldTransform_.TransferMatrix();
+
+	CheckRotate(worldTransform.scale_.x, worldTransform.scale_.z);
+
+}

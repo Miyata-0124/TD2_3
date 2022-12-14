@@ -8,8 +8,11 @@ public:
 	void Initialize(float y);
 	void Update();
 	void Draw(ViewProjection* viewProjection);
+	void CheckRotate(float scale_x, float scale_z);
 	// 座標を渡す用
 	WorldTransform GetWorldTransform() { return worldTransform_; }
+	//回転の同期用
+	void SetWorldTransform(WorldTransform worldTransform);
 private:
 	// テクスチャ
 	uint32_t textureHandle_ = 0;

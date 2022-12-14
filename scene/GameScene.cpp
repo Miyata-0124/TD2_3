@@ -65,16 +65,19 @@ void GameScene::Update() {
 	//ステージ回転時、プレイヤーも一緒に回転する
 	player_->SetWorldTransform(worldTransform_);
 	
+	
 	if (isRotateZ) {
 		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+		core_->SetWorldTransform(worldTransform_);
 	}
 	else if (isRotateX) {
 		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+		core_->SetWorldTransform(worldTransform_);
 	}
 	else {
 		player_->Update();
 	}
-
+	
 	if (isRotateX || isRotateZ) {
 		rotateTimer += radian;
 
@@ -109,13 +112,13 @@ void GameScene::Update() {
 		player_->GetWorldTransform().translation_.y,
 		player_->GetWorldTransform().translation_.z
 	);
-	debugText_->SetPos(20, 40);
+	/*debugText_->SetPos(20, 40);
 	debugText_->Printf("%f,%f,%f",
 		worldTransform_.matWorld_.m[0][0],
 		worldTransform_.matWorld_.m[0][1],
 		worldTransform_.matWorld_.m[0][2]
-	);
-  
+	);*/
+
 	debugText_->SetPos(20, 60);
 	debugText_->Printf("%f,%d",rotateTimer,isRotateZ);
 }
