@@ -29,7 +29,7 @@ void GameScene::Initialize() {
 
 	//コアの生成
 	core_ = new Core();
-	core_->Initialize(worldTransform_.scale_.y);
+	core_->Initialize(worldTransform_.scale_.y,worldTransform_);
 
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
@@ -81,7 +81,7 @@ void GameScene::Update() {
 	player_->CheckRotate(worldTransform_.scale_.x, worldTransform_.scale_.z);
 	player_->Update();
 
-	core_->Update();
+	core_->Update(worldTransform_.matWorld_);
 
 
 	//一周したら0に戻す
@@ -138,7 +138,7 @@ void GameScene::Draw() {
 	/// </summary>
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
-	core_->Draw(viewProjection_);
+	core_->Draw(&viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
