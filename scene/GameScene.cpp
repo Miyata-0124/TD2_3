@@ -7,6 +7,7 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+	delete player_;
 	delete debugCamera_;
 }
 
@@ -18,9 +19,10 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	model_ = Model::CreateFromOBJ("Box", true);
+	model_ = Model::CreateFromOBJ("Box",true);
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
+	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
 
 	//プレイヤーの生成
 	player_ = new Player();
@@ -34,48 +36,49 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
-	if (input_->PushKey(DIK_UP)) {
-		if (viewProjection_.eye.y < 50)
-		{
-			viewProjection_.eye.y += 2.5f;
-		}
-	}
-	else {
-		viewProjection_.eye = { 20.0f,20.0f,-30.0f };
-		viewProjection_.target = { 0, 0, 0 };
-	}
-	if (input_->PushKey(DIK_LEFT)) {
-		viewProjection_.eye = { -50, 0, 0 };
-	}
-	if (input_->PushKey(DIK_DOWN)) {
-		viewProjection_.eye = { 0, -50, -0.01 };
-	}
-	if (input_->PushKey(DIK_RIGHT)) {
-		viewProjection_.eye = { 50, 0, 0 };
-	}
-	viewProjection_.UpdateMatrix();
-	const float radian = 2.0f;
+
+	const float radian = PI / 100.0f;
 
 	//箱の回転
 	if (player_->GetWorldTransform().translation_.x > worldTransform_.scale_.x) {
-		worldTransform_.rotation_ = { 0.0f, 0.0f, PI / radian };
-		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+		worldTransform_.rotation_ = {0.0f, 0.0f, radian};
+		isRotateZ = 1;
 	}
 	else if (player_->GetWorldTransform().translation_.x < -worldTransform_.scale_.x) {
-		worldTransform_.rotation_ = { 0.0f, 0.0f, -PI / radian };
-		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+		worldTransform_.rotation_ = { 0.0f, 0.0f, -radian };
+		isRotateZ = 1;
 	}
 	else if (player_->GetWorldTransform().translation_.z > worldTransform_.scale_.z) {
-		worldTransform_.rotation_ = { -PI / radian, 0.0f, 0.0f };
-		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+		worldTransform_.rotation_ = { -radian, 0.0f, 0.0f };
+		isRotateX = 1;
 	}
 	else if (player_->GetWorldTransform().translation_.z < -worldTransform_.scale_.z) {
-		worldTransform_.rotation_ = { PI / radian, 0.0f, 0.0f };
+		worldTransform_.rotation_ = { radian, 0.0f, 0.0f };
+		isRotateX = 1;
+	}
+	
+	//ステージ回転時、プレイヤーも一緒に回転する
+	player_->SetWorldTransform(worldTransform_);
+	
+	if (isRotateZ) {
+		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+	}
+	else if (isRotateX) {
 		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
 	}
-	player_->CheckRotate(worldTransform_.scale_.x, worldTransform_.scale_.z);
-	player_->Update();
+	else {
+		player_->Update();
+	}
 
+	if (isRotateX || isRotateZ) {
+		rotateTimer += radian;
+
+		if (rotateTimer >= PI / 2) {
+			isRotateZ = 0;
+			isRotateX = 0;
+			rotateTimer = 0;
+		}
+	}
 
 	//一周したら0に戻す
 	if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
@@ -92,15 +95,20 @@ void GameScene::Update() {
 
 	debugText_->SetPos(20, 20);
 	debugText_->Printf("%f,%f,%f",
-		worldTransform_.rotation_.x,
-		worldTransform_.rotation_.y,
-		worldTransform_.rotation_.z);
-	debugText_->SetPos(20, 40);
-	debugText_->Printf("%f,%f,%f",
+
 		player_->GetWorldTransform().translation_.x,
 		player_->GetWorldTransform().translation_.y,
-		player_->GetWorldTransform().translation_.z);
-
+		player_->GetWorldTransform().translation_.z
+	);
+	debugText_->SetPos(20, 40);
+	debugText_->Printf("%f,%f,%f",
+		worldTransform_.matWorld_.m[0][0],
+		worldTransform_.matWorld_.m[0][1],
+		worldTransform_.matWorld_.m[0][2]
+	);
+  
+	debugText_->SetPos(20, 60);
+	debugText_->Printf("%f,%d",rotateTimer,isRotateZ);
 }
 
 void GameScene::Draw() {

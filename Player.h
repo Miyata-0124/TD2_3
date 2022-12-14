@@ -8,7 +8,7 @@ class Player
 {
 public:
 	/// <summary>
-	/// ƒfƒXƒgƒ‰ƒNƒ^
+	/// Æ’fÆ’XÆ’gÆ’â€°Æ’NÆ’^
 	/// </summary>
 	~Player();
 
@@ -16,11 +16,13 @@ public:
 
 	void Update();
 
-	void Draw(ViewProjection* viewProjection);
+	void Draw(ViewProjection *viewProjection);
 
 	void CheckRotate(float scale_x, float scale_z);
 
-	WorldTransform GetWorldTransform() { return worldTransform_; }
+	WorldTransform GetWorldTransform();
+
+	void SetWorldTransform(WorldTransform worldTransform);
 
 private:
 	Input* input_ = nullptr;

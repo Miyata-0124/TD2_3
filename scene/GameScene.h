@@ -63,5 +63,9 @@ private: // メンバ変数
 	DebugCamera* debugCamera_ = nullptr;
 
 	Player* player_ = nullptr;
+  
+	int isRotateZ = 0;
+	int isRotateX = 0;
+	float rotateTimer = 0.0f;
 };
 

@@ -5,25 +5,25 @@
 
 namespace Affine
 {
-	//“x‚©‚çƒ‰ƒWƒAƒ“‚É•ÏŠ·‚·‚é’è”
+	//åº¦ã‹ã‚‰ãƒ©ã‚¸ã‚¢ãƒ³ã«å¤‰æ›ã™ã‚‹å®šæ•°
 	constexpr float Deg2Rad = 3.1415926535897931f / 180.0f;
 	constexpr float PIHalf = 3.1415926535897931f / 2.0f;
 
 	/// <summary>
-	/// ’PˆÊs—ñ
+	/// å˜ä½è¡Œåˆ—
 	/// </summary>
 	/// <param name="matrix"></param>
 	void CreateMatIdentity(Matrix4& matrix);
 
 	/// <summary>
-	/// ƒXƒP[ƒ‹
+	/// ã‚¹ã‚±ãƒ¼ãƒ«
 	/// </summary>
 	/// <param name="matrix"></param>
 	/// <param name="scale"></param>
 	void CreateMatScale(Matrix4& matrix, Vector3 scale);
 
 	/// <summary>
-	/// ‰ñ“]
+	/// å›è»¢
 	/// </summary>
 	/// <param name="matrix"></param>
 	/// <param name="rot"></param>
@@ -33,18 +33,19 @@ namespace Affine
 	void CreateMatRot(Matrix4& matrix, Vector3 rot);
 
 	/// <summary>
-	/// •½sˆÚ“®
+	/// å¹³è¡Œç§»å‹•
 	/// </summary>
 	/// <param name="matrix"></param>
 	/// <param name="trans"></param>
-	void CreateMatTrans(Matrix4& matrix, Vector3 trans);
+	void CreateMatTransA(Matrix4& matrix, Vector3 trans);
+	void CreateMatTrans(WorldTransform& worldTransform, Vector3 trans);
 
 	void CreateAffine(WorldTransform& worldTransform);
 	void CreateAffineX(WorldTransform& worldTransform);
 	void CreateAffineZ(WorldTransform& worldTransform);
 
 	/// <summary>
-	/// ƒxƒNƒgƒ‹‚Æs—ñ‚ÌŠ|‚¯Z
+	/// ãƒ™ã‚¯ãƒˆãƒ«ã¨è¡Œåˆ—ã®æ›ã‘ç®—
 	/// </summary>
 	/// <param name="matrix"></param>
 	/// <param name="vector"></param>
