@@ -5,8 +5,8 @@
 class Core
 {
 public:
-	void Initialize(float y,WorldTransform boxTransform);
-	void Update(Matrix4 boxMat);
+	void Initialize(float y);
+	void Update();
 	void Draw(ViewProjection* viewProjection);
 	// ç¿ïWÇìnÇ∑óp
 	WorldTransform GetWorldTransform() { return worldTransform_; }

@@ -31,7 +31,7 @@ void GameScene::Initialize() {
 
 	//コアの生成
 	core_ = new Core();
-	core_->Initialize(worldTransform_.scale_.y,worldTransform_);
+	core_->Initialize(worldTransform_.scale_.y);
 
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
