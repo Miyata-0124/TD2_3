@@ -14,7 +14,7 @@ public:
 
 	void Initialize(float y);
 
-	void Update();
+	void Update(WorldTransform* worldTransform, bool* collision);
 
 	void Draw(ViewProjection *viewProjection);
 
@@ -22,7 +22,7 @@ public:
 
 	WorldTransform GetWorldTransform();
 
-	void SetWorldTransform(WorldTransform worldTransform);
+	void Rotate(WorldTransform worldTransform);
 
 private:
 	Input* input_ = nullptr;
@@ -31,6 +31,9 @@ private:
 	Model* playerModel_ = nullptr;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
+
+	float speed = 0.1f;
+	float speedTmp = 0.2f;
 
 };
 

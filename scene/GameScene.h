@@ -11,7 +11,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
-
+#include "map.h"
 
 /// <summary>
 /// ゲームシーン
@@ -46,6 +46,9 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	//当たり判定
+	bool CheakCollision(Vector3 posA, Vector3 posB, Vector3 sclA, Vector3 sclB);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -59,6 +62,8 @@ private: // メンバ変数
 
 	Model* model_ = nullptr;
 	WorldTransform worldTransform_;
+	WorldTransform worldTransform2_[blockNum];
+	WorldTransform worldTransform3_[blockNum];
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;
 
@@ -67,5 +72,8 @@ private: // メンバ変数
 	int isRotateZ = 0;
 	int isRotateX = 0;
 	float rotateTimer = 0.0f;
+
+	Vector3 trans[blockNum];
+	bool isHit[blockNum] = { 0 };
 };
 
