@@ -21,9 +21,9 @@
 class GameScene {
 
 public: // メンバ関数
-	/// <summary>
-	/// コンストクラタ
-	/// </summary>
+  /// <summary>
+  /// コンストクラタ
+  /// </summary>
 	GameScene();
 
 	/// <summary>
@@ -66,5 +66,9 @@ private: // メンバ変数
 
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
+  
+	int isRotateZ = 0;
+	int isRotateX = 0;
+	float rotateTimer = 0.0f;
 };
 

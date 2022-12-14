@@ -7,20 +7,20 @@
 class Player
 {
 public:
-	/// <summary>
-	/// デストラクタ
 	/// </summary>
 	~Player();
 
 	void Initialize(float y);
 
 	void Update();
-
-	void Draw(ViewProjection* viewProjection);
+  
+	void Draw(ViewProjection *viewProjection);
 
 	void CheckRotate(float scale_x, float scale_z);
 
-	WorldTransform GetWorldTransform() { return worldTransform_; }
+	WorldTransform GetWorldTransform();
+
+	void SetWorldTransform(WorldTransform worldTransform);
 
 private:
 	Input* input_ = nullptr;

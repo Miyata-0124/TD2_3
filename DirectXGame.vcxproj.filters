@@ -170,6 +170,7 @@
     <ClInclude Include="Player.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+
     <ClInclude Include="Core.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
