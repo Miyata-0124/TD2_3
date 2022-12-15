@@ -11,6 +11,7 @@
 #include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "Player.h"
+#include "Wall.h"
 #include "map.h"
 
 /// <summary>
@@ -60,20 +61,24 @@ private: // メンバ変数
 	/// </summary>
 	const float PI = 3.14159f;
 
+	uint32_t tex = 0;
 	Model* model_ = nullptr;
+	Model* model2_ = nullptr;
 	WorldTransform worldTransform_;
-	WorldTransform worldTransform2_[blockNum];
-	WorldTransform worldTransform3_[blockNum];
+	WorldTransform worldTransform2_;
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;
 
 	Player* player_ = nullptr;
+	Wall* wall_ = nullptr;
 
 	int isRotateZ = 0;
 	int isRotateX = 0;
 	float rotateTimer = 0.0f;
 
-	Vector3 trans[blockNum];
-	bool isHit[blockNum] = { 0 };
+	Vector3 wallCollisions[totalBlockNum];
+	bool isHit[totalBlockNum] = { 0 };
+
+	float a = 0.01f;
 };
 

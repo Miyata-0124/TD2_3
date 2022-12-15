@@ -32,8 +32,8 @@ private:
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 
-	float speed = 0.1f;
-	float speedTmp = 0.2f;
+	float speed = 0.2f;
+	//float speedTmp = 0.2f;
 
 };
 

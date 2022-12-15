@@ -26,7 +26,7 @@ void Player::Update(WorldTransform* worldTransform, bool* collision) {
 
 		worldTransform_.translation_.x -= speed;
 
-		for (int i = 0; i < blockNum; i++) {
+		for (int i = 0; i < totalBlockNum; i++) {
 
 			if (collision[i] && worldTransform[i].matWorld_.m[3][0] < worldTransform_.translation_.x) {
 				worldTransform_.translation_.x += speed;
@@ -37,7 +37,7 @@ void Player::Update(WorldTransform* worldTransform, bool* collision) {
 
 		worldTransform_.translation_.x += speed;
 
-		for (int i = 0; i < blockNum; i++) {
+		for (int i = 0; i < totalBlockNum; i++) {
 			if (collision[i] && worldTransform[i].matWorld_.m[3][0] > worldTransform_.translation_.x) {
 				worldTransform_.translation_.x -= speed;
 			}
@@ -47,7 +47,7 @@ void Player::Update(WorldTransform* worldTransform, bool* collision) {
 	if (input_->PushKey(DIK_W)) {
 
 		worldTransform_.translation_.z += speed;
-		for (int i = 0; i < blockNum; i++) {
+		for (int i = 0; i < totalBlockNum; i++) {
 			if (collision[i] && worldTransform[i].matWorld_.m[3][2] > worldTransform_.translation_.z) {
 				worldTransform_.translation_.z -= speed;
 			}
@@ -57,7 +57,7 @@ void Player::Update(WorldTransform* worldTransform, bool* collision) {
 	}
 	if (input_->PushKey(DIK_S)) {
 		worldTransform_.translation_.z -= speed;
-		for (int i = 0; i < blockNum; i++) {
+		for (int i = 0; i < totalBlockNum; i++) {
 			if (collision[i] && worldTransform[i].matWorld_.m[3][2] < worldTransform_.translation_.z) {
 				worldTransform_.translation_.z += speed;
 			}
@@ -77,16 +77,16 @@ void Player::Draw(ViewProjection *viewProjection) {
 void Player::CheckRotate(float scale_x, float scale_z) {
 	//” ‚Ì‰ñ“]
 	if (worldTransform_.translation_.x > scale_x) {
-		worldTransform_.translation_.x = -scale_x + 0.1f;
+		worldTransform_.translation_.x = -scale_x + speed;
 	}
 	else if (worldTransform_.translation_.x < -scale_x) {
-		worldTransform_.translation_.x = scale_x - 0.1f;
+		worldTransform_.translation_.x = scale_x - speed;
 	}
 	else if (worldTransform_.translation_.z > scale_z) {
-		worldTransform_.translation_.z = -scale_z + 0.1f;
+		worldTransform_.translation_.z = -scale_z + speed;
 	}
 	else if (worldTransform_.translation_.z < -scale_z) {
-		worldTransform_.translation_.z = scale_z - 0.1f;
+		worldTransform_.translation_.z = scale_z - speed;
 	}
 	//Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
@@ -97,7 +97,6 @@ WorldTransform Player::GetWorldTransform() {
 }
 
 void Player::Rotate(WorldTransform worldTransform) {
-	//worldTransform_.matWorld_ *= matrix;
 	Affine::CreateMatRotZ(worldTransform_,worldTransform.rotation_);
 	Affine::CreateMatRotX(worldTransform_,worldTransform.rotation_);
 	worldTransform_.TransferMatrix();

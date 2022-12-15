@@ -7,7 +7,9 @@ GameScene::GameScene() {}
 
 GameScene::~GameScene() {
 	delete model_;
+	delete model2_;
 	delete player_;
+	delete wall_;
 	delete debugCamera_;
 }
 
@@ -19,8 +21,10 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
+	tex = TextureManager::Load("block.png");
 
 	model_ = Model::CreateFromOBJ("Box", true);
+	model2_ = Model::Create();
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
 	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
@@ -28,53 +32,58 @@ void GameScene::Initialize() {
 	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
 
-	int num = 0;
-	for (int i = 0; i < mapHeight;  i++) {
-		for (int j = 0; j < mapWidth; j++) {
-			worldTransform2_[num].Initialize();
-			worldTransform3_[num].Initialize();
+	worldTransform2_.Initialize();
+	worldTransform2_.scale_ = { 0.5f,0.5f,0.5f };
+	worldTransform2_.translation_ = { 0.0f,8.0f,0.0f };
 
-			if (map[j][i] == 1) {
-				worldTransform2_[num].translation_ = { -6.0f + i * 2.0f,8.0f,6.0f - j * 2.0f};
-				worldTransform3_[num].translation_ = {8.0f, -6.0f + i * 2.0f,6.0f - j * 2.0f};
-			}
+	Affine::CreateAffine(worldTransform2_);
+	worldTransform2_.TransferMatrix();
 
-			Affine::CreateAffine(worldTransform2_[num]);
-			Affine::CreateAffine(worldTransform3_[num]);
-			worldTransform2_[num].TransferMatrix();
-			worldTransform3_[num].TransferMatrix();
-			num++;
-		}
-	}
+	//壁ブロックの生成
+	wall_ = new Wall();
+	wall_->Initialize();
 
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(worldTransform_.scale_.y);
 
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
+	viewProjection_.fovAngleY += a;
+	viewProjection_.eye = { 20.0f,40.0f,-40.0f };
 	viewProjection_.UpdateMatrix();
 }
 
 void GameScene::Update() {
 	const float radian = PI / 100.0f;
 
-	Vector3 trans2 = {
+	if (input_->PushKey(DIK_P)) {
+		viewProjection_.fovAngleY += a;
+	}
+	if (input_->PushKey(DIK_O)) {
+		viewProjection_.fovAngleY -= a;
+	}
+	
+
+	//プレイヤーの位置をとる
+	Vector3 playerCollision = {
 		player_->GetWorldTransform().matWorld_.m[3][0],
 		player_->GetWorldTransform().matWorld_.m[3][1],
 		player_->GetWorldTransform().matWorld_.m[3][2],
 	};
 
-	for (int i = 0; i < blockNum; i++) {
-		 trans[i] = {
-			worldTransform2_[i].matWorld_.m[3][0],
-			worldTransform2_[i].matWorld_.m[3][1],
-			worldTransform2_[i].matWorld_.m[3][2]
+	for (int i = 0; i < totalBlockNum; i++) {
+
+		//壁ブロックの位置をとる
+		 wallCollisions[i] = {
+			 wall_->GetWorldTransform()[i].matWorld_.m[3][0],
+			 wall_->GetWorldTransform()[i].matWorld_.m[3][1],
+			 wall_->GetWorldTransform()[i].matWorld_.m[3][2],
 		};
 	
+		 //全ての壁ブロックとプレイヤーの当たり判定をとる
 		 if (CheakCollision(
-			 trans[i], trans2,
-			 worldTransform2_[i].scale_, player_->GetWorldTransform().scale_)) {
+			 wallCollisions[i], playerCollision,
+			 wall_->GetWorldTransform()[i].scale_, player_->GetWorldTransform().scale_)) {
 			 isHit[i] = 1;
 		 }
 		 else {
@@ -100,42 +109,40 @@ void GameScene::Update() {
 		isRotateX = 1;
 	}
 
-	//ステージ回転時、プレイヤーも一緒に回転する
-	player_->Rotate(worldTransform_);
+	if (isRotateX || isRotateZ) {
 
-	if (isRotateZ) {
-		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
-
-		for (WorldTransform& worldTransform2_ : worldTransform2_) {
+		if (isRotateZ) {
+			//ステージZ軸回転
+			Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 			Affine::CreateMatRotZ(worldTransform2_, worldTransform_.rotation_);
 		}
-		for (WorldTransform& worldTransform3_ : worldTransform3_) {
-			Affine::CreateMatRotZ(worldTransform3_, worldTransform_.rotation_);
-		}
-	}
-	else if (isRotateX) {
-		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
-
-		for (WorldTransform& worldTransform2_ : worldTransform2_) {
+		else if (isRotateX) {
+			//ステージX軸回転
+			Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
 			Affine::CreateMatRotX(worldTransform2_, worldTransform_.rotation_);
 		}
 
-		for (WorldTransform& worldTransform2_ : worldTransform2_) {
-			Affine::CreateMatRotX(worldTransform2_, worldTransform_.rotation_);
-		}
-	}
-	else {
-		player_->Update(worldTransform2_,isHit);
-		//player_->Update(worldTransform2_[1],isHit);
-	}
+		//壁やプレイヤーはステージに合わせて回転する
+		player_->Rotate(worldTransform_);
+		wall_->Rotate(worldTransform_);
 
-	if (isRotateX || isRotateZ) {
 		rotateTimer += radian;
 
 		if (rotateTimer >= PI / 2) {
 			isRotateZ = 0;
 			isRotateX = 0;
 			rotateTimer = 0;
+		}
+	}
+	else {
+		//回転していないときだけプレイヤーは動ける
+		player_->Update(wall_->GetWorldTransform(), isHit);
+		if (worldTransform2_.matWorld_.m[3][0] > 7.0f || worldTransform2_.matWorld_.m[3][0] < -7.0f ||
+			worldTransform2_.matWorld_.m[3][2] > 7.0f || worldTransform2_.matWorld_.m[3][2] < -7.0f) {
+
+			if (worldTransform2_.matWorld_.m[3][1] > -8.0f) {
+				Affine::CreateMatTrans(worldTransform2_, { 0.0f,-0.1f,0.0f });
+			}
 		}
 	}
 
@@ -148,13 +155,9 @@ void GameScene::Update() {
 		worldTransform_.rotation_.z = 0.0f;
 	}
 
-
 	worldTransform_.TransferMatrix();
-	for (WorldTransform& worldTransform2_ : worldTransform2_) {
-		worldTransform2_.TransferMatrix();
-
-	}
-
+	worldTransform2_.TransferMatrix();
+	viewProjection_.UpdateMatrix();
 	debugCamera_->Update();
 
 	debugText_->SetPos(20, 20);
@@ -170,18 +173,6 @@ void GameScene::Update() {
 		worldTransform_.matWorld_.m[0][2]
 	);
 
-	for (WorldTransform& worldTransform2_ : worldTransform2_) {
-		debugText_->SetPos(20, 60);
-		debugText_->Printf("%d,%d", CheakCollision(
-			trans[0], trans2,
-			worldTransform2_.scale_, player_->GetWorldTransform().scale_),
-			CheakCollision(
-				trans[1], trans2,
-				worldTransform2_.scale_, player_->GetWorldTransform().scale_));
-	}
-
-	debugText_->SetPos(20, 80);
-	debugText_->Printf("%d",isHit);
 }
 
 void GameScene::Draw() {
@@ -210,12 +201,13 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	
+	//ステージの描画
 	model_->Draw(worldTransform_, viewProjection_);
-
-	for (WorldTransform& worldTransform2_ : worldTransform2_) {
-		model_->Draw(worldTransform2_, viewProjection_);
-	}
-
+	model2_->Draw(worldTransform2_, viewProjection_,tex);
+	//壁ブロックの描画
+	wall_->Draw(&viewProjection_);
+	//プレイヤーの描画
 	player_->Draw(&viewProjection_);
 
 	// 3Dオブジェクト描画後処理
