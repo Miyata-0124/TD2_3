@@ -126,9 +126,9 @@ void GameScene::Update() {
 	);
 	debugText_->SetPos(680, 40);
 	debugText_->Printf("CoreTrans%f,%f,%f",
-		core_->GetWorldTransform().translation_.x,
-		core_->GetWorldTransform().translation_.y,
-		core_->GetWorldTransform().translation_.z
+		core_->GetWorldTransform().matWorld_.m[3][0],
+		core_->GetWorldTransform().matWorld_.m[3][1],
+		core_->GetWorldTransform().matWorld_.m[3][2]
 	);
 	debugText_->SetPos(680, 60);
 	debugText_->Printf("Velocity_:%f,%f,%f",

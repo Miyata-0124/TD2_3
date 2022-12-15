@@ -19,21 +19,22 @@ void Core::Initialize(float y)
 
 void Core::Update(WorldTransform worldTransform)
 {
-	//向きを確認後滑らす
+	//ゲーム開始後動いていないなら
 	if (worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f)
 	{
-		if (velocity_.y <= 0.1f)
+		if (velocity_.y <= 0.5f)
 		{
-			velocity_.y -= 0.001f;
+			velocity_.y -= 0.01f;
 		}
-		
 	}
 
 	// 移動範囲
 	// 範囲限界に来たら一度止める
-	if (worldTransform_.translation_.y < -worldTransform.scale_.y)
+	if (worldTransform_.matWorld_.m[3][1] < -(worldTransform.scale_.y+0.4f))
 	{
 		velocity_.y = 0.0f;
+		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
+		
 	}
 
 	//計算
@@ -51,7 +52,6 @@ void Core::Draw(ViewProjection* viewProjection)
 
 void Core::SetWorldTransform(WorldTransform worldTransform)
 {
-	worldTransform_.translation_.y = 7.5f;
 	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
 	Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
 	worldTransform_.TransferMatrix();
