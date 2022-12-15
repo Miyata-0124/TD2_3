@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 	worldTransform_.TransferMatrix();
 
 	worldTransform2_.Initialize();
-	worldTransform2_.scale_ = { 0.5f,0.5f,0.5f };
+	worldTransform2_.scale_ = { 1.0f,1.0f,1.0f };
 	worldTransform2_.translation_ = { 0.0f,8.0f,0.0f };
 
 	Affine::CreateAffine(worldTransform2_);
