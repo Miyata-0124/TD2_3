@@ -58,8 +58,9 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	const float PI = 3.14159f;
-
+  
 	Model* model_ = nullptr;
+	WorldTransform worldTransformPearent_;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;

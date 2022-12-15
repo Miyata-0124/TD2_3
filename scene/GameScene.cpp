@@ -21,6 +21,7 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	model_ = Model::CreateFromOBJ("Box", true);
+
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
   	worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
@@ -37,11 +38,34 @@ void GameScene::Initialize() {
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
 	viewProjection_.UpdateMatrix();
 	Affine::CreateAffine(worldTransform_);
+  
 	worldTransform_.TransferMatrix();
 }
 
 void GameScene::Update() {
-
+	if (input_->PushKey(DIK_UP)) {
+		viewProjection_.eye.y += 2.5f;
+		if (viewProjection_.eye.y > 50)
+		{
+			viewProjection_.eye.y = 50;
+			viewProjection_.eye.z = -0.01;
+		}
+	}
+	else {
+		viewProjection_.eye = { 0, 0, -50 };
+		viewProjection_.target = { 0, 0, 0 };
+	}
+	if (input_->PushKey(DIK_LEFT)) {
+		viewProjection_.eye = { -50, 0, 0 };
+	}
+	if (input_->PushKey(DIK_DOWN)) {
+		viewProjection_.eye = { 0, -50, -0.01 };
+	}
+	if (input_->PushKey(DIK_RIGHT)) {
+		viewProjection_.eye = { 50, 0, 0 };
+	}
+	viewProjection_.UpdateMatrix();
+  
 	const float radian = PI / 100.0f;
 
 	//箱の回転
@@ -164,6 +188,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
 	core_->Draw(&viewProjection_);
