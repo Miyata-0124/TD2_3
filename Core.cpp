@@ -1,5 +1,6 @@
 #include "Core.h"
 #include "Affine.h"
+//ƒvƒ‹ƒŠƒN—p
 
 void Core::Initialize(float y)
 {
