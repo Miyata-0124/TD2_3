@@ -64,20 +64,22 @@ void GameScene::Update() {
 
 	//ステージ回転時、プレイヤーも一緒に回転する
 	player_->SetWorldTransform(worldTransform_);
-
+	
 	//回転中
 	if (isRotateZ) {
 		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
-		
+		core_->SetWorldTransform(worldTransform_);
 	}
 	else if (isRotateX) {
 		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+		core_->SetWorldTransform(worldTransform_);
 	}
 	//回転後
 	else {
 		player_->Update();
+		core_->Update(worldTransform_);
 	}
-	core_->Update(worldTransform_, isRotateX, isRotateZ);
+
 	if (isRotateX || isRotateZ) {
 		rotateTimer += radian;
 

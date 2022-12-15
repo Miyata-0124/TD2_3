@@ -9,24 +9,24 @@ void Core::Initialize(float y)
 	worldTransform_.Initialize();
 	//ローカル座標
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
-	worldTransform_.translation_ = { 0.0f, y + 0.5f, 0.0f };
+	worldTransform_.translation_ = { 0.0f, y + 0.5f, 0.0f };//{0.0,7.5,0.0}
 
 	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
+
+	debugText_ = DebugText::GetInstance();
 }
 
-void Core::Update(WorldTransform worldTransform, int rotX, int rotZ)
+void Core::Update(WorldTransform worldTransform)
 {
-	if (rotZ)
-	{
-		Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
-	}
-	if (rotX)
-	{
-		Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
-	}
+	worldTransform_.translation_.z += 0.1f;
+	Affine::CreateMatTrans(worldTransform_,velocity_);
+	/*Affine::CreateAffine(worldTransform_);*/
+	//転送
 	worldTransform_.TransferMatrix();
 
+	//滑って移動後
+	//はみ出すか確認
 	CheckRotate(worldTransform.scale_.x, worldTransform.scale_.z);
 }
 
@@ -51,5 +51,12 @@ void Core::CheckRotate(float scale_x, float scale_z)
 		worldTransform_.translation_.z = scale_z - 0.1f;
 	}
 
+	worldTransform_.TransferMatrix();
+}
+
+void Core::SetWorldTransform(WorldTransform worldTransform)
+{
+	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
+	Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
 	worldTransform_.TransferMatrix();
 }
