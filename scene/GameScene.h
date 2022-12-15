@@ -10,6 +10,10 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+// 作成したクラス
+#include "Player.h"
+#include "Core.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -54,14 +58,18 @@ private: // メンバ変数
 	/// ゲームシーン用
 	/// </summary>
 	const float PI = 3.14159f;
-	float radianX = 0.0f;
-	float radianY = 0.0f;
-	float radianZ = 0.0f;
-
-	int face = 0;
+  
 	Model* model_ = nullptr;
 	WorldTransform worldTransformPearent_;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;
+
+	Player* player_ = nullptr;
+	Core* core_ = nullptr;
+  
+	int isRotateZ = 0;
+	int isRotateX = 0;
+	float rotateTimer = 0.0f;
 };
+
