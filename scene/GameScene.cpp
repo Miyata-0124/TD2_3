@@ -61,18 +61,23 @@ void GameScene::Update() {
 		worldTransform_.rotation_ = { radian, 0.0f, 0.0f };
 		isRotateX = 1;
 	}
-	
+
 	//ステージ回転時、プレイヤーも一緒に回転する
 	player_->SetWorldTransform(worldTransform_);
 	
+	//回転中
 	if (isRotateZ) {
 		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+		core_->SetWorldTransform(worldTransform_);
 	}
 	else if (isRotateX) {
 		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+		core_->SetWorldTransform(worldTransform_);
 	}
+	//回転後
 	else {
 		player_->Update();
+		core_->Update(worldTransform_);
 	}
 
 	if (isRotateX || isRotateZ) {
@@ -97,27 +102,40 @@ void GameScene::Update() {
 	worldTransform_.TransferMatrix();
 
 	debugCamera_->Update();
-
+	//Box
 	debugText_->SetPos(20, 20);
-	debugText_->Printf("%f,%f,%f",
+	debugText_->Printf("Box:%f,%f,%f",
 		worldTransform_.rotation_.x,
 		worldTransform_.rotation_.y,
-		worldTransform_.rotation_.z);
-	debugText_->SetPos(20, 40);
-	debugText_->Printf("%f,%f,%f",
+		worldTransform_.rotation_.z
+	);
+
+	//player
+	debugText_->SetPos(350, 20);
+	debugText_->Printf("Player:%f,%f,%f",
 		player_->GetWorldTransform().translation_.x,
 		player_->GetWorldTransform().translation_.y,
 		player_->GetWorldTransform().translation_.z
 	);
-	debugText_->SetPos(20, 40);
-	debugText_->Printf("%f,%f,%f",
-		worldTransform_.matWorld_.m[0][0],
-		worldTransform_.matWorld_.m[0][1],
-		worldTransform_.matWorld_.m[0][2]
+	//Core
+	debugText_->SetPos(680, 20);
+	debugText_->Printf("CoreRot:%f,%f,%f",
+		core_->GetWorldTransform().rotation_.x,
+		core_->GetWorldTransform().rotation_.y,
+		core_->GetWorldTransform().rotation_.z
 	);
-  
-	debugText_->SetPos(20, 60);
-	debugText_->Printf("%f,%d",rotateTimer,isRotateZ);
+	debugText_->SetPos(680, 40);
+	debugText_->Printf("CoreTrans%f,%f,%f",
+		core_->GetWorldTransform().matWorld_.m[3][0],
+		core_->GetWorldTransform().matWorld_.m[3][1],
+		core_->GetWorldTransform().matWorld_.m[3][2]
+	);
+	debugText_->SetPos(680, 60);
+	debugText_->Printf("Velocity_:%f,%f,%f",
+		core_->GetVelocity().x,
+		core_->GetVelocity().y,
+		core_->GetVelocity().z
+	);
 }
 
 void GameScene::Draw() {

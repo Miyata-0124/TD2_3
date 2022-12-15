@@ -2,20 +2,30 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "DebugText.h"
+
 class Core
 {
 public:
 	void Initialize(float y);
-	void Update();
+  
+	void Update(WorldTransform worldTransform);
+
 	void Draw(ViewProjection* viewProjection);
-	// À•W‚ğ“n‚·—p
-	WorldTransform GetWorldTransform() { return worldTransform_; }
+	// åº§æ¨™ã‚’æ¸¡ã™ç”¨
+	WorldTransform GetWorldTransform() const{ return worldTransform_; }
+	Vector3 GetVelocity()const { return velocity_; }
+
+	void SetWorldTransform(WorldTransform worldTransform);
 private:
-	// ƒeƒNƒXƒ`ƒƒ
+	//é€Ÿåº¦ç”¨
+	Vector3 velocity_ = { 0.0f,0.0f,0.0f };
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 	uint32_t textureHandle_ = 0;
-	// ƒ‚ƒfƒ‹
+	// ãƒ¢ãƒ‡ãƒ«
 	Model* coreModel_ = nullptr;
-	// À•W
+	// åº§æ¨™
 	WorldTransform worldTransform_;
+	DebugText* debugText_;
 };
 
