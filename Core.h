@@ -6,13 +6,15 @@ class Core
 {
 public:
 	void Initialize(float y);
-	void Update();
+	void Update(WorldTransform worldTransform,int rotX,int rotZ);
 	void Draw(ViewProjection* viewProjection);
 	void CheckRotate(float scale_x, float scale_z);
 	// 座標を渡す用
-	WorldTransform GetWorldTransform() { return worldTransform_; }
-	//回転の同期用
-	void SetWorldTransform(WorldTransform worldTransform);
+	WorldTransform GetWorldTransform() const{ return worldTransform_; }
+
+	//void SetWorldTransZ(WorldTransform worldTransform);
+	//void SetWorldTransX(WorldTransform worldTransform);
+
 private:
 	// テクスチャ
 	uint32_t textureHandle_ = 0;

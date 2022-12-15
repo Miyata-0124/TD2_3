@@ -15,10 +15,19 @@ void Core::Initialize(float y)
 	worldTransform_.TransferMatrix();
 }
 
-void Core::Update()
+void Core::Update(WorldTransform worldTransform, int rotX, int rotZ)
 {
-	Affine::CreateAffine(worldTransform_);
+	if (rotZ)
+	{
+		Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
+	}
+	if (rotX)
+	{
+		Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
+	}
 	worldTransform_.TransferMatrix();
+
+	CheckRotate(worldTransform.scale_.x, worldTransform.scale_.z);
 }
 
 void Core::Draw(ViewProjection* viewProjection)
@@ -42,16 +51,5 @@ void Core::CheckRotate(float scale_x, float scale_z)
 		worldTransform_.translation_.z = scale_z - 0.1f;
 	}
 
-	//Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
-}
-
-void Core::SetWorldTransform(WorldTransform worldTransform)
-{
-	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
-	Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
-	worldTransform_.TransferMatrix();
-
-	CheckRotate(worldTransform.scale_.x, worldTransform.scale_.z);
-
 }
