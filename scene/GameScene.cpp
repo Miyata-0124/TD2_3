@@ -10,6 +10,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete debugCamera_;
 	delete core_;
+	delete wall_;
 }
 
 void GameScene::Initialize() {
@@ -34,6 +35,10 @@ void GameScene::Initialize() {
 	core_ = new Core();
 	core_->Initialize(worldTransform_.scale_.y);
 
+	//壁ブロックの生成
+	wall_ = new Wall();
+	wall_->Initialize();
+
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
 	viewProjection_.UpdateMatrix();
@@ -52,7 +57,7 @@ void GameScene::Update() {
 		}
 	}
 	else {
-		viewProjection_.eye = { 0, 0, -50 };
+		viewProjection_.eye = { 20, 20, -30 };
 		viewProjection_.target = { 0, 0, 0 };
 	}
 	if (input_->PushKey(DIK_LEFT)) {
@@ -86,25 +91,20 @@ void GameScene::Update() {
 		isRotateX = 1;
 	}
 
-	//ステージ回転時、プレイヤーも一緒に回転する
-	player_->SetWorldTransform(worldTransform_);
-	
 	//回転中
-	if (isRotateZ) {
-		Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
-		core_->SetWorldTransform(worldTransform_);
-	}
-	else if (isRotateX) {
-		Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
-		core_->SetWorldTransform(worldTransform_);
-	}
-	//回転後
-	else {
-		player_->Update();
-		core_->Update(worldTransform_);
-	}
-
 	if (isRotateX || isRotateZ) {
+		if (isRotateZ) {
+			Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
+			core_->SetWorldTransform(worldTransform_);
+		}
+		else if (isRotateX) {
+			Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
+			core_->SetWorldTransform(worldTransform_);
+		}
+
+		//ステージ回転時、プレイヤーも一緒に回転する
+		player_->SetWorldTransform(worldTransform_);
+		wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
 
 		if (rotateTimer >= PI / 2) {
@@ -112,6 +112,11 @@ void GameScene::Update() {
 			isRotateX = 0;
 			rotateTimer = 0;
 		}
+	}
+	//回転後
+	else {
+		player_->Update();
+		core_->Update(worldTransform_);
 	}
   
 	//一周したら0に戻す
@@ -192,6 +197,9 @@ void GameScene::Draw() {
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
 	core_->Draw(&viewProjection_);
+
+	//壁ブロックの描画
+	wall_->Draw(&viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

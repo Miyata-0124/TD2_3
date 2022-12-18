@@ -10,10 +10,11 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "map.h"
 // 作成したクラス
 #include "Player.h"
 #include "Core.h"
-
+#include "Wall.h"
 
 /// <summary>
 /// ゲームシーン
@@ -67,9 +68,13 @@ private: // メンバ変数
 
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
+	Wall* wall_ = nullptr;
   
 	int isRotateZ = 0;
 	int isRotateX = 0;
 	float rotateTimer = 0.0f;
+
+	Vector3 wallCollisions[totalBlockNum];
+	bool isHit[totalBlockNum] = { 0 };
 };
 
