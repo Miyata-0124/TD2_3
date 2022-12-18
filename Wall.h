@@ -12,6 +12,8 @@ public:
 
 	void Initialize();
 
+	void SetBlock();
+
 	void Rotate(WorldTransform worldTransform);
 
 	void Draw(ViewProjection* viewProjection);

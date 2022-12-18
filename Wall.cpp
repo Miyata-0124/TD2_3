@@ -16,6 +16,10 @@ void Wall::Initialize() {
 		worldTransform_[i].scale_ = { blockSize,blockSize,blockSize };
 	}
 
+	SetBlock();
+}
+
+void Wall::SetBlock() {
 	//マップチップ通りに壁ブロックを配置
 	int num = 0;
 	for (int i = 0; i < mapHeight; i++) {
