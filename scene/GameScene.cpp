@@ -48,6 +48,8 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+
+	/*カメラ関連*/
 	if (input_->PushKey(DIK_UP)) {
 		viewProjection_.eye.y += 2.5f;
 		if (viewProjection_.eye.y > 50)
@@ -71,8 +73,38 @@ void GameScene::Update() {
 	}
 	viewProjection_.UpdateMatrix();
   
-	const float radian = PI / 100.0f;
 
+	/*当たり判定関連*/
+	//プレイヤーの位置をとる
+	Vector3 playerCollision = {
+		player_->GetWorldTransform().matWorld_.m[3][0],
+		player_->GetWorldTransform().matWorld_.m[3][1],
+		player_->GetWorldTransform().matWorld_.m[3][2],
+	};
+
+	for (int i = 0; i < totalBlockNum; i++) {
+
+		//壁ブロックの位置をとる
+		wallCollisions[i] = {
+			wall_->GetWorldTransform()[i].matWorld_.m[3][0],
+			wall_->GetWorldTransform()[i].matWorld_.m[3][1],
+			wall_->GetWorldTransform()[i].matWorld_.m[3][2],
+		};
+
+		//全ての壁ブロックとプレイヤーの当たり判定をとる
+		if (CheakCollision(
+			wallCollisions[i], playerCollision,
+			wall_->GetWorldTransform()[i].scale_, player_->GetWorldTransform().scale_)) {
+			isHit[i] = 1;
+		}
+		else {
+			isHit[i] = 0;
+		}
+	}
+
+
+	/*ステージ関連*/
+	const float radian = PI / 100.0f;
 	//箱の回転
 	if (player_->GetWorldTransform().translation_.x > worldTransform_.scale_.x) {
 		worldTransform_.rotation_ = {0.0f, 0.0f, radian};
@@ -103,7 +135,7 @@ void GameScene::Update() {
 		}
 
 		//ステージ回転時、プレイヤーも一緒に回転する
-		player_->SetWorldTransform(worldTransform_);
+		player_->Rotate(worldTransform_);
 		wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
 
@@ -115,7 +147,7 @@ void GameScene::Update() {
 	}
 	//回転後
 	else {
-		player_->Update();
+		player_->Update(wall_->GetWorldTransform(), isHit);
 		core_->Update(worldTransform_);
 	}
   
@@ -220,4 +252,21 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+//当たり判定
+bool GameScene::CheakCollision(Vector3 posA, Vector3 posB, Vector3 sclA, Vector3 sclB) {
+
+	float a = 1.0f;
+	sclA = { sclA.x * a,sclA.y * a ,sclA.z * a };
+	sclB = { sclB.x * a,sclB.y * a ,sclB.z * a };
+
+	if (posA.x - sclA.x < posB.x + sclB.x && posA.x + sclA.x > posB.x - sclB.x &&
+		posA.y - sclA.y < posB.y + sclB.y && posA.y + sclA.y > posB.y - sclB.y &&
+		posA.z - sclA.z < posB.z + sclB.z && posA.z + sclA.z > posB.z - sclB.z)
+	{
+		return true;
+	}
+
+	return false;
 }

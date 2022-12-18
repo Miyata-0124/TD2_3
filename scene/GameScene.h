@@ -49,6 +49,9 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	//当たり判定
+	bool CheakCollision(Vector3 posA, Vector3 posB, Vector3 sclA, Vector3 sclB);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -61,7 +64,7 @@ private: // メンバ変数
 	const float PI = 3.14159f;
   
 	Model* model_ = nullptr;
-	WorldTransform worldTransformPearent_;
+	//WorldTransform worldTransformPearent_;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	DebugCamera* debugCamera_ = nullptr;
