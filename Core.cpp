@@ -31,11 +31,10 @@ void Core::Update(WorldTransform worldTransform)
 
 	// ˆÚ“®”ÍˆÍ
 	// ”ÍˆÍŒÀŠE‚É—ˆ‚½‚çˆê“xŽ~‚ß‚é
-	if (worldTransform_.matWorld_.m[3][1] < -(worldTransform.scale_.y+0.4f))
+	if (worldTransform_.matWorld_.m[3][1] <= -(worldTransform.scale_.y + 0.4f))
 	{
 		velocity_.y = 0.0f;
 		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
-		
 	}
 
 	//ŒvŽZ
