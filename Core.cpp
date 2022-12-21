@@ -1,6 +1,6 @@
 #include "Core.h"
 #include "Affine.h"
-//�v�����N�p
+//ƒvƒ‹ƒŠƒN—p
 
 void Core::Initialize(float y)
 {
@@ -8,8 +8,9 @@ void Core::Initialize(float y)
 	coreModel_ = Model::Create();
 
 	worldTransform_.Initialize();
-	//���[�J�����W
+	//ƒ[ƒJƒ‹À•W
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
+
 	worldTransform_.translation_ = { 0.0f, y + 0.5f, 0.0f };//{0.0,7.5,0.0}
 
 	Affine::CreateAffine(worldTransform_);
@@ -20,7 +21,7 @@ void Core::Initialize(float y)
 
 void Core::Update(WorldTransform worldTransform)
 {
-	//�Q�[���J�n�㓮���Ă��Ȃ��Ȃ�
+	//ƒQ[ƒ€ŠJŽnŒã“®‚¢‚Ä‚¢‚È‚¢‚È‚ç
 	if (worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f)
 	{
 		if (velocity_.y <= 0.5f)
@@ -29,18 +30,17 @@ void Core::Update(WorldTransform worldTransform)
 		}
 	}
 
-	// �ړ��͈�
-	// �͈͌��E�ɗ������x�~�߂�
+	// 移動範囲
+	// 範囲限界に来たら一度止める
 	if (worldTransform_.matWorld_.m[3][1] <= -(worldTransform.scale_.y + 0.4f))
 	{
 		velocity_.y = 0.0f;
 		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
 	}
 
-	//�v�Z
+	//ŒvŽZ
 	worldTransform_.translation_ += velocity_;
 	Affine::CreateMatTrans(worldTransform_, { velocity_.x,velocity_.y,velocity_.z });
-	//�]��
 	worldTransform_.TransferMatrix();
 
 }
