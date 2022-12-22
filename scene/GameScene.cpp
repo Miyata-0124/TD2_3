@@ -11,6 +11,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete core_;
 	delete wall_;
+	delete goal_;
 }
 
 void GameScene::Initialize() {
@@ -39,8 +40,12 @@ void GameScene::Initialize() {
 	wall_ = new Wall();
 	wall_->Initialize();
 
+	//ゴールの作成
+	goal_ = new Goal();
+	goal_->Initialize();
+
 	viewProjection_.Initialize();
-	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
+	viewProjection_.eye = { 0.0f,0.0f,0.0f };
 	viewProjection_.UpdateMatrix();
 	Affine::CreateAffine(worldTransform_);
   
@@ -55,21 +60,34 @@ void GameScene::Update() {
 		if (viewProjection_.eye.y > 50)
 		{
 			viewProjection_.eye.y = 50;
-			viewProjection_.eye.z = -0.01;
 		}
 	}
 	else {
-		viewProjection_.eye = { 20, 20, -30 };
+		viewProjection_.eye = { 20, 20, -20 };
 		viewProjection_.target = { 0, 0, 0 };
 	}
 	if (input_->PushKey(DIK_LEFT)) {
-		viewProjection_.eye = { -50, 0, 0 };
+		viewProjection_.eye.x -= 2.5f;
+		if (viewProjection_.eye.x > -20)
+		{
+			viewProjection_.eye.x = -20;
+
+		}
 	}
 	if (input_->PushKey(DIK_DOWN)) {
-		viewProjection_.eye = { 0, -50, -0.01 };
+		viewProjection_.eye.y -= 2.5f;
+		if (viewProjection_.eye.y > -50)
+		{
+			viewProjection_.eye.y = -50;
+		}
 	}
 	if (input_->PushKey(DIK_RIGHT)) {
-		viewProjection_.eye = { 50, 0, 0 };
+		viewProjection_.eye.z += 2.5f;
+		if (viewProjection_.eye.z < 20)
+		{
+			viewProjection_.eye.z = 20;
+
+		}
 	}
 	viewProjection_.UpdateMatrix();
   
@@ -229,6 +247,7 @@ void GameScene::Draw() {
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
 	core_->Draw(&viewProjection_);
+	goal_->Draw(&viewProjection_);
 
 	//壁ブロックの描画
 	wall_->Draw(&viewProjection_);

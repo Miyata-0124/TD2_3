@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "Core.h"
 #include "Wall.h"
+#include "Goal.h"
 
 /// <summary>
 /// ゲームシーン
@@ -72,6 +73,7 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
 	Wall* wall_ = nullptr;
+	Goal* goal_ = nullptr;
   
 	int isRotateZ = 0;
 	int isRotateX = 0;
