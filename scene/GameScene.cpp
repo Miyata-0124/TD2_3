@@ -104,10 +104,16 @@ void GameScene::Update() {
 	debugCamera_->Update();
 	//Box
 	debugText_->SetPos(20, 20);
-	debugText_->Printf("Box:%f,%f,%f",
+	debugText_->Printf("BoxRot:%f,%f,%f",
 		worldTransform_.rotation_.x,
 		worldTransform_.rotation_.y,
 		worldTransform_.rotation_.z
+	);
+	debugText_->SetPos(20, 40);
+	debugText_->Printf("BoxScal:%f,%f,%f",
+		worldTransform_.scale_.x,
+		worldTransform_.scale_.y,
+		worldTransform_.scale_.z
 	);
 
 	//player
@@ -119,13 +125,13 @@ void GameScene::Update() {
 	);
 	//Core
 	debugText_->SetPos(680, 20);
-	debugText_->Printf("CoreRot:%f,%f,%f",
-		core_->GetWorldTransform().rotation_.x,
-		core_->GetWorldTransform().rotation_.y,
-		core_->GetWorldTransform().rotation_.z
+	debugText_->Printf("CoreTrans1:%f,%f,%f",
+		core_->GetWorldTransform().translation_.x,
+		core_->GetWorldTransform().translation_.y,
+		core_->GetWorldTransform().translation_.z
 	);
 	debugText_->SetPos(680, 40);
-	debugText_->Printf("CoreTrans%f,%f,%f",
+	debugText_->Printf("CoreTrans2:%f,%f,%f",
 		core_->GetWorldTransform().matWorld_.m[3][0],
 		core_->GetWorldTransform().matWorld_.m[3][1],
 		core_->GetWorldTransform().matWorld_.m[3][2]

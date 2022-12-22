@@ -21,7 +21,7 @@ void Core::Initialize(float y)
 
 void Core::Update(WorldTransform worldTransform)
 {
-	//ƒQ[ƒ€ŠJŽnŒã“®‚¢‚Ä‚¢‚È‚¢‚È‚ç
+	//������ԈȊO�Ȃ痎�Ƃ�
 	if (worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f)
 	{
 		if (velocity_.y <= 0.5f)
@@ -30,12 +30,22 @@ void Core::Update(WorldTransform worldTransform)
 		}
 	}
 
-	// 移動範囲
-	// 範囲限界に来たら一度止める
-	if (worldTransform_.matWorld_.m[3][1] <= -(worldTransform.scale_.y + 0.4f))
+	// �ړ��͈�
+	// �����t�߂�Core���X�e�[�W�ɂ߂荞�܂Ȃ��悤�ɂ���
+	if (worldTransform_.matWorld_.m[3][1] > worldTransform.scale_.y)
+	{
+		if (worldTransform_.matWorld_.m[3][0] < worldTransform.scale_.x && worldTransform_.matWorld_.m[3][0] > -worldTransform.scale_.x &&
+			worldTransform_.matWorld_.m[3][2] < worldTransform.scale_.z && worldTransform_.matWorld_.m[3][2] > -worldTransform.scale_.z)
+		{
+			velocity_.y = 0.0f;
+			worldTransform_.matWorld_.m[3][1] = worldTransform.scale_.y + 0.5f;
+		}
+	}
+	// �͈͌��E�ɗ������x�~�߂�
+	if (worldTransform_.matWorld_.m[3][1] <= -(worldTransform.scale_.y + 0.5f))
 	{
 		velocity_.y = 0.0f;
-		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
+		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.5f);
 	}
 
 	//ŒvŽZ
