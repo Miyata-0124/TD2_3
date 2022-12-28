@@ -126,9 +126,9 @@ void GameScene::Update() {
 	//Core
 	debugText_->SetPos(680, 20);
 	debugText_->Printf("CoreTrans1:%f,%f,%f",
-		core_->GetWorldTransform().translation_.x,
-		core_->GetWorldTransform().translation_.y,
-		core_->GetWorldTransform().translation_.z
+		core_->GetWorldTransform().rotation_.x,
+		core_->GetWorldTransform().rotation_.y,
+		core_->GetWorldTransform().rotation_.z
 	);
 	debugText_->SetPos(680, 40);
 	debugText_->Printf("CoreTrans2:%f,%f,%f",

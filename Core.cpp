@@ -48,8 +48,18 @@ void Core::Update(WorldTransform worldTransform)
 		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.5f);
 	}
 
+	//’[‚É‚Â‚¢‚½Žž‚Ì—h‚ê‚é‹““®
+	if (worldTransform_.matWorld_.m[3][1] == -(worldTransform.scale_.y + 0.5f))
+	{
+
+	}
+
 	//Å’vÅ½Z
+	worldTransform_.rotation_ += rot_;
 	worldTransform_.translation_ += velocity_;
+
+	Affine::CreateMatRotZ(worldTransform_, rot_);
+	Affine::CreateMatRotX(worldTransform_, rot_);
 	Affine::CreateMatTrans(worldTransform_, { velocity_.x,velocity_.y,velocity_.z });
 	worldTransform_.TransferMatrix();
 
