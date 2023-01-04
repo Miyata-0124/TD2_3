@@ -20,6 +20,8 @@ public:
 private:
 	//速度用
 	Vector3 velocity_ = { 0.0f,0.0f,0.0f };
+	//回転用
+	Vector3 rot_ = { 0.0f,0.0f,0.0f };
 	// テクスチャ
 	uint32_t textureHandle_ = 0;
 	// モデル

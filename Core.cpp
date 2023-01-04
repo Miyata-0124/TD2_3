@@ -21,7 +21,7 @@ void Core::Initialize(float y)
 
 void Core::Update(WorldTransform worldTransform)
 {
-	//Æ’QÂ[Æ’â‚¬Å JÅ½nÅ’Ã£â€œÂ®â€šÂ¢â€šÃ„â€šÂ¢â€šÃˆâ€šÂ¢â€šÃˆâ€šÃ§
+	//‰Šúó‘ÔˆÈŠO‚È‚ç—‚Æ‚·
 	if (worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f)
 	{
 		if (velocity_.y <= 0.5f)
@@ -30,17 +30,36 @@ void Core::Update(WorldTransform worldTransform)
 		}
 	}
 
-	// Ë†Ãšâ€œÂ®â€ÃË†Ã
-	// â€ÃË†ÃÅ’Ã€Å Eâ€šÃ‰â€”Ë†â€šÂ½â€šÃ§Ë†Ãªâ€œxÅ½~â€šÃŸâ€šÃ©
-	if (worldTransform_.matWorld_.m[3][1] < -(worldTransform.scale_.y+0.4f))
+	// ˆÚ“®”ÍˆÍ
+	// ’†‰›•t‹ß‚ÅCore‚ªƒXƒe[ƒW‚É‚ß‚è‚Ü‚È‚¢‚æ‚¤‚É‚·‚é
+	if (worldTransform_.matWorld_.m[3][1] > worldTransform.scale_.y)
+	{
+		if (worldTransform_.matWorld_.m[3][0] < worldTransform.scale_.x && worldTransform_.matWorld_.m[3][0] > -worldTransform.scale_.x &&
+			worldTransform_.matWorld_.m[3][2] < worldTransform.scale_.z && worldTransform_.matWorld_.m[3][2] > -worldTransform.scale_.z)
+		{
+			velocity_.y = 0.0f;
+			worldTransform_.matWorld_.m[3][1] = worldTransform.scale_.y + 0.5f;
+		}
+	}
+	// ”ÍˆÍŒÀŠE‚É—ˆ‚½‚çˆê“x~‚ß‚é
+	if (worldTransform_.matWorld_.m[3][1] <= -(worldTransform.scale_.y + 0.5f))
 	{
 		velocity_.y = 0.0f;
-		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
-		
+		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.5f);
+	}
+
+	//’[‚É‚Â‚¢‚½‚Ì—h‚ê‚é‹““®
+	if (worldTransform_.matWorld_.m[3][1] == -(worldTransform.scale_.y + 0.5f))
+	{
+
 	}
 
 	//Å’vÅ½Z
+	worldTransform_.rotation_ += rot_;
 	worldTransform_.translation_ += velocity_;
+
+	Affine::CreateMatRotZ(worldTransform_, rot_);
+	Affine::CreateMatRotX(worldTransform_, rot_);
 	Affine::CreateMatTrans(worldTransform_, { velocity_.x,velocity_.y,velocity_.z });
 	worldTransform_.TransferMatrix();
 
