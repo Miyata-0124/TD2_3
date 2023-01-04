@@ -8,13 +8,13 @@ Goal::~Goal() {
 void Goal::Initialize() {
     goalModel = Model::CreateFromOBJ("goal1", true);
     goalTransform.Initialize();
-    goalTransform.scale = { 7.0f,7.0f,7.0f };
-    goalTransform.translation = { 0.0f,0.0f,0.0f };
+    goalTransform.scale_ = { 7.0f,7.0f,7.0f };
+    goalTransform.translation_ = { 0.0f,0.0f,0.0f };
 
     Affine::CreateAffine(goalTransform);
     goalTransform.TransferMatrix();
 }
 
 void Goal::Draw(ViewProjection* viewProjection) {
-    goalModel->Draw(goalTransform_, *viewProjection);
+    goalModel->Draw(goalTransform, *viewProjection);
 }
