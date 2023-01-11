@@ -80,6 +80,9 @@ private: // メンバ変数
 	float rotateTimer = 0.0f;
 
 	Vector3 wallCollisions[totalBlockNum];
-	bool isHit[totalBlockNum] = { 0 };
+	bool isHitPlayer[totalBlockNum] = { 0 };
+	bool isHitCore[totalBlockNum] = { 0 };
+	bool isFall = 1;
+
 };
 

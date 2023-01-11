@@ -100,6 +100,20 @@ void GameScene::Update() {
 		player_->GetWorldTransform().matWorld_.m[3][2],
 	};
 
+	//コアの位置をとる
+	Vector3 coreCollision = {
+		core_->GetWorldTransform().matWorld_.m[3][0],
+		core_->GetWorldTransform().matWorld_.m[3][1],
+		core_->GetWorldTransform().matWorld_.m[3][2],
+	};
+
+	//プレイヤーとコアの当たり判定
+	if (CheakCollision
+		(playerCollision, coreCollision,
+		player_->GetWorldTransform().scale_, core_->GetWorldTransform().scale_)) {
+
+	}
+
 	for (int i = 0; i < totalBlockNum; i++) {
 
 		//壁ブロックの位置をとる
@@ -113,10 +127,19 @@ void GameScene::Update() {
 		if (CheakCollision(
 			wallCollisions[i], playerCollision,
 			wall_->GetWorldTransform()[i].scale_, player_->GetWorldTransform().scale_)) {
-			isHit[i] = 1;
+			isHitPlayer[i] = 1;
 		}
 		else {
-			isHit[i] = 0;
+			isHitPlayer[i] = 0;
+		}
+
+		if (CheakCollision(
+			wallCollisions[i], coreCollision,
+			wall_->GetWorldTransform()[i].scale_, core_->GetWorldTransform().scale_)) {
+			isHitCore[i] = 1;
+		}
+		else {
+			isHitCore[i] = 0;
 		}
 	}
 
@@ -143,6 +166,7 @@ void GameScene::Update() {
 
 	//回転中
 	if (isRotateX || isRotateZ) {
+		core_->SetIsFall(1);
 		if (isRotateZ) {
 			Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 			core_->SetWorldTransform(worldTransform_);
@@ -165,8 +189,8 @@ void GameScene::Update() {
 	}
 	//回転後
 	else {
-		player_->Update(wall_->GetWorldTransform(), isHit);
-		core_->Update(worldTransform_);
+		player_->Update(wall_->GetWorldTransform(), isHitPlayer);
+		core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
   
 	//一周したら0に戻す
@@ -247,7 +271,7 @@ void GameScene::Draw() {
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
 	core_->Draw(&viewProjection_);
-	goal_->Draw(&viewProjection_);
+	//goal_->Draw(&viewProjection_);
 
 	//壁ブロックの描画
 	wall_->Draw(&viewProjection_);

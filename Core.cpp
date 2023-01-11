@@ -1,5 +1,6 @@
 #include "Core.h"
 #include "Affine.h"
+#include "map.h"
 //ƒvƒ‹ƒŠƒN—p
 
 void Core::Initialize(float y)
@@ -8,10 +9,9 @@ void Core::Initialize(float y)
 	coreModel_ = Model::Create();
 
 	worldTransform_.Initialize();
-	//ƒ[ƒJƒ‹À•W
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
 
-	worldTransform_.translation_ = { 0.0f, y + 0.5f, 0.0f };//{0.0,7.5,0.0}
+	worldTransform_.translation_ = { 0.0f, y + worldTransform_.scale_.y, 0.0f };//{0.0,7.5,0.0}
 
 	Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();
@@ -19,27 +19,45 @@ void Core::Initialize(float y)
 	debugText_ = DebugText::GetInstance();
 }
 
-void Core::Update(WorldTransform worldTransform)
+void Core::Update(WorldTransform worldTransform, WorldTransform* wall, bool* collision)
 {
-	//ƒQ[ƒ€ŠJŽnŒã“®‚¢‚Ä‚¢‚È‚¢‚È‚ç
-	if (worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f)
-	{
-		if (velocity_.y <= 0.5f)
+	//コアがステージの上にある時	
+	if (worldTransform_.matWorld_.m[3][0] < worldTransform.scale_.x && worldTransform_.matWorld_.m[3][0] > -worldTransform.scale_.x &&
+		worldTransform_.matWorld_.m[3][2] < worldTransform.scale_.z && worldTransform_.matWorld_.m[3][2] > -worldTransform.scale_.z) {
+		//速度を0にする
+		velocity_.y = 0;
+
+	}
+	else {
+		for (int i = 0; i < totalBlockNum; i++) {
+			//壁に当たったら
+			if (collision[i]) {
+				//位置を少し戻し、速度を0にする
+				isFall = 0;
+				worldTransform_.matWorld_.m[3][1] -= velocity_.y;
+				velocity_.y = 0.0f;
+			}
+		}
+		//ステージが回転していないとき
+		if ((worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f) && isFall)
 		{
-			velocity_.y -= 0.01f;
+			//一定まで加速し続ける
+			if (velocity_.y <= 0.5f)
+			{
+				velocity_.y -= 0.01f;
+			}
 		}
 	}
 
-	// ˆÚ“®”ÍˆÍ
-	// ”ÍˆÍŒÀŠE‚É—ˆ‚½‚çˆê“xŽ~‚ß‚é
-	if (worldTransform_.matWorld_.m[3][1] < -(worldTransform.scale_.y+0.4f))
+	//一番下まで行ったら止まる
+	if (worldTransform_.matWorld_.m[3][1] < -(worldTransform.scale_.y+0.5f))
 	{
 		velocity_.y = 0.0f;
-		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
+		worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.5f);
 		
 	}
 
-	//ŒvŽZ
+	//アフィン変換
 	worldTransform_.translation_ += velocity_;
 	Affine::CreateMatTrans(worldTransform_, { velocity_.x,velocity_.y,velocity_.z });
 	worldTransform_.TransferMatrix();
