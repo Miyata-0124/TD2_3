@@ -60,7 +60,6 @@ void GameScene::Update() {
 			if (input_->PushKey(DIK_SPACE))
 			{
 				scene_ = Scene::play;
-				
 			}
 			break;
 		}
