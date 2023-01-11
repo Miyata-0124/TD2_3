@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include "Affine.h"
 #include <cassert>
-
+// シーン制作
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
