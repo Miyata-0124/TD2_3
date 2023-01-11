@@ -81,5 +81,15 @@ private: // メンバ変数
 
 	Vector3 wallCollisions[totalBlockNum];
 	bool isHit[totalBlockNum] = { 0 };
+
+	//シーン管理
+	enum Scene
+	{
+		title,
+		play,
+		clear,
+		over
+	};
+	int scene_ = 0;
 };
 
