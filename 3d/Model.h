@@ -1,153 +1,93 @@
 ﻿#pragma once
-
-#include "TextureManager.h"
-#include "ViewProjection.h"
-#include "WorldTransform.h"
-#include "Mesh.h"
-#include "LightGroup.h"
+#include <d3d12.h>
+#include <fstream>
+#include <sstream>
 #include <string>
-#include <unordered_map>
 #include <vector>
+#include <DirectXmath.h>
+#include <d3dcompiler.h>
 
-/// <summary>
-/// モデルデータ
-/// </summary>
+#include<wrl.h>
+
+#include "DX12base.h"
+
+#pragma comment(lib,"d3d12.lib")
+#pragma comment(lib,"dxgi.lib")
+#pragma comment(lib,"d3dcompiler")
+
+#include <string.h>
+
+using namespace Microsoft::WRL;
+using namespace DirectX;
+
+//class DX12base;
+
 class Model {
-  private: // エイリアス
-	// Microsoft::WRL::を省略
-	template<class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+public:
+	//メンバ関数
+	void LoadModel();
+	void LoadModel(const char* fileName);
 
-  public: // 列挙子
-	/// <summary>
-	/// ルートパラメータ番号
-	/// </summary>
-	enum class RoomParameter {
-		kWorldTransform, // ワールド変換行列
-		kViewProjection, // ビュープロジェクション変換行列
-		kMaterial,       // マテリアル
-		kTexture,        // テクスチャ
-		kLight,          // ライト
+	void Initialize();
+
+	void Draw();
+
+public:
+	//アクセッサ
+	D3D12_RESOURCE_DESC GetResDesc();
+
+	D3D12_VERTEX_BUFFER_VIEW GetVbView();
+
+	D3D12_INDEX_BUFFER_VIEW GetIbView();
+
+private:
+	//構造体
+	struct Vertex {
+		XMFLOAT3 pos;	//xyz座標
+		XMFLOAT3 normal;	//法線ベクトル
+		XMFLOAT2 uv;	//uv座標
 	};
 
-  private:
-	static const std::string kBaseDirectory;
-	static const std::string kDefaultModelName;
+	//メンバ変数
+	//result
+	HRESULT result;
 
-  private: // 静的メンバ変数
-	// デスクリプタサイズ
-	static UINT sDescriptorHandleIncrementSize_;
-	// コマンドリスト
-	static ID3D12GraphicsCommandList* sCommandList_;
-	// ルートシグネチャ
-	static Microsoft::WRL::ComPtr<ID3D12RootSignature> sRootSignature_;
-	// パイプラインステートオブジェクト
-	static Microsoft::WRL::ComPtr<ID3D12PipelineState> sPipelineState_;
-	// ライト
-	static std::unique_ptr<LightGroup> lightGroup;
+	//dierectX12の基礎設定
+	DX12base& dx12base = DX12base::GetInstance();
 
-  public: // 静的メンバ関数
-	/// <summary>
-	/// 静的初期化
-	/// </summary>
-	static void StaticInitialize();
+	//モデルのファイル形式
+	char fileType[5] = { 0 };
 
-	/// <summary>
-	/// グラフィックスパイプラインの初期化
-	/// </summary>
-	static void InitializeGraphicsPipeline();
+	// 頂点データ配列
+	std::vector<Vertex> vertices;
+	// 頂点インデックス配列
+	std::vector<unsigned short> indices;
 
-			/// <summary>
-	/// 3Dモデル生成
-	/// </summary>
-	/// <returns></returns>
-	static Model* Create();
+	//頂点データ全体のサイズ
+	UINT sizeVB;
 
-	/// <summary>
-	/// OBJファイルからメッシュ生成
-	/// </summary>
-	/// <param name="modelname">モデル名</param>
-	/// <param name="modelname">エッジ平滑化フラグ</param>
-	/// <returns>生成されたモデル</returns>
-	static Model* CreateFromOBJ(const std::string& modelname, bool smoothing = false);
+	//インデックスデータ全体のサイズ
+	UINT sizeIB;
 
-		/// <summary>
-	/// 描画前処理
-	/// </summary>
-	/// <param name="commandList">描画コマンドリスト</param>
-	static void PreDraw(ID3D12GraphicsCommandList* commandList);
+	//リソース設定
+	D3D12_RESOURCE_DESC resDesc;
 
-	/// <summary>
-	/// 描画後処理
-	/// </summary>
-	static void PostDraw();
+	//頂点バッファの生成
+	ComPtr<ID3D12Resource> vertBuff = nullptr;
 
-  public: // メンバ関数
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Model();
+	//インデックスバッファの生成
+	ComPtr<ID3D12Resource> indexBuff = nullptr;
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	/// <param name="modelname">モデル名</param>
-	/// <param name="modelname">エッジ平滑化フラグ</param>
-	void Initialize(const std::string& modelname, bool smoothing = false);
+	//GPU上のバッファのマップ
+	Vertex* vertMap = nullptr;
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="worldTransform">ワールドトランスフォーム</param>
-	/// <param name="viewProjection">ビュープロジェクション</param>
-	void Draw(
-	  const WorldTransform& worldTransform, const ViewProjection& viewProjection);
+	//インデックスバッファのマップ
+	uint16_t* indexMap = nullptr;
 
-	/// <summary>
-	/// 描画（テクスチャ差し替え）
-	/// </summary>
-	/// <param name="worldTransform">ワールドトランスフォーム</param>
-	/// <param name="viewProjection">ビュープロジェクション</param>
-	/// <param name="textureHadle">テクスチャハンドル</param>
-	void Draw(
-	  const WorldTransform& worldTransform, const ViewProjection& viewProjection,
-	  uint32_t textureHadle);
+	//頂点バッファビューの作成
+	D3D12_VERTEX_BUFFER_VIEW vbView;
 
-	/// <summary>
-	/// メッシュコンテナを取得
-	/// </summary>
-	/// <returns>メッシュコンテナ</returns>
-	inline const std::vector<Mesh*>& GetMeshes() { return meshes_; }
-
-  private: // メンバ変数
-	// 名前
-	std::string name_;
-	// メッシュコンテナ
-	std::vector<Mesh*> meshes_;
-	// マテリアルコンテナ
-	std::unordered_map<std::string, Material*> materials_;
-	// デフォルトマテリアル
-	Material* defaultMaterial_ = nullptr;
-
-  private: // メンバ関数
-	/// <summary>
-	/// モデル読み込み
-	/// </summary>
-	/// <param name="modelname">モデル名</param>
-	/// <param name="modelname">エッジ平滑化フラグ</param>
-	void LoadModel(const std::string& modelname, bool smoothing);
-
-	/// <summary>
-	/// マテリアル読み込み
-	/// </summary>
-	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
-
-	/// <summary>
-	/// マテリアル登録
-	/// </summary>
-	void AddMaterial(Material* material);
-
-	/// <summary>
-	/// テクスチャ読み込み
-	/// </summary>
-	void LoadTextures();
+	//インデックスバッファビューの作成
+	D3D12_INDEX_BUFFER_VIEW ibView;
 };
+

@@ -1,85 +1,57 @@
 ﻿#pragma once
-
-#include "Audio.h"
-#include "DirectXCommon.h"
-#include "DebugText.h"
-#include "DebugCamera.h"
 #include "Input.h"
-#include "Model.h"
-#include "SafeDelete.h"
-#include "Sprite.h"
+#include "DX12base.h"
+#include"GameObject3D.h"
+#include "WinApp.h"
 #include "ViewProjection.h"
-#include "WorldTransform.h"
-#include "map.h"
-// 作成したクラス
-#include "Player.h"
-#include "Core.h"
-#include "Wall.h"
-#include "Goal.h"
+#include "Audio.h"
+#include <xaudio2.h>
+#pragma comment(lib,"xaudio2.lib")
+#include "Sprite.h"
 
-/// <summary>
-/// ゲームシーン
-/// </summary>
+
 class GameScene {
 
 public: // メンバ関数
-  /// <summary>
-  /// コンストクラタ
-  /// </summary>
+
+	//コンストラクタ
 	GameScene();
 
-	/// <summary>
 	/// デストラクタ
-	/// </summary>
 	~GameScene();
 
-	/// <summary>
-	/// 初期化
-	/// </summary>
-	void Initialize();
+	//初期化
+	void Initialize(WinApp* winApp);
 
-	WorldTransform GetWorldTransform() { return worldTransform_; }
-
-	/// <summary>
-	/// 毎フレーム処理
-	/// </summary>
+	//毎フレーム処理
 	void Update();
 
-	/// <summary>
-	/// 描画
-	/// </summary>
+	//描画処理
 	void Draw();
 
-	//当たり判定
-	bool CheakCollision(Vector3 posA, Vector3 posB, Vector3 sclA, Vector3 sclB);
+	void Reset();
 
 private: // メンバ変数
-	DirectXCommon* dxCommon_ = nullptr;
-	Input* input_ = nullptr;
-	Audio* audio_ = nullptr;
-	DebugText* debugText_ = nullptr;
+	WinApp* winApp_ = nullptr;
+	DX12base& dx12base_ = DX12base::GetInstance();
+	Input& input_ = Input::GetInstance();
+	XMMATRIX matProjection_ = {};
+	SoundManager soundManager_;
 
-	/// <summary>
-	/// ゲームシーン用
-	/// </summary>
-	const float PI = 3.14159f;
-  
-	Model* model_ = nullptr;
-	//WorldTransform worldTransformPearent_;
-	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
-	DebugCamera* debugCamera_ = nullptr;
 
-	Player* player_ = nullptr;
-	Core* core_ = nullptr;
-	Wall* wall_ = nullptr;
-	Goal* goal_ = nullptr;
-  
-	int isRotateZ = 0;
-	int isRotateX = 0;
-	float rotateTimer = 0.0f;
+	//音声読み込み
+	//SoundData soundData1 = soundManager_.SoundLoadWave("Resources/Alarm01.wav");
 
-	Vector3 wallCollisions[totalBlockNum];
-	bool isHit[totalBlockNum] = { 0 };
+
+	//シーン管理
+	enum class Scene
+	{
+		Title,//タイトル
+		Stage,//ステージ
+	};
+
+	Scene scene_ = Scene::Title;
+
+	int stage = 0;
 };
-
