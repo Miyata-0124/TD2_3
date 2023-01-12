@@ -6,10 +6,10 @@ Goal::~Goal() {
 }
 
 void Goal::Initialize() {
-    goalModel = Model::CreateFromOBJ("goal1", true);
+    goalModel = Model::CreateFromOBJ("cube", true);
     goalTransform.Initialize();
-    goalTransform.scale_ = { 7.0f,7.0f,7.0f };
-    goalTransform.translation_ = { 0.0f,0.0f,0.0f };
+    goalTransform.scale_ = { 0.5f,0.5f,0.5f };
+    goalTransform.translation_ = { 1.0f,7.5f,1.0f };
 
     Affine::CreateAffine(goalTransform);
     goalTransform.TransferMatrix();

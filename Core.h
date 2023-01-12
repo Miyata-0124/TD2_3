@@ -7,6 +7,8 @@
 class Core
 {
 public:
+	~Core();
+
 	void Initialize(float y);
   
 	void Update(WorldTransform worldTransform, WorldTransform* wall, bool* collision);
@@ -19,6 +21,9 @@ public:
 	void SetWorldTransform(WorldTransform worldTransform);
 	void SetIsFall(bool fall) {  isFall = fall; }
 private:
+
+	static const int leadNum = 30;
+
 	//速度用
 	Vector3 velocity_ = { 0.0f,0.0f,0.0f };
 	// テクスチャ
@@ -27,8 +32,12 @@ private:
 	Model* coreModel_ = nullptr;
 	// 座標
 	WorldTransform worldTransform_;
+	WorldTransform leadWorldTransformsX_[leadNum];
+	WorldTransform leadWorldTransformsY_[leadNum];
+	WorldTransform leadWorldTransformsZ_[leadNum];
 	DebugText* debugText_;
 
 	bool isFall = 0;
+
 };
 
