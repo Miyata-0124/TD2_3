@@ -17,7 +17,7 @@ public:
 
     void Draw(ViewProjection* viewProjection);
 
-    void SetWorldTransform(WorldTransform goalTransform);
+    void SetWorldTransform(WorldTransform worldTransform);
 
 private:
 

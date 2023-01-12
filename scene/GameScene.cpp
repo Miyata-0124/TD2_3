@@ -156,10 +156,12 @@ void GameScene::Update() {
 				if (isRotateZ) {
 					Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 					core_->SetWorldTransform(worldTransform_);
+					goal_->SetWorldTransform(worldTransform_);
 				}
 				else if (isRotateX) {
 					Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
 					core_->SetWorldTransform(worldTransform_);
+					goal_->SetWorldTransform(worldTransform_);
 				}
 
 				//ステージ回転時、プレイヤーも一緒に回転する

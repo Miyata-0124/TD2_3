@@ -23,3 +23,10 @@ void Goal::Update()
 void Goal::Draw(ViewProjection* viewProjection) {
     goalModel->Draw(goalTransform, *viewProjection);
 }
+
+void Goal::SetWorldTransform(WorldTransform worldTransform)
+{
+    Affine::CreateMatRotZ(goalTransform, worldTransform.rotation_);
+	Affine::CreateMatRotX(goalTransform, worldTransform.rotation_);
+	goalTransform.TransferMatrix();
+}
