@@ -15,6 +15,11 @@ void Goal::Initialize() {
     goalTransform.TransferMatrix();
 }
 
+void Goal::Update()
+{
+
+}
+
 void Goal::Draw(ViewProjection* viewProjection) {
     goalModel->Draw(goalTransform, *viewProjection);
 }

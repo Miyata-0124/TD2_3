@@ -1,9 +1,24 @@
 #pragma once
+#include "Input.h"
+
+//シーン管理
+enum Scene
+{
+	title,
+	play,
+	clear,
+	over
+};
 
 class SceneManager
 {
 public:
-	void SetNextScene() {} // 次のシーンをセット&待機させる
+	void Initialize();
+	void Update(Input* input_);
+	void Draw();
+
+	int getScene() { return scene_; }
 private:
+	int scene_;
 };
 
