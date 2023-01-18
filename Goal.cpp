@@ -1,32 +1,22 @@
 #include "Goal.h"
-#include "Affine.h"
 
-Goal::~Goal() {
-    delete goalModel;
-}
-
-void Goal::Initialize() {
-    goalModel = Model::CreateFromOBJ("goal1", true);
-    goalTransform.Initialize();
-    goalTransform.scale_ = { 7.0f,7.0f,7.0f };
-    goalTransform.translation_ = { 0.0f,0.0f,0.0f };
-
-    Affine::CreateAffine(goalTransform);
-    goalTransform.TransferMatrix();
-}
-
-void Goal::Update()
+void Goal::Initialize(float y)
 {
+	goalModel_->CreateFromOBJ("goal1", true);
 
+	worldTransform_.Initialize();
+	worldTransform_.scale_ = { 5.0f,5.0f,5.0f };
+	worldTransform_.rotation_ = { 0.0f,0.0f,0.0f };
+	worldTransform_.translation_ = { 0.0f, y + 0.5f,0.0f };
+
+	worldTransform_.TransferMatrix();
 }
 
-void Goal::Draw(ViewProjection* viewProjection) {
-    goalModel->Draw(goalTransform, *viewProjection);
-}
-
-void Goal::SetWorldTransform(WorldTransform worldTransform)
+void Goal::Update(WorldTransform worldTransform)
 {
-    Affine::CreateMatRotZ(goalTransform, worldTransform.rotation_);
-	Affine::CreateMatRotX(goalTransform, worldTransform.rotation_);
-	goalTransform.TransferMatrix();
+}
+
+void Goal::Draw(ViewProjection& viewProjection)
+{
+	goalModel_->Draw(worldTransform_, viewProjection);
 }

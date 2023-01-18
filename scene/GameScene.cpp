@@ -42,7 +42,7 @@ void GameScene::Initialize() {
 
 	//ゴールの作成
 	goal_ = new Goal();
-	goal_->Initialize();
+	goal_->Initialize(worldTransform_.scale_.y);
 
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 0.0f,0.0f,0.0f };
@@ -156,12 +156,11 @@ void GameScene::Update() {
 				if (isRotateZ) {
 					Affine::CreateMatRotZ(worldTransform_, worldTransform_.rotation_);
 					core_->SetWorldTransform(worldTransform_);
-					goal_->SetWorldTransform(worldTransform_);
+
 				}
 				else if (isRotateX) {
 					Affine::CreateMatRotX(worldTransform_, worldTransform_.rotation_);
 					core_->SetWorldTransform(worldTransform_);
-					goal_->SetWorldTransform(worldTransform_);
 				}
 
 				//ステージ回転時、プレイヤーも一緒に回転する
@@ -279,7 +278,7 @@ void GameScene::Draw() {
 	model_->Draw(worldTransform_, viewProjection_);
 	player_->Draw(&viewProjection_);
 	core_->Draw(&viewProjection_);
-	goal_->Draw(&viewProjection_);
+	goal_->Draw(viewProjection_);
 
 	//壁ブロックの描画
 	wall_->Draw(&viewProjection_);

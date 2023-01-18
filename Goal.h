@@ -2,26 +2,23 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
+#include "DebugText.h"
 
 class Goal
 {
 public:
-    /// <summary>
-    /// デストラクタ
-    /// </summary>
-    ~Goal();
+	void Initialize(float y);
 
-    void Initialize();
+	void Update(WorldTransform worldTransform);
 
-    void Update();
-
-    void Draw(ViewProjection* viewProjection);
-
-    void SetWorldTransform(WorldTransform worldTransform);
-
+	void Draw(ViewProjection& viewProjection);
+	// 座標を渡す用
+	WorldTransform GetWorldTransform() const { return worldTransform_; }
 private:
-
-    Model* goalModel = nullptr;
-    WorldTransform goalTransform;
-    ViewProjection viewProjection_;
+	// モデル
+	Model* goalModel_ = nullptr;
+	// 座標
+	WorldTransform worldTransform_;
+	DebugText* debugText_;
 };
+
