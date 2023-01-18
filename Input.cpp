@@ -32,7 +32,7 @@ bool Input::ReleaseKey(unsigned char keys)
 void Input::DirectInputInit(WinApp winApp_)
 {
 	result = DirectInput8Create(
-		winApp_.w.hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
+		winApp_.GetHInstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&directInput, nullptr);
 	assert(SUCCEEDED(result));
 }
 
@@ -46,7 +46,7 @@ void Input::DirectInputCreate(WinApp winApp_)
 	assert(SUCCEEDED(result));
 
 	result = keyboard->SetCooperativeLevel(
-		winApp_.hwnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+		winApp_.GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(result));
 }
 

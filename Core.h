@@ -3,6 +3,7 @@
 #include "WorldTransform.h"
 #include "ViewProjection.h"
 #include "DebugText.h"
+#include "GameObject3D.h"
 
 class Core
 {
@@ -26,6 +27,7 @@ private:
 	uint32_t textureHandle_ = 0;
 	// モデル
 	Model* coreModel_ = nullptr;
+	GameObject3D* coreObject_ = nullptr;
 	// 座標
 	WorldTransform worldTransform_;
 	DebugText* debugText_;

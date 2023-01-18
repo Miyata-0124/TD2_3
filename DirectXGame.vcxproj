@@ -98,17 +98,21 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="Affine.cpp" />
+    <ClCompile Include="audio\Audio.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="DX12base.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunc.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -116,14 +120,17 @@
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="viewProjection.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="3d\Model.h" />
     <ClInclude Include="3d\ViewProjection.h" />
     <ClInclude Include="3d\WorldTransform.h" />
-    <ClInclude Include="audio\Audio.h" />
+    <ClInclude Include="Affine.h" />
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="DX12base.h" />
     <ClInclude Include="ErrorException.h" />
     <ClInclude Include="FPS.h" />
@@ -135,10 +142,12 @@
     <ClInclude Include="math\Vector3.h" />
     <ClInclude Include="math\Vector4.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BasicPS.hlsl">

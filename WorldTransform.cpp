@@ -1,11 +1,11 @@
 #include "WorldTransform.h"
 
-void WorldTransform::initialize() {
+void WorldTransform::Initialize() {
 
-	scale = { 1 , 1 , 1 };
-	rotation = { 0 , 0 , 0 };
-	translation = { 0 , 0 , 0 };
-	matWorld.SetIdentityMatrix();
+	scale_ = { 1 , 1 , 1 };
+	rotation_ = { 0 , 0 , 0 };
+	translation_ = { 0 , 0 , 0 };
+	matWorld_.SetIdentityMatrix();
 
 	UpdateMatWorld();
 
@@ -19,20 +19,20 @@ void WorldTransform::UpdateMatWorld() {
 	affineMat.SetIdentityMatrix();
 
 	//ワールド変換行列にスケーリング,回転,平行移動の行列を合成
-	MathFunc::Affine::SetMatScale(affineMat, scale);
-	MathFunc::Affine::SetMatRotation(affineMat, rotation);
-	MathFunc::Affine::SetMatTranslation(affineMat, translation);
+	MathFunc::Affine::SetMatScale(affineMat, scale_);
+	MathFunc::Affine::SetMatRotation(affineMat, rotation_);
+	MathFunc::Affine::SetMatTranslation(affineMat, translation_);
 
 	//ワールド行列に単位行列を代入
-	matWorld.SetIdentityMatrix();
+	matWorld_.SetIdentityMatrix();
 
 	//行列の計算
-	matWorld *= affineMat;
+	matWorld_ *= affineMat;
 
 	//もし親がある場合
 	if (parent) {
 		//親のワールド行列との計算を行う
-		matWorld *= parent->matWorld;
+		matWorld_ *= parent->matWorld_;
 	}
 
 }

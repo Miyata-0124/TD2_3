@@ -4,9 +4,10 @@
 
 void Core::Initialize(float y)
 {
-	textureHandle_ = TextureManager::Load("Core.png");
-	coreModel_ = Model::Create();
-
+	//textureHandle_ = Model::LoadModel("Core.png");
+	coreModel_ = Model::LoadFromOBJ("core");
+	coreObject_ = GameObject3D::Create();
+	coreObject_->SetModel(coreModel_);
 	worldTransform_.Initialize();
 	//ƒ[ƒJƒ‹À•W
 	worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
@@ -14,7 +15,7 @@ void Core::Initialize(float y)
 	worldTransform_.translation_ = { 0.0f, y + 0.5f, 0.0f };//{0.0,7.5,0.0}
 
 	Affine::CreateAffine(worldTransform_);
-	worldTransform_.TransferMatrix();
+	worldTransform_.UpdateMatWorld();
 
 	debugText_ = DebugText::GetInstance();
 }
@@ -61,18 +62,18 @@ void Core::Update(WorldTransform worldTransform)
 	Affine::CreateMatRotZ(worldTransform_, rot_);
 	Affine::CreateMatRotX(worldTransform_, rot_);
 	Affine::CreateMatTrans(worldTransform_, { velocity_.x,velocity_.y,velocity_.z });
-	worldTransform_.TransferMatrix();
+	worldTransform_.UpdateMatWorld();
 
 }
 
 void Core::Draw(ViewProjection* viewProjection)
 {
-	coreModel_->Draw(worldTransform_, *viewProjection, textureHandle_);
+	coreObject_->Draw();
 }
 
 void Core::SetWorldTransform(WorldTransform worldTransform)
 {
 	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
 	Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
-	worldTransform_.TransferMatrix();
+	worldTransform_.UpdateMatWorld();
 }

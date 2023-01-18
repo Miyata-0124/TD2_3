@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "DX12base.h"
 #include <xaudio2.h>
 #pragma comment(lib,"xaudio2.lib")
@@ -13,58 +13,58 @@
 #include <cassert>
 #include <iterator>
 
-//ãƒãƒ£ãƒ³ã‚¯ãƒ˜ãƒƒãƒ€
+//ƒ`ƒƒƒ“ƒNƒwƒbƒ_
 struct ChunkHeader {
-	char id[4];		//ãƒãƒ£ãƒ³ã‚¯æ¯ã®ID
-	int32_t size;	//ãƒãƒ£ãƒ³ã‚¯ã‚µã‚¤ã‚º
+	char id[4];		//ƒ`ƒƒƒ“ƒN–ˆ‚ÌID
+	int32_t size;	//ƒ`ƒƒƒ“ƒNƒTƒCƒY
 };
 
-//RIFFãƒ˜ãƒƒãƒ€ãƒãƒ£ãƒ³ã‚¯
+//RIFFƒwƒbƒ_ƒ`ƒƒƒ“ƒN
 struct RiffHeader {
 	ChunkHeader chunk;	//"RIFF"
 	char type[4];		//"WAVE"
 };
 
-//FMTãƒãƒ£ãƒ³ã‚¯
+//FMTƒ`ƒƒƒ“ƒN
 struct FormatChunk {
 	ChunkHeader chunk;	//"fmt"
-	WAVEFORMATEX fmt;	//æ³¢å½¢ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+	WAVEFORMATEX fmt;	//”gŒ`ƒtƒH[ƒ}ƒbƒg
 };
 
-//éŸ³å£°ãƒ‡ãƒ¼ã‚¿
+//‰¹ºƒf[ƒ^
 struct SoundData {
-	//æ³¢å½¢ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+	//”gŒ`ƒtƒH[ƒ}ƒbƒg
 	WAVEFORMATEX wfex;
-	//ãƒãƒƒãƒ•ã‚¡ã®å…ˆé ­ã‚¢ãƒ‰ãƒ¬ã‚¹
+	//ƒoƒbƒtƒ@‚Ìæ“ªƒAƒhƒŒƒX
 	BYTE* pBuffer;
-	//ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
+	//ƒoƒbƒtƒ@ƒTƒCƒY
 	unsigned int bufferSize;
 };
 
-class SoundManager
+class Audio
 {
 public:
 	ComPtr<IXAudio2> xAudio2;
 	IXAudio2MasteringVoice* masterVoice;
 	static const int kMaxSoundData = 256;
 	void Initialize();
-	//éŸ³å£°èª­ã¿è¾¼ã¿
+	//‰¹º“Ç‚İ‚İ
 	SoundData SoundLoadWave(const char* filename);
-	//éŸ³å£°å†ç”Ÿ
+	//‰¹ºÄ¶
 	void SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, bool loop = false, float volume = 1.0f);
-	// éŸ³å£°åœæ­¢
+	// ‰¹º’â~
 	void StopWave(const SoundData& soundData);
 	//void StopWave(const std::string& filename);
-	//éŸ³å£°è§£æ”¾
+	//‰¹º‰ğ•ú
 	void SoundUnload(SoundData& soundData);
-	//xAudio2ã®è§£æ”¾
+	//xAudio2‚Ì‰ğ•ú
 	void End();
 
 private:
 	std::map<std::string, SoundData> soundDatas_;
-	//å†ç”Ÿã™ã‚‹æ³¢å½¢ãƒ‡ãƒ¼ã‚¿ã®è¨­å®š
+	//Ä¶‚·‚é”gŒ`ƒf[ƒ^‚Ìİ’è
 	XAUDIO2_BUFFER buf{};
-	//æ³¢å½¢ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‹ã‚‰SourceVoiceã®ç”Ÿæˆ
+	//”gŒ`ƒtƒH[ƒ}ƒbƒg‚©‚çSourceVoice‚Ì¶¬
 	IXAudio2SourceVoice* sourceVoice = nullptr;
 	HRESULT result;
 };

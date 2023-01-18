@@ -1,13 +1,13 @@
 #include "Audio.h"
 
-void SoundManager::Initialize()
+void Audio::Initialize()
 {
 	result = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	result = xAudio2->CreateMasteringVoice(&masterVoice);
 }
 
 //音声データの読み込み
-SoundData SoundManager::SoundLoadWave(const char* filename) {
+SoundData Audio::SoundLoadWave(const char* filename) {
 
 	HRESULT result;
 
@@ -86,7 +86,7 @@ SoundData SoundManager::SoundLoadWave(const char* filename) {
 }
 
 //-------音声データの解放-------//
-void SoundManager::SoundUnload(SoundData& soundData) {
+void Audio::SoundUnload(SoundData& soundData) {
 	//バッファのメモリを解放
 	delete[] soundData.pBuffer;
 
@@ -98,7 +98,7 @@ void SoundManager::SoundUnload(SoundData& soundData) {
 //------サウンドの再生-------//
 
 //音声再生
-void SoundManager::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, bool loop, float volume) {
+void Audio::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, bool loop, float volume) {
 	//波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
 	result = xAudio2->CreateSourceVoice(&pSourceVoice, &soundData.wfex);
@@ -139,7 +139,7 @@ void SoundManager::SoundPlayWave(IXAudio2* xAudio2, const SoundData& soundData, 
 //	result = pSourceVoice->SubmitSourceBuffer(&buf);
 //}
 
-void SoundManager::StopWave(const SoundData& soundData)
+void Audio::StopWave(const SoundData& soundData)
 {
 	//波形フォーマットを元にSourceVoiceの生成
 	IXAudio2SourceVoice* pSourceVoice = nullptr;
