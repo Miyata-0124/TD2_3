@@ -10,7 +10,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete debugCamera_;
 	delete core_;
-	delete wall_;
+	//delete wall_;
 	delete goal_;
 }
 
@@ -22,7 +22,7 @@ void GameScene::Initialize() {
 	debugText_ = DebugText::GetInstance();
 	debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
-	model_ = Model::CreateFromOBJ("Box", true);
+	model_ = Model::CreateFromOBJ("stage", true);
 
 	worldTransform_.Initialize();
 	worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
@@ -37,8 +37,8 @@ void GameScene::Initialize() {
 	core_->Initialize(worldTransform_.scale_.y);
 
 	//壁ブロックの生成
-	wall_ = new Wall();
-	wall_->Initialize();
+	//wall_ = new Wall();
+	//wall_->Initialize();
 
 	//ゴールの作成
 	goal_ = new Goal();
@@ -54,38 +54,42 @@ void GameScene::Initialize() {
 
 void GameScene::Update() {
 
-	/*カメラ関連*/
-	if (input_->PushKey(DIK_UP)) {
-		viewProjection_.eye.y += 2.5f;
-		if (viewProjection_.eye.y > 50)
-		{
-			viewProjection_.eye.y = 50;
+	/* カメラ関連 */
+		if (input_->PushKey(DIK_UP)) {
+			viewProjection_.eye.y += 2.0f;
+			if (viewProjection_.eye.y > 40)
+			{
+				viewProjection_.eye.y = 40;
+			}
 		}
-	}
-	else {
-		viewProjection_.eye = { 20, 20, -20 };
-		viewProjection_.target = { 0, 0, 0 };
-	}
+		else {
+			viewProjection_.eye = { 15, 20, -20 };
+			viewProjection_.target = { 0, 0, 0 };
+		}
 	if (input_->PushKey(DIK_LEFT)) {
-		viewProjection_.eye.x -= 2.5f;
-		if (viewProjection_.eye.x > -20)
+		viewProjection_.eye.x = -25;
+		viewProjection_.eye.y = 0;
+		viewProjection_.eye.z -= 2.0f;
+		if (viewProjection_.eye.z > -25)
 		{
-			viewProjection_.eye.x = -20;
+			viewProjection_.eye.z = -25;
 
 		}
 	}
 	if (input_->PushKey(DIK_DOWN)) {
-		viewProjection_.eye.y -= 2.5f;
-		if (viewProjection_.eye.y > -50)
+		viewProjection_.eye.y -= 2.0f;
+		if (viewProjection_.eye.y > -40)
 		{
-			viewProjection_.eye.y = -50;
+			viewProjection_.eye.y = -40;
 		}
 	}
 	if (input_->PushKey(DIK_RIGHT)) {
-		viewProjection_.eye.z += 2.5f;
-		if (viewProjection_.eye.z < 20)
+		viewProjection_.eye.x = 25;
+		viewProjection_.eye.y = 0;
+		viewProjection_.eye.z += 2.0f;
+		if (viewProjection_.eye.z < 25)
 		{
-			viewProjection_.eye.z = 20;
+			viewProjection_.eye.z = 25;
 
 		}
 	}
@@ -117,30 +121,30 @@ void GameScene::Update() {
 	for (int i = 0; i < totalBlockNum; i++) {
 
 		//壁ブロックの位置をとる
-		wallCollisions[i] = {
+		/*wallCollisions[i] = {
 			wall_->GetWorldTransform()[i].matWorld_.m[3][0],
 			wall_->GetWorldTransform()[i].matWorld_.m[3][1],
 			wall_->GetWorldTransform()[i].matWorld_.m[3][2],
-		};
+		};*/
 
 		//全ての壁ブロックとプレイヤーの当たり判定をとる
-		if (CheakCollision(
+		/*if (CheakCollision(
 			wallCollisions[i], playerCollision,
 			wall_->GetWorldTransform()[i].scale_, player_->GetWorldTransform().scale_)) {
 			isHitPlayer[i] = 1;
 		}
 		else {
 			isHitPlayer[i] = 0;
-		}
+		}*/
 
-		if (CheakCollision(
+		/*if (CheakCollision(
 			wallCollisions[i], coreCollision,
 			wall_->GetWorldTransform()[i].scale_, core_->GetWorldTransform().scale_)) {
 			isHitCore[i] = 1;
 		}
 		else {
 			isHitCore[i] = 0;
-		}
+		}*/
 	}
 
 
@@ -178,7 +182,7 @@ void GameScene::Update() {
 
 		//ステージ回転時、プレイヤーも一緒に回転する
 		player_->Rotate(worldTransform_);
-		wall_->Rotate(worldTransform_);
+		//wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
 
 		if (rotateTimer >= PI / 2) {
@@ -189,8 +193,8 @@ void GameScene::Update() {
 	}
 	//回転後
 	else {
-		player_->Update(wall_->GetWorldTransform(), isHitPlayer);
-		core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
+		//player_->Update(wall_->GetWorldTransform(), isHitPlayer);
+		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
   
 	//一周したら0に戻す
@@ -274,7 +278,7 @@ void GameScene::Draw() {
 	//goal_->Draw(&viewProjection_);
 
 	//壁ブロックの描画
-	wall_->Draw(&viewProjection_);
+	//wall_->Draw(&viewProjection_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
