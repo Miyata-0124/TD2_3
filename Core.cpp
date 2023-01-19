@@ -17,7 +17,7 @@ void Core::Initialize(float y)
 	Affine::CreateAffine(worldTransform_);
 	worldTransform_.UpdateMatWorld();
 
-	debugText_ = DebugText::GetInstance();
+	//debugText_ = DebugText::GetInstance();
 }
 
 void Core::Update(WorldTransform worldTransform)

@@ -2,7 +2,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include "ViewProjection.h"
-#include "DebugText.h"
+// #include "DebugText.h"
 #include "GameObject3D.h"
 
 class Core
@@ -30,6 +30,6 @@ private:
 	GameObject3D* coreObject_ = nullptr;
 	// 座標
 	WorldTransform worldTransform_;
-	DebugText* debugText_;
+	//DebugText* debugText_;
 };
 

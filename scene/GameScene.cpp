@@ -1,5 +1,5 @@
 ﻿#include "GameScene.h"
-#include "Texture.h"
+//#include "Texture.h"
 #include "Affine.h"
 #include <cassert>
 
@@ -21,7 +21,7 @@ void GameScene::Initialize(WinApp* winApp) {
 	*dx12base_ = DX12base::GetInstance();
 	*input_ = Input::GetInstance();
 	//audio_ = Audio::GetInstance();
-	debugText_ = DebugText::GetInstance();
+	/*debugText_ = DebugText::GetInstance();*/
 	//debugCamera_ = new DebugCamera(WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	stageModel_ = Model::LoadFromOBJ("Box");

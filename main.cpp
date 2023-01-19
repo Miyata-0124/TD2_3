@@ -18,20 +18,20 @@ LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 //main関数
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
-	WinApp* win = nullptr;
+	WinApp* win = new WinApp();
 	win->Initialize();
 	DX12base* dxCommon = nullptr;
 	// 汎用機能
 	Input* input = nullptr;
 	Audio* audio = nullptr;
-	DebugText* debugText = nullptr;
+	/*DebugText* debugText = nullptr;*/
 	//AxisIndicator* axisIndicator = nullptr;
 	//PrimitiveDrawer* primitiveDrawer = nullptr;
 	GameScene* gameScene = nullptr;
 
 	// ゲームウィンドウの作成
-	//n = WinApp::GetInstance();
-	//n->CreateGameWindow();
+	//win = WinApp::GetInstance();
+	//win->CreateGameWindow();
 
 	// DirectX初期化処理
 	*dxCommon = DX12base::GetInstance();
@@ -54,8 +54,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	//Sprite::StaticInitialize(dxCommon->GetDevice(), WinApp::kWindowWidth, WinApp::kWindowHeight);
 
 	// デバッグテキスト初期化
-	debugText = DebugText::GetInstance();
-	debugText->Initialize();
+	/*debugText = DebugText::GetInstance();
+	debugText->Initialize();*/
 
 	// 3Dモデル静的初期化
 	//Model::StaticInitialize();
