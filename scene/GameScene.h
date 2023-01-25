@@ -8,7 +8,7 @@
 #include <xaudio2.h>
 #pragma comment(lib,"xaudio2.lib")
 #include "Sprite.h"
-
+#include "Box.h"
 
 class GameScene {
 
@@ -52,6 +52,6 @@ private: // メンバ変数
 	};
 
 	Scene scene_ = Scene::Title;
-
+	Box* field = nullptr;
 	int stage = 0;
 };

@@ -3,7 +3,6 @@
 #include "Model.h"
 #include "Texture.h"
 #include "DX12base.h"
-
 #include "MathFunc.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -30,7 +29,17 @@ public:
 	//アクセッサ
 	void SetViewProjection(ViewProjection* viewProjection);
 	void SetMatProjection(XMMATRIX* matProjection);
+	Vector3 GetWorldPosition()
+	{
+		// ワールド座標を入れる変数
+		Vector3 worldPos;
+		// ワールド行列の平行移動成分を取得（ワールド座標）
+		worldPos.x = worldTransform.matWorld.m[3][0];
+		worldPos.y = worldTransform.matWorld.m[3][1];
+		worldPos.z = worldTransform.matWorld.m[3][2];
 
+		return worldPos;
+	}
 private:
 	void InitializeConstMapTransform();
 	void InitializeConstMapMaterial();

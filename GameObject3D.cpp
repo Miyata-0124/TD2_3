@@ -1,90 +1,139 @@
-#pragma once
-#include "WorldTransform.h"
-#include "Model.h"
-#include "Texture.h"
-#include "DX12base.h"
+#include "GameObject3D.h"
 
-#include "MathFunc.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-
-
-//前方宣言
-//class DX12base;
-class ViewProjection;
-
-class GameObject3D {
-
+class ViewProjection {
 public:
-	//メンバ変数
-	void PreLoadModel(const char* modelFileName);
-	void PreLoadTexture(const wchar_t* textureFileName);
-
-	void Initialize();
-
-	void Update();
-
-	void Draw();
-
-	//アクセッサ
-	void SetViewProjection(ViewProjection* viewProjection);
-	void SetMatProjection(XMMATRIX* matProjection);
-
-private:
-	void InitializeConstMapTransform();
-	void InitializeConstMapMaterial();
-
-	//構造体
-private:
-	//定数バッファ用データ構造体(マテリアル)
-	struct ConstBufferDataMaterial {
-		Vector4 color; //色(RGBA)
-	};
-
-	//定数バッファ用データ構造体(3D変換行列)
-	struct ConstBufferDataTransform {
-		Matrix4 mat; //3D変換行列
-	};
-
-	//メンバ変数
-public:
-	//ワールド変換
-	WorldTransform worldTransform;
-
-
-private:
-	//モデル
-	Model model;
-	//モデルのファイル名
-	const char* modelFileName = nullptr;
-
-	//テクスチャ
-	Texture textrue;
-	//モデルのファイル名
-	const wchar_t* textureFileName = nullptr;
-
-	//定数バッファ(行列用)
-	ComPtr<ID3D12Resource> constBuffTransform = nullptr;
-	//定数バッファマッピング(行列用)
-	ConstBufferDataTransform* constMapTransform = nullptr;
-
-	//ヒープ設定
-	D3D12_HEAP_PROPERTIES cbTransformHeapProp;
-	D3D12_HEAP_PROPERTIES cbMaterialHeapProp{};
-
-	//リソース設定
-	D3D12_RESOURCE_DESC cbTransformResourceDesc;
-	D3D12_RESOURCE_DESC cbMaterialResourceDesc{};
-
-	ComPtr<ID3D12Resource> constBuffMaterial = nullptr;
-
-	XMMATRIX* matProjection;
-
-	//DirectX基礎部分
-	DX12base& dx12base = DX12base::GetInstance();
-	//ビュープロジェクション
-	ViewProjection* viewProjection;
-
+	Matrix4 matView;
 };
 
+//メンバ関数
+void GameObject3D::PreLoadModel(const char* modelFileName) {
+	this->modelFileName = modelFileName;
+}
+
+//メンバ関数
+void GameObject3D::PreLoadTexture(const wchar_t* textureFileName) {
+	this->textureFileName = textureFileName;
+}
+
+void GameObject3D::Initialize() {
+
+	InitializeConstMapTransform();
+	InitializeConstMapMaterial();
+
+	//ワールド変換の初期化
+	worldTransform.initialize();
+
+	//モデルの初期化
+	model.LoadModel(modelFileName);
+	model.Initialize();
+
+	textrue.LoadTexture(textureFileName);
+	textrue.SetModel(&model);
+	textrue.CreateSRV();
+}
+
+void GameObject3D::Update() {
+
+	worldTransform.UpdateMatWorld();
+
+	//定数バッファへデータ転送
+	constMapTransform->mat = worldTransform.matWorld;
+	constMapTransform->mat *= viewProjection->matView;
+	constMapTransform->mat *= MathFunc::Utility::ConvertXMMATRIXtoMatrix4(*matProjection);
+
+}
+
+void GameObject3D::Draw() {
+
+	//頂点バッファ―ビューをセットするコマンド
+	dx12base.GetCmdList()->SetGraphicsRootConstantBufferView(0, constBuffMaterial->GetGPUVirtualAddress());
+
+	//定数バッファビュー(CBV)の設定コマンド
+	dx12base.GetCmdList()->SetGraphicsRootConstantBufferView(2, constBuffTransform->GetGPUVirtualAddress());
+
+	textrue.Draw();
+
+	model.Draw();
+}
+
+void GameObject3D::InitializeConstMapTransform() {
+	HRESULT result;
+
+	//定数バッファの生成
+	//ヒープ設定
+	cbTransformHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;	//GPUへの転送用
+
+	//リソース設定
+	cbTransformResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	cbTransformResourceDesc.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;	//256バイトアラインメント
+	cbTransformResourceDesc.Height = 1;
+	cbTransformResourceDesc.DepthOrArraySize = 1;
+	cbTransformResourceDesc.MipLevels = 1;
+	cbTransformResourceDesc.SampleDesc.Count = 1;
+	cbTransformResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	//定数バッファの生成
+	result = dx12base.GetDevice()->CreateCommittedResource(
+		&cbTransformHeapProp,	//ヒープ設定
+		D3D12_HEAP_FLAG_NONE,
+		&cbTransformResourceDesc,	//リソース設定
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuffTransform)
+	);
+	assert(SUCCEEDED(result));
+
+	//定数バッファのマッピング
+	result = constBuffTransform->Map(0, nullptr, (void**)&constMapTransform); // マッピング
+	assert(SUCCEEDED(result));
+
+}
+
+void GameObject3D::InitializeConstMapMaterial() {
+
+	HRESULT result;
+
+	//定数バッファの生成
+//ヒープ設定
+	cbMaterialHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;	//GPUへの転送用
+
+	//リソース設定
+	D3D12_RESOURCE_DESC cbMaterialResourceDesc{};
+	cbMaterialResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	cbMaterialResourceDesc.Width = (sizeof(ConstBufferDataMaterial) + 0xff) & ~0xff;	//256バイトアラインメント
+	cbMaterialResourceDesc.Height = 1;
+	cbMaterialResourceDesc.DepthOrArraySize = 1;
+	cbMaterialResourceDesc.MipLevels = 1;
+	cbMaterialResourceDesc.SampleDesc.Count = 1;
+	cbMaterialResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+
+	//定数バッファの生成
+	result = dx12base.GetDevice()->CreateCommittedResource(
+		&cbMaterialHeapProp,	//ヒープ設定
+		D3D12_HEAP_FLAG_NONE,
+		&cbMaterialResourceDesc,	//リソース設定
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuffMaterial)
+	);
+	assert(SUCCEEDED(result));
+
+	//定数バッファのマッピング
+	ConstBufferDataMaterial* constMapMaterial = nullptr;
+	result = constBuffMaterial->Map(0, nullptr, (void**)&constMapMaterial); // マッピング
+	assert(SUCCEEDED(result));
+
+	//定数バッファへのデータ転送
+	//値を書き込むと自動的に転送される
+	constMapMaterial->color = Vector4(1.0f, 1.0f, 1.0f, 0.5f);
+
+}
+
+//アクセッサ
+void GameObject3D::SetViewProjection(ViewProjection* viewProjection) {
+	this->viewProjection = viewProjection;
+}
+
+void GameObject3D::SetMatProjection(XMMATRIX* matProjection) {
+	this->matProjection = matProjection;
+}

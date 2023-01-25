@@ -100,6 +100,7 @@
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="base\WinApp.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="DX12base.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="GameObject3D.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="3d\WorldTransform.h" />
     <ClInclude Include="audio\Audio.h" />
     <ClInclude Include="base\WinApp.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="DX12base.h" />
     <ClInclude Include="ErrorException.h" />
     <ClInclude Include="FPS.h" />

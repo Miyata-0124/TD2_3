@@ -26,18 +26,20 @@ void GameScene::Initialize(WinApp* winApp) {
 	//XAudioエンジンのインスタンスを生成
 	soundManager_.Initialize();
 
+	field = new Box();
+	field->Initialize(&viewProjection_, &matProjection_);
 
 }
 
 void GameScene::Update() {
-
+	field->Update();
 
 
 }
 
 void GameScene::Draw() {
 	//3D描画
-
+	field->Draw();
 
 	//スプライト描画
 	Sprite::PreDraw(dx12base_.GetCmdList().Get());
