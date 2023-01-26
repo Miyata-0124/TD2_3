@@ -253,6 +253,7 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position">座標</param>
 	void SetPosition(const XMFLOAT3& position) { this->position = position; }
+	void SetScale(const XMFLOAT3& scale) { this->scale = scale; }
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
 	//setter

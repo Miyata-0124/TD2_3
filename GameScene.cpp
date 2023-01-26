@@ -29,6 +29,10 @@ void GameScene::Initialize() {
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
 	//描画初期化ここから
 
+	//カメラの初期化
+	Object3d::SetEye({ 15.0f,20.0f,-20.0f });
+	Object3d::SetTarget({ 0, 0, 0 });
+
 	//スプライト共通部の初期化
 	spriteCommon = new SpriteCommon();
 	spriteCommon->Initialize(dxCommon);
@@ -40,25 +44,24 @@ void GameScene::Initialize() {
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
 
-	object3d = Object3d::Create();
+	stageObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
 	model = Model::LoadFromOBJ("cube");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	//オブジェクトにモデルをひもづける
-	object3d->SetModel(model);
+	stageObject->SetModel(model);
 	//object3d2->SetModel(model2);
 
-	//プレイヤーの生成
-	//player_ = new Player();
-	//player_->Initialize(0.0f);
+	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 
-	Object3d::SetEye({ 15.0f,20.0f,-20.0f });
-	Object3d::SetTarget({0, 0, 0});
+	//プレイヤーの生成
+	player_ = new Player();
+	player_->Initialize(0.0f);
 	//viewProjection_.Initialize();
 	//viewProjection_.eye = { 0.0f,0.0f,-50.0f };
 	//viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
-	object3d->Update();
+	stageObject->Update();
 
 	//worldTransform_.UpdateMatWorld();
 	//worldTransform_.Initialize();
@@ -78,12 +81,12 @@ void GameScene::Finalize() {
 	delete sprite1;
 	delete spriteCommon;
 	//3Dオブジェクト解放
-	delete object3d;
+	delete stageObject;
 	//delete object3d2;
 	//3Dモデル解放
 	delete model;
 	delete model2;
-	//delete player_;
+	delete player_;
 	//DirectX解放
 	delete dxCommon;
 	//入力解放
@@ -102,38 +105,67 @@ void GameScene::Update() {
 	input->Update();
 	//sprite->Update(spriteCommon);
 
-	if (input->PushKey(DIK_A)) {
-		object3d->rotation.z = 1.0f;
-		object3d->CreateMatRotZ(object3d->rotation);
 
+	/*ステージ関連*/
+	const float radian = 2.0f;
+	//箱の回転
+	if (player_->GetPosition().x > stageObject->scale.x) {
+		stageObject->rotation = { 0.0f, 0.0f, radian };
+		isRotateZ = 1;
 	}
-	else if (input->PushKey(DIK_D)) {
-		object3d->rotation.z = -1.0f;
-		object3d->CreateMatRotZ(object3d->rotation);
+	else if (player_->GetPosition().x < -stageObject->scale.x) {
+		stageObject->rotation = { 0.0f, 0.0f, -radian };
+		isRotateZ = 1;
+	}
+	else if (player_->GetPosition().z > stageObject->scale.z) {
+		stageObject->rotation = { -radian, 0.0f, 0.0f };
+		isRotateX = 1;
+	}
+	else if (player_->GetPosition().z < -stageObject->scale.z) {
+		stageObject->rotation = { radian, 0.0f, 0.0f };
+		isRotateX = 1;
 	}
 
-	//Affine::CreateMatRotZ(object3d->matWorld, object3d->rotation);
+	////回転中
+	if (isRotateX || isRotateZ) {
+		//core_->SetIsFall(1);
+		if (isRotateZ) {
+			stageObject->CreateMatRotZ(stageObject->rotation);
+			//core_->SetWorldTransform(worldTransform_);
+		}
+		else if (isRotateX) {
+			stageObject->CreateMatRotX(stageObject->rotation);
+			//core_->SetWorldTransform(worldTransform_);
+		}
 
-	if (input->PushKey(DIK_W)) {
-		object3d->CreateMatRotX(object3d->rotation);
-		object3d->rotation.x = 1.0f;
+		//ステージ回転時、プレイヤーも一緒に回転する
+		player_->Rotate(stageObject);
+		//wall_->Rotate(worldTransform_);
+		rotateTimer += radian;
+
+		if (rotateTimer >= 90.0f) {
+			isRotateZ = 0;
+			isRotateX = 0;
+			rotateTimer = 0;
+		}
 	}
-	else if (input->PushKey(DIK_S)) {
-		object3d->CreateMatRotX(object3d->rotation);
-		object3d->rotation.x = -1.0f;
+	//回転後
+	else {
+		player_->Update(input);
+
+		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
 
-	//player_->SetRotation(rotation);
-	//worldTransform_.UpdateMatWorld();
+	////一周したら0に戻す
+	//if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
+	//	worldTransform_.rotation_.x = 0.0f;
+	//}
 
-	//3Dオブジェクト更新
-	//object3d->SetPosition({ -10.0f,0.0f,0.0f });
-	//object3d2->SetPosition({ 10.0f,0.0f,0.0f });
-	//object3d2->Update();
-	//player_->Update();
+	//if (worldTransform_.rotation_.z >= PI * 2 || worldTransform_.rotation_.z <= -PI * 2) {
+	//	worldTransform_.rotation_.z = 0.0f;
+	//}
 
-	//viewProjection_.UpdateView();
-	//worldTransform_.UpdateMatWorld();
+	//worldTransform_.TransferMatrix();
 }
 
 void GameScene::Draw() {
@@ -144,9 +176,9 @@ void GameScene::Draw() {
 	Object3d::PreDraw(dxCommon->GetCommandList());
 
 	//3Dオブジェクトの描画
-	object3d->Draw();
+	stageObject->Draw();
 	//object3d2->Draw();
-	//player_->Draw();
+	player_->Draw();
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
@@ -161,8 +193,8 @@ void GameScene::Draw() {
 	sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
 
-	sprite->Draw(spriteCommon);
-	sprite1->Draw(spriteCommon);
+	//sprite->Draw(spriteCommon);
+	//sprite1->Draw(spriteCommon);
 	////描画コマンドここまで
 
 	//スプライト描画後処理

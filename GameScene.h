@@ -1,11 +1,11 @@
 #pragma once
-//#include "WinApp.h"
+#include "map.h"
 #include "Object3d.h"
 #include "Sprite.h"
 #include "Input.h"
 #include "DirectXCommon.h"
 #include "SpriteCommon.h"
-//#include "Player.h"
+#include "Player.h"
 
 class GameScene
 {
@@ -23,6 +23,8 @@ public:
 	WinApp* GetWinApp() { return winApp; }
 
 private:
+	const float PI = 3.14159f;
+
 	//ポインタ
 	WinApp* winApp = nullptr;
 	DirectXCommon* dxCommon = nullptr;
@@ -38,11 +40,19 @@ private:
 	Model* model = nullptr;
 	Model* model2 = nullptr;
 	//3Dオブジェクト生成
-	Object3d* object3d = nullptr;
+	Object3d* stageObject = nullptr;
 	//Object3d* object3d2 = nullptr;
 	//WorldTransform worldTransform_;
 	//ViewProjection viewProjection_;
-	//Player* player_ = nullptr;
+	Player* player_ = nullptr;
 
+	int isRotateZ = 0;
+	int isRotateX = 0;
+	float rotateTimer = 0.0f;
+
+	Vector3 wallCollisions[totalBlockNum];
+	bool isHitPlayer[totalBlockNum] = { 0 };
+	bool isHitCore[totalBlockNum] = { 0 };
+	bool isFall = 1;
 };
 
