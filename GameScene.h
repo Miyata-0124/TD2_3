@@ -6,6 +6,7 @@
 #include "DirectXCommon.h"
 #include "SpriteCommon.h"
 #include "Player.h"
+#include "Core.h"
 
 class GameScene
 {
@@ -45,6 +46,7 @@ private:
 	//WorldTransform worldTransform_;
 	//ViewProjection viewProjection_;
 	Player* player_ = nullptr;
+	Core* core_ = nullptr;
 
 	int isRotateZ = 0;
 	int isRotateX = 0;

@@ -57,8 +57,9 @@ void GameScene::Initialize() {
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
-	//viewProjection_.Initialize();
-	//viewProjection_.eye = { 0.0f,0.0f,-50.0f };
+	core_ = new Core();
+	core_->Initialize(0.0f);
+	//viewProjection_.eye  { 0.0f,0.0f,-50.0f };
 	//viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
@@ -87,6 +88,7 @@ void GameScene::Finalize() {
 	delete model;
 	delete model2;
 	delete player_;
+	delete core_;
 	//DirectX解放
 	delete dxCommon;
 	//入力解放
@@ -152,7 +154,7 @@ void GameScene::Update() {
 	//回転後
 	else {
 		player_->Update(input);
-
+		core_->Update();
 		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
 
@@ -179,6 +181,7 @@ void GameScene::Draw() {
 	stageObject->Draw();
 	//object3d2->Draw();
 	player_->Draw();
+	core_->Draw();
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
