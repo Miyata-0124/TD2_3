@@ -10,11 +10,13 @@ Box::~Box() {
 
 void Box::Initialize(ViewProjection* viewProjection, XMMATRIX* matProjection) {
 	field = new GameObject3D();
-	field->PreLoadModel("Resources/cube/cube.obj");
-	field->PreLoadTexture(L"Resources/cube/cube.jpg");
+	field->PreLoadModel("Resources/taitle/taitle.obj");
+	field->PreLoadTexture(L"Resources/taitle/taitle.png");
 	field->SetViewProjection(viewProjection);
 	field->SetMatProjection(matProjection);
 	field->Initialize();
+	field->worldTransform.rotation = { 0,90,0 };
+	field->worldTransform.translation = { 0,0,-45 };
 }
 
 void Box::Update() {
