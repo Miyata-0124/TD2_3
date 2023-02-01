@@ -5,7 +5,7 @@ Core::~Core() {
 }
 void Core::Initialize(float y)
 {
-	coreModel_ = Model::LoadFromOBJ("triangle_mat");
+	coreModel_ = Model::LoadFromOBJ("woodCube");
 	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
 	coreObject_->position = { 0.0f,y+1.5f,0.0f };
@@ -70,7 +70,7 @@ void Core::Initialize(float y)
 }
 
 //void Core::Update()
-void Core::Update(Object3d* obj)
+void Core::Update(Object3d* obj, bool *collision)
 {
 	//コアがステージの上にある時
 	if (coreObject_->matWorld.r[3].m128_f32[0] < obj->scale.x && coreObject_->matWorld.r[3].m128_f32[0] > -obj->scale.x &&
@@ -79,17 +79,17 @@ void Core::Update(Object3d* obj)
 		velocity_.y = 0;
 	}
 	else {
-		//for (int i = 0; i < totalBlockNum; i++) {
-		//	//壁に当たったら
-		//	//if (collision[i]) {
-		//	//	//位置を少し戻し、速度を0にする
-		//	//	isFall = 0;
-		//	//	coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y - 0.1f;
-		//	//	velocity_.y = 0.0f;
-		//	//}
-		//}
+		for (int i = 0; i < totalBlockNum; i++) {
+			//壁に当たったら
+			if (collision[i]) {
+				//位置を少し戻し、速度を0にする
+				isFall = 0;
+				coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y ;
+				velocity_.y = 0.0f;
+			}
+		}
 		//ステージが回転していないとき
-		if ((obj->rotation.x != 0.0f || obj->rotation.z != 0.0f) /*&& isFall*/)
+		if ((obj->rotation.x != 0.0f || obj->rotation.z != 0.0f) && isFall)
 		{
 			//一定まで加速し続ける
 			if (velocity_.y <= 0.5f && coreObject_->matWorld.r[3].m128_f32[1] > -obj->scale.y)
@@ -99,10 +99,10 @@ void Core::Update(Object3d* obj)
 		}
 	}
 	//一番下まで行ったら止まる
-	if (coreObject_->matWorld.r[3].m128_f32[1] < -(obj->scale.y + 0.4f))
+	if (coreObject_->matWorld.r[3].m128_f32[1] < -(obj->scale.y + 1.0f))
 	{
 		velocity_.y = 0.0f;
-		coreObject_->matWorld.r[3].m128_f32[1] = -(obj->scale.y + 0.4f);
+		coreObject_->matWorld.r[3].m128_f32[1] = -(obj->scale.y + 1.0f);
 	}
 
 	coreObject_->position.y += velocity_.y;

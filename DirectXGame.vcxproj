@@ -114,6 +114,7 @@
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="viewProjection.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WinApp.cpp" />
     <ClCompile Include="WorldTransform.cpp" />
   </ItemGroup>
@@ -134,6 +135,7 @@
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="ViewProjection.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="WinApp.h" />
     <ClInclude Include="WorldTransform.h" />
   </ItemGroup>

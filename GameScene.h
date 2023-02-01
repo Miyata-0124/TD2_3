@@ -7,6 +7,7 @@
 #include "SpriteCommon.h"
 #include "ViewProjection.h"
 #include "Player.h"
+#include "Wall.h"
 #include "Core.h"
 
 class GameScene
@@ -21,6 +22,9 @@ public:
 	void Update();
 	//•`‰æ
 	void Draw();
+
+	//“–‚½‚è”»’è
+	bool CheakCollision(XMFLOAT3 posA, XMFLOAT3 posB, XMFLOAT3 sclA, XMFLOAT3 sclB);
 
 	WinApp* GetWinApp() { return winApp; }
 
@@ -48,12 +52,13 @@ private:
 	ViewProjection viewProjection_;
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
+	Wall* wall_ = nullptr;
 
 	int isRotateZ = 0;
 	int isRotateX = 0;
 	float rotateTimer = 0.0f;
 
-	Vector3 wallCollisions[totalBlockNum];
+	XMFLOAT3 wallCollisions[totalBlockNum];
 	bool isHitPlayer[totalBlockNum] = { 0 };
 	bool isHitCore[totalBlockNum] = { 0 };
 	bool isFall = 1;
