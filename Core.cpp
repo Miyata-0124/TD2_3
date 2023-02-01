@@ -167,6 +167,13 @@ void Core::Draw()
 	}*/
 }
 
+void Core::Rotate(Object3d* obj)
+{
+	coreObject_->CreateMatRotZ(obj->rotation);
+	coreObject_->CreateMatRotX(obj->rotation);
+	coreObject_->TransferMatrix();
+}				 
+
 //void Core::SetWorldTransform(WorldTransform worldTransform)
 //{
 //	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);

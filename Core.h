@@ -14,6 +14,8 @@ public:
 	void Update();
 
 	void Draw();
+
+	void Rotate(Object3d* obj);
 	// À•W‚ğ“n‚·—p
 	/*WorldTransform GetWorldTransform() const { return worldTransform_; }*/
 	Vector3 GetVelocity()const { return velocity_; }

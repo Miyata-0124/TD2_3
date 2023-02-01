@@ -142,6 +142,7 @@ void GameScene::Update() {
 
 		//ステージ回転時、プレイヤーも一緒に回転する
 		player_->Rotate(stageObject);
+		core_->Rotate(stageObject);
 		//wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
 
