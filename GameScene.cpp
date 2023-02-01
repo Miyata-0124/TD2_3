@@ -30,7 +30,7 @@ void GameScene::Initialize() {
 	//描画初期化ここから
 
 	//カメラの初期化
-	Object3d::SetEye({ 15.0f,25.0f,-15.0f });
+	Object3d::SetEye({ 14.5f,23.0f,-14.5f });
 	Object3d::SetTarget({ 1, 0, -1 });
 
 	//スプライト共通部の初期化
@@ -176,7 +176,7 @@ void GameScene::Update() {
 	//回転後
 	else {
 		player_->Update(input);
-		core_->Update();
+		core_->Update(stageObject);
 		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
 
