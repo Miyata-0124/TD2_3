@@ -8,7 +8,7 @@ void Core::Initialize(float y)
 	coreModel_ = Model::LoadFromOBJ("triangle_mat");
 	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
-	coreObject_->position = { 0.0f,y + 1.1f,0.0f };
+	coreObject_->position = { 0.0f,y+1.5f,0.0f };
 	coreObject_->SetPosition(coreObject_->position);
 	coreObject_->SetScale({ 1.0f,1.0f,1.0f });
 	coreObject_->Update();
@@ -111,24 +111,29 @@ void Core::Update(Object3d* obj)
 
 	//指標のアフィン変換
 	/*for (int i = 0; i < leadNum; i++) {
+
 		if ((leadWorldTransformsX_[0].matWorld_.m[3][1] - leadWorldTransformsX_[10].matWorld_.m[3][1]) < 2.0f &&
 			(leadWorldTransformsX_[0].matWorld_.m[3][1] - leadWorldTransformsX_[10].matWorld_.m[3][1]) > -2.0f) {
+
 			leadWorldTransformsX_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
 			Affine::CreateMatTrans(leadWorldTransformsX_[i], { velocity_.x,velocity_.y,velocity_.z });
 			leadWorldTransformsX_[i].TransferMatrix();
 		}
 		if ((leadWorldTransformsY_[0].matWorld_.m[3][1] - leadWorldTransformsY_[10].matWorld_.m[3][1]) < 2.0f &&
 			(leadWorldTransformsY_[0].matWorld_.m[3][1] - leadWorldTransformsY_[10].matWorld_.m[3][1]) > -2.0f) {
+
 			leadWorldTransformsY_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
 			Affine::CreateMatTrans(leadWorldTransformsY_[i], { velocity_.x,velocity_.y,velocity_.z });
 			leadWorldTransformsY_[i].TransferMatrix();
 		}
 		if ((leadWorldTransformsZ_[0].matWorld_.m[3][1] - leadWorldTransformsZ_[10].matWorld_.m[3][1]) < 2.0f &&
 			(leadWorldTransformsZ_[0].matWorld_.m[3][1] - leadWorldTransformsZ_[10].matWorld_.m[3][1]) > -2.0f) {
+
 			leadWorldTransformsZ_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
 			Affine::CreateMatTrans(leadWorldTransformsZ_[i], { velocity_.x,velocity_.y,velocity_.z });
 			leadWorldTransformsZ_[i].TransferMatrix();
 		}
+
 	}
 	);*/
 }

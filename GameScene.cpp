@@ -149,7 +149,7 @@ void GameScene::Update() {
 		isRotateX = 1;
 	}
 
-	////‰ñ“]’†
+	//‰ñ“]’†
 	if (isRotateX || isRotateZ) {
 		//core_->SetIsFall(1);
 		if (isRotateZ) {
