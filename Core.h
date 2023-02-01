@@ -11,7 +11,7 @@ public:
 
 	void Initialize(float y);
 
-	void Update();
+	void Update(Object3d* obj);
 
 	void Draw();
 

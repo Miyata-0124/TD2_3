@@ -78,7 +78,7 @@ void Core::Initialize(float y)
 	//}
 }
 
-void Core::Update()
+void Core::Update(Object3d* obj)
 {
 	//コアがステージの上にある時
 	//if (worldTransform_.matWorld_.m[3][0] < worldTransform.scale_.x && worldTransform_.matWorld_.m[3][0] > -worldTransform.scale_.x &&
