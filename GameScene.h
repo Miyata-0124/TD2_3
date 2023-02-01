@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "DirectXCommon.h"
 #include "SpriteCommon.h"
+#include "ViewProjection.h"
 #include "Player.h"
 #include "Core.h"
 
@@ -44,7 +45,7 @@ private:
 	Object3d* stageObject = nullptr;
 	//Object3d* object3d2 = nullptr;
 	//WorldTransform worldTransform_;
-	//ViewProjection viewProjection_;
+	ViewProjection viewProjection_;
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
 
@@ -57,4 +58,3 @@ private:
 	bool isHitCore[totalBlockNum] = { 0 };
 	bool isFall = 1;
 };
-

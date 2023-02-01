@@ -10,6 +10,6 @@ void ViewProjection::Initialize() {
 
 void ViewProjection::UpdateView() {
 
-	//matView = MathFunc::Utility::CreatMatView(eye, target, up);
+	matView = MathFunc::Utility::CreatMatView(eye, target, up);
 
 }

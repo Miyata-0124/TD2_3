@@ -3,7 +3,7 @@
 
 void GameScene::Initialize() {
 	//コンソールへの文字出力
-	/*コンソール・・・広義でパソコン全般の入力・出力用の装置のことを指し、主にキーボードやディスプレイのこと*/
+	//コンソール・・・広義でパソコン全般の入力・出力用の装置のことを指し、主にキーボードやディスプレイのこと
 	//OutputDebugStringA("Hello,DirectX!!\n");
 
 	//WindowsAPIの初期化
@@ -11,10 +11,10 @@ void GameScene::Initialize() {
 	winApp->Initialize();
 
 	//DirectX初期化処理 ここから
-	/*DirectX・・・マイクロソフトが開発したゲーム・マルチメディア処理用のAPIの集合*/
-	/*API・・・Application Programming Interfaceの略
-	ソフトウェアからOSの機能を利用するための仕様またはインターフェース(両者の間で情報や信号などをやりとりするための手順や規約を定めたもの)の総称
-	アプリケーションの開発を容易にするためのソフトウェア資源のことをいう*/
+	//DirectX・・・マイクロソフトが開発したゲーム・マルチメディア処理用のAPIの集合
+	//API・・・Application Programming Interfaceの略
+	//ソフトウェアからOSの機能を利用するための仕様またはインターフェース(両者の間で情報や信号などをやりとりするための手順や規約を定めたもの)の総称
+	//アプリケーションの開発を容易にするためのソフトウェア資源のことをいう
 	//HRESULT result;
 
 	//DirectXの初期化
@@ -30,8 +30,8 @@ void GameScene::Initialize() {
 	//描画初期化ここから
 
 	//カメラの初期化
-	Object3d::SetEye({ 15.0f,20.0f,-20.0f });
-	Object3d::SetTarget({ 0, 0, 0 });
+	Object3d::SetEye({ 15.0f,25.0f,-15.0f });
+	Object3d::SetTarget({ 1, 0, -1 });
 
 	//スプライト共通部の初期化
 	spriteCommon = new SpriteCommon();
@@ -59,8 +59,9 @@ void GameScene::Initialize() {
 	player_->Initialize(0.0f);
 	core_ = new Core();
 	core_->Initialize(0.0f);
-	//viewProjection_.eye  { 0.0f,0.0f,-50.0f };
-	//viewProjection_.UpdateView();
+	viewProjection_.Initialize();
+	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
+	viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
 
@@ -69,7 +70,6 @@ void GameScene::Initialize() {
 	//worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
 	//worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
 	//Affine::CreateAffine(worldTransform_);
-
 	//worldTransform_.UpdateMatWorld();
 }
 
@@ -106,7 +106,28 @@ void GameScene::Update() {
 	//入力の更新
 	input->Update();
 	//sprite->Update(spriteCommon);
-
+	if (input->PushKey(DIK_UP)) {
+		viewProjection_.eye.y += 2.5f;
+		if (viewProjection_.eye.y > 50)
+		{
+			viewProjection_.eye.y = -0.01;
+			viewProjection_.eye.z = -0.01;
+		}
+	}
+	else {
+		viewProjection_.eye = { 0, 0, -50 };
+		viewProjection_.target = { 0, 0, 0 };
+	}
+	if (input->PushKey(DIK_LEFT)) {
+		viewProjection_.eye = { -50, 0, 0 };
+	}
+	if (input->PushKey(DIK_DOWN)) {
+		viewProjection_.eye = { 0, -50, -0.01 };
+	}
+	if (input->PushKey(DIK_RIGHT)) {
+		viewProjection_.eye = { 50, 0, 0 };
+	}
+	viewProjection_.UpdateView();
 
 	/*ステージ関連*/
 	const float radian = 2.0f;
