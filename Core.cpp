@@ -3,7 +3,6 @@
 Core::~Core() {
 	delete coreModel_;
 }
-
 void Core::Initialize(float y)
 {
 	coreModel_ = Model::LoadFromOBJ("triangle_mat");
@@ -15,24 +14,18 @@ void Core::Initialize(float y)
 	coreObject_->Update();
 	/*textureHandle_ = TextureManager::Load("Core.png");
 	coreModel_ = Model::Create();*/
-
 	//worldTransform_.Initialize();
 	//worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
-
 	//worldTransform_.translation_ = { 0.0f, y + worldTransform_.scale_.y, 0.0f };//{0.0,7.5,0.0}
-
 	/*Affine::CreateAffine(worldTransform_);
 	worldTransform_.TransferMatrix();*/
-
 	//for (int i = 0; i < leadNum; i++) {
 	//	leadWorldTransformsX_[i].Initialize();
 	//	leadWorldTransformsY_[i].Initialize();
 	//	leadWorldTransformsZ_[i].Initialize();
-
 	//	leadWorldTransformsX_[i].scale_ = { 0.1f,0.1f,0.1f };
 	//	leadWorldTransformsY_[i].scale_ = { 0.1f,0.1f,0.1f };
 	//	leadWorldTransformsZ_[i].scale_ = { 0.1f,0.1f,0.1f };
-
 	//	/*	leadWorldTransformsX_[i % 30].translation_ =
 	//	{
 	//		-leadNum / 6.0f + i,
@@ -49,7 +42,6 @@ void Core::Initialize(float y)
 	//	}
 	//	if (i >= 30 && i < 60) {
 	//	}*/
-
 	//	leadWorldTransformsX_[i].translation_ =
 	//	{
 	//		-leadNum / 2.0f + i,
@@ -68,16 +60,16 @@ void Core::Initialize(float y)
 	//		worldTransform_.matWorld_.m[3][1],
 	//		-leadNum / 2.0f + i
 	//	};
-
 	/*	Affine::CreateAffine(leadWorldTransformsX_[i]);
 		Affine::CreateAffine(leadWorldTransformsY_[i]);
 		Affine::CreateAffine(leadWorldTransformsZ_[i]);
 		leadWorldTransformsX_[i].TransferMatrix();
 		leadWorldTransformsY_[i].TransferMatrix();
 		leadWorldTransformsZ_[i].TransferMatrix();*/
-	//}
+		//}
 }
 
+//void Core::Update()
 void Core::Update(Object3d* obj)
 {
 	//コアがステージの上にある時
@@ -145,26 +137,22 @@ void Core::Update(Object3d* obj)
 	}
 	);*/
 }
-
 void Core::Draw()
 {
 	coreObject_->Draw();
 	/*coreModel_->Draw(worldTransform_, *viewProjection, textureHandle_);*/
-
 	/*for (int i = 0; i < leadNum; i++) {
 		coreModel_->Draw(leadWorldTransformsX_[i], *viewProjection, textureHandle_);
 		coreModel_->Draw(leadWorldTransformsY_[i], *viewProjection, textureHandle_);
 		coreModel_->Draw(leadWorldTransformsZ_[i], *viewProjection, textureHandle_);
 	}*/
 }
-
 void Core::Rotate(Object3d* obj)
 {
 	coreObject_->CreateMatRotZ(obj->rotation);
 	coreObject_->CreateMatRotX(obj->rotation);
 	coreObject_->TransferMatrix();
-}				 
-
+}
 //void Core::SetWorldTransform(WorldTransform worldTransform)
 //{
 //	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
