@@ -8,7 +8,7 @@ void Core::Initialize(float y)
 	coreModel_ = Model::LoadFromOBJ("triangle_mat");
 	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
-	coreObject_->position = { 0.0f,11.0f,0.0f };
+	coreObject_->position = { 0.0f,y + 1.1f,0.0f };
 	coreObject_->SetPosition(coreObject_->position);
 	coreObject_->SetScale({ 1.0f,1.0f,1.0f });
 	coreObject_->Update();
@@ -73,68 +73,64 @@ void Core::Initialize(float y)
 void Core::Update(Object3d* obj)
 {
 	//コアがステージの上にある時
-	//if (worldTransform_.matWorld_.m[3][0] < worldTransform.scale_.x && worldTransform_.matWorld_.m[3][0] > -worldTransform.scale_.x &&
-	//	worldTransform_.matWorld_.m[3][2] < worldTransform.scale_.z && worldTransform_.matWorld_.m[3][2] > -worldTransform.scale_.z) {
-	//	//速度を0にする
-	//	velocity_.y = 0;
-	//}
-	//else {
-	//	for (int i = 0; i < totalBlockNum; i++) {
-	//		//壁に当たったら
-	//		if (collision[i]) {
-	//			//位置を少し戻し、速度を0にする
-	//			isFall = 0;
-	//			worldTransform_.matWorld_.m[3][1] -= velocity_.y - 0.1f;
-	//			velocity_.y = 0.0f;
-	//		}
-	//	}
-	//	//ステージが回転していないとき
-	//	if ((worldTransform.rotation_.x != 0.0f || worldTransform.rotation_.z != 0.0f) && isFall)
-	//	{
-	//		//一定まで加速し続ける
-	//		if (velocity_.y <= 0.5f && worldTransform_.matWorld_.m[3][1] > -worldTransform.scale_.y)
-	//		{
-	//			velocity_.y -= 0.01f;
-	//		}
-	//	}
-	//}
+	if (coreObject_->matWorld.r[3].m128_f32[0] < obj->scale.x && coreObject_->matWorld.r[3].m128_f32[0] > -obj->scale.x &&
+		coreObject_->matWorld.r[3].m128_f32[2]  < obj->scale.z && coreObject_->matWorld.r[3].m128_f32[2] > -obj->scale.z) {
+		//速度を0にする
+		velocity_.y = 0;
+	}
+	else {
+		//for (int i = 0; i < totalBlockNum; i++) {
+		//	//壁に当たったら
+		//	//if (collision[i]) {
+		//	//	//位置を少し戻し、速度を0にする
+		//	//	isFall = 0;
+		//	//	coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y - 0.1f;
+		//	//	velocity_.y = 0.0f;
+		//	//}
+		//}
+		//ステージが回転していないとき
+		if ((obj->rotation.x != 0.0f || obj->rotation.z != 0.0f) /*&& isFall*/)
+		{
+			//一定まで加速し続ける
+			if (velocity_.y <= 0.5f && coreObject_->matWorld.r[3].m128_f32[1] > -obj->scale.y)
+			{
+				velocity_.y -= 0.01f;
+			}
+		}
+	}
 	//一番下まで行ったら止まる
-	//if (worldTransform_.matWorld_.m[3][1] < -(worldTransform.scale_.y + 0.4f))
-	//{
-	//	velocity_.y = 0.0f;
-	//	worldTransform_.matWorld_.m[3][1] = -(worldTransform.scale_.y + 0.4f);
-	//}
-	////アフィン変換
-	//worldTransform_.translation_ += velocity_;
-	//Affine::CreateMatTrans(worldTransform_, { velocity_.x,velocity_.y,velocity_.z });
-	//worldTransform_.TransferMatrix();
-	////指標のアフィン変換
-	//for (int i = 0; i < leadNum; i++) {
-	//	if ((leadWorldTransformsX_[0].matWorld_.m[3][1] - leadWorldTransformsX_[10].matWorld_.m[3][1]) < 2.0f &&
-	//		(leadWorldTransformsX_[0].matWorld_.m[3][1] - leadWorldTransformsX_[10].matWorld_.m[3][1]) > -2.0f) {
-	//		leadWorldTransformsX_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
-	//		Affine::CreateMatTrans(leadWorldTransformsX_[i], { velocity_.x,velocity_.y,velocity_.z });
-	//		leadWorldTransformsX_[i].TransferMatrix();
-	//	}
-	//	if ((leadWorldTransformsY_[0].matWorld_.m[3][1] - leadWorldTransformsY_[10].matWorld_.m[3][1]) < 2.0f &&
-	//		(leadWorldTransformsY_[0].matWorld_.m[3][1] - leadWorldTransformsY_[10].matWorld_.m[3][1]) > -2.0f) {
-	//		leadWorldTransformsY_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
-	//		Affine::CreateMatTrans(leadWorldTransformsY_[i], { velocity_.x,velocity_.y,velocity_.z });
-	//		leadWorldTransformsY_[i].TransferMatrix();
-	//	}
-	//	if ((leadWorldTransformsZ_[0].matWorld_.m[3][1] - leadWorldTransformsZ_[10].matWorld_.m[3][1]) < 2.0f &&
-	//		(leadWorldTransformsZ_[0].matWorld_.m[3][1] - leadWorldTransformsZ_[10].matWorld_.m[3][1]) > -2.0f) {
-	//		leadWorldTransformsZ_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
-	//		Affine::CreateMatTrans(leadWorldTransformsZ_[i], { velocity_.x,velocity_.y,velocity_.z });
-	//		leadWorldTransformsZ_[i].TransferMatrix();
-	//	}
-	//}
-	//debugText_->SetPos(50, 120);
-	//debugText_->Printf("%f,%f,%f",
-	//	leadWorldTransformsX_[0].matWorld_.m[3][0],
-	//	leadWorldTransformsX_[9].matWorld_.m[3][1],
-	//	leadWorldTransformsX_[9].matWorld_.m[3][2]
-	//);
+	if (coreObject_->matWorld.r[3].m128_f32[1] < -(obj->scale.y + 0.4f))
+	{
+		velocity_.y = 0.0f;
+		coreObject_->matWorld.r[3].m128_f32[1] = -(obj->scale.y + 0.4f);
+	}
+
+	coreObject_->position.y += velocity_.y;
+	coreObject_->CreateMatTrans(velocity_);
+	coreObject_->TransferMatrix();
+
+	//指標のアフィン変換
+	/*for (int i = 0; i < leadNum; i++) {
+		if ((leadWorldTransformsX_[0].matWorld_.m[3][1] - leadWorldTransformsX_[10].matWorld_.m[3][1]) < 2.0f &&
+			(leadWorldTransformsX_[0].matWorld_.m[3][1] - leadWorldTransformsX_[10].matWorld_.m[3][1]) > -2.0f) {
+			leadWorldTransformsX_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
+			Affine::CreateMatTrans(leadWorldTransformsX_[i], { velocity_.x,velocity_.y,velocity_.z });
+			leadWorldTransformsX_[i].TransferMatrix();
+		}
+		if ((leadWorldTransformsY_[0].matWorld_.m[3][1] - leadWorldTransformsY_[10].matWorld_.m[3][1]) < 2.0f &&
+			(leadWorldTransformsY_[0].matWorld_.m[3][1] - leadWorldTransformsY_[10].matWorld_.m[3][1]) > -2.0f) {
+			leadWorldTransformsY_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
+			Affine::CreateMatTrans(leadWorldTransformsY_[i], { velocity_.x,velocity_.y,velocity_.z });
+			leadWorldTransformsY_[i].TransferMatrix();
+		}
+		if ((leadWorldTransformsZ_[0].matWorld_.m[3][1] - leadWorldTransformsZ_[10].matWorld_.m[3][1]) < 2.0f &&
+			(leadWorldTransformsZ_[0].matWorld_.m[3][1] - leadWorldTransformsZ_[10].matWorld_.m[3][1]) > -2.0f) {
+			leadWorldTransformsZ_[i].matWorld_.m[3][1] = worldTransform_.matWorld_.m[3][1];
+			Affine::CreateMatTrans(leadWorldTransformsZ_[i], { velocity_.x,velocity_.y,velocity_.z });
+			leadWorldTransformsZ_[i].TransferMatrix();
+		}
+	}
+	);*/
 }
 void Core::Draw()
 {

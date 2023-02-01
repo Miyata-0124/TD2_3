@@ -397,9 +397,9 @@ void Object3d::Draw()
 
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
-	
+
 	//モデルを描画
-	model->Draw(cmdList,1);
+	model->Draw(cmdList, 1);
 }
 
 void Object3d::TransferMatrix() {

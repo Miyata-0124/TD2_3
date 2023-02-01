@@ -40,7 +40,7 @@ private: // 定数
 	static const float prizmHeight;			// 柱の高さ
 	static const int planeCount = division * 2 + division * 2;		// 面の数
 	static const int vertexCount = 4;		// 頂点数
-	static const int indexCount = 3*2;		// インデックス数
+	static const int indexCount = 3 * 2;		// インデックス数
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -236,7 +236,7 @@ public: // メンバ関数
 		matrotZ *= XMMatrixRotationZ(XMConvertToRadians(rot.z));
 
 		matWorld *= matrotZ;
-	
+
 		TransferMatrix();
 	}
 
@@ -256,6 +256,16 @@ public: // メンバ関数
 	void SetScale(const XMFLOAT3& scale) { this->scale = scale; }
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
+	void CreateMatTrans(const Vector3& trans)
+	{
+		XMMATRIX  matTrams;
+		matTrans = XMMatrixIdentity();
+		matTrans *= XMMatrixTranslation(trans.x, trans.y, trans.z);
+
+		matWorld *= matTrans;
+		TransferMatrix();
+	}
+
 	//setter
 	void SetModel(Model* model) { this->model = model; }
 
@@ -265,7 +275,7 @@ private: // メンバ変数
 
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	//ComPtr<ID3D12Resource> constBuffB1; // 定数バッファ
-	
+
 public:
 	//WorldTransform worldTransform;
 	// ローカルスケール
@@ -281,4 +291,3 @@ public:
 
 	XMMATRIX matScale, matRot, matTrans;
 };
-
