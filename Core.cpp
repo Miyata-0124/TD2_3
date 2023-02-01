@@ -8,7 +8,7 @@ void Core::Initialize(float y)
 	coreModel_ = Model::LoadFromOBJ("triangle_mat");
 	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
-	coreObject_->position = { 0.0f,11.5f,0.0f };
+	coreObject_->position = { 0.0f,11.0f,0.0f };
 	coreObject_->SetPosition(coreObject_->position);
 	coreObject_->SetScale({ 1.0f,1.0f,1.0f });
 	coreObject_->Update();

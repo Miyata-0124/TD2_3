@@ -99,7 +99,7 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
-	
+
 
 	//DirectX–ˆƒtƒŒ[ƒ€ˆ— ‚±‚±‚©‚ç
 

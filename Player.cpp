@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 //#include "Affine.h"
 #include "map.h"
 
@@ -33,19 +33,18 @@ void Player::Update(Input* input) {
 	//worldTransform_.UpdateMatWorld();
 	//playerObject_->Update();
 
-	//���@�̈ړ�
+	//Ž©‹@‚ÌˆÚ“®
 	if (input->PushKey(DIK_A)) {
 
 		playerObject_->position.x -= speed;
-		
-		/*for (int i = 0; i < totalBlockNum; i++) {
 
+		/*for (int i = 0; i < totalBlockNum; i++) {
 			if (collision[i] && worldTransform[i].matWorld_.m[3][0] < worldTransform_.translation_.x) {
 				worldTransform_.translation_.x += speed;
 			}
 		}*/
 	}
-	
+
 	if (input->PushKey(DIK_D)) {
 
 		playerObject_->position.x += speed;
@@ -54,7 +53,6 @@ void Player::Update(Input* input) {
 			if (collision[i] && worldTransform[i].matWorld_.m[3][0] > worldTransform_.translation_.x) {
 				worldTransform_.translation_.x -= speed;
 			}
-
 		}*/
 	}
 	if (input->PushKey(DIK_W)) {
@@ -87,8 +85,8 @@ void Player::Draw() {
 }
 
 void Player::CheckRotate(float scale_x, float scale_z) {
-	
-	//���̉�]
+
+	//” ‚Ì‰ñ“]
 	if (playerObject_->position.x > scale_x) {
 		playerObject_->position.x = -scale_x + speed;
 	}
