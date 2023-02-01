@@ -58,7 +58,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	player_->Initialize(0.0f);
 	core_ = new Core();
-	core_->Initialize(0.0f);
+	core_->Initialize(stageObject->scale.y);
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
 	viewProjection_.UpdateView();
@@ -149,7 +149,7 @@ void GameScene::Update() {
 		isRotateX = 1;
 	}
 
-	////‰ñ“]’†
+	//‰ñ“]’†
 	if (isRotateX || isRotateZ) {
 		//core_->SetIsFall(1);
 		if (isRotateZ) {

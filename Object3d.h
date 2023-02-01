@@ -256,6 +256,16 @@ public: // メンバ関数
 	void SetScale(const XMFLOAT3& scale) { this->scale = scale; }
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
+	void CreateMatTrans(const Vector3& trans)
+	{
+		XMMATRIX  matTrams;
+		matTrans = XMMatrixIdentity();
+		matTrans *= XMMatrixTranslation(trans.x, trans.y, trans.z);
+
+		matWorld *= matTrans;
+		TransferMatrix();
+	}
+
 	//setter
 	void SetModel(Model* model) { this->model = model; }
 
