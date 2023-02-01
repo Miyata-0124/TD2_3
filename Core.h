@@ -11,9 +11,11 @@ public:
 
 	void Initialize(float y);
 
-	void Update();
+	void Update(Object3d* obj);
 
 	void Draw();
+
+	void Rotate(Object3d* obj);
 	// À•W‚ğ“n‚·—p
 	/*WorldTransform GetWorldTransform() const { return worldTransform_; }*/
 	Vector3 GetVelocity()const { return velocity_; }
