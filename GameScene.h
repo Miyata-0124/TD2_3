@@ -56,9 +56,11 @@ private:
 	Wall* wall_ = nullptr;
 	Goal* goal_ = nullptr;
 
+	int scene = 0;
 	int isRotateZ = 0;
 	int isRotateX = 0;
 	float rotateTimer = 0.0f;
+	const float radian = 2.0f;
 
 	XMFLOAT3 wallCollisions[totalBlockNum];
 	bool isHitPlayer[totalBlockNum] = { 0 };

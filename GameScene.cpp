@@ -138,127 +138,146 @@ void GameScene::Update() {
 		viewProjection_.eye = { 50, 0, 0 };
 	}
 	viewProjection_.UpdateView();
-
-	/*当たり判定関連*/
-	//プレイヤーの位置をとる
-	XMFLOAT3 playerCollision =
+	switch (scene)
 	{
-		player_->GetTransform()->matWorld.r[3].m128_f32[0],
-		player_->GetTransform()->matWorld.r[3].m128_f32[1],
-		player_->GetTransform()->matWorld.r[3].m128_f32[2],
-	};
-
-	XMFLOAT3 coreCollision =
-	{
-		core_->GetTransform()->matWorld.r[3].m128_f32[0],
-		core_->GetTransform()->matWorld.r[3].m128_f32[1],
-		core_->GetTransform()->matWorld.r[3].m128_f32[2],
-	};
-
-	for (int i = 0; i < totalBlockNum; i++) {
-
-		//壁ブロックの位置をとる
-		wallCollisions[i] =
+	case 0:// タイトル
+		if (input->PushKey(DIK_SPACE)) {
+			scene = 1;
+		}
+		break;
+	case 1:// ゲームプレイ
+#pragma region ゲームプレイ
+		/*当たり判定関連*/
+//プレイヤーの位置をとる
+		XMFLOAT3 playerCollision =
 		{
-			wall_->GetTransform()[i].matWorld.r[3].m128_f32[0],
-			wall_->GetTransform()[i].matWorld.r[3].m128_f32[1],
-			wall_->GetTransform()[i].matWorld.r[3].m128_f32[2],
+			player_->GetTransform()->matWorld.r[3].m128_f32[0],
+			player_->GetTransform()->matWorld.r[3].m128_f32[1],
+			player_->GetTransform()->matWorld.r[3].m128_f32[2],
 		};
 
-		//全ての壁ブロックとプレイヤーの当たり判定をとる
+		XMFLOAT3 coreCollision =
+		{
+			core_->GetTransform()->matWorld.r[3].m128_f32[0],
+			core_->GetTransform()->matWorld.r[3].m128_f32[1],
+			core_->GetTransform()->matWorld.r[3].m128_f32[2],
+		};
+
+		for (int i = 0; i < totalBlockNum; i++) {
+
+			//壁ブロックの位置をとる
+			wallCollisions[i] =
+			{
+				wall_->GetTransform()[i].matWorld.r[3].m128_f32[0],
+				wall_->GetTransform()[i].matWorld.r[3].m128_f32[1],
+				wall_->GetTransform()[i].matWorld.r[3].m128_f32[2],
+			};
+
+			//全ての壁ブロックとプレイヤーの当たり判定をとる
+			if (CheakCollision(
+				wallCollisions[i], playerCollision,
+				wall_->GetScale(), player_->GetScale())) {
+				isHitPlayer[i] = 1;
+			}
+			else {
+				isHitPlayer[i] = 0;
+			}
+
+
+			if (CheakCollision(
+				wallCollisions[i], coreCollision,
+				wall_->GetScale(), core_->GetTransform()->scale)) {
+				isHitCore[i] = 1;
+			}
+			else {
+				isHitCore[i] = 0;
+			}
+		}
+
 		if (CheakCollision(
-			wallCollisions[i], playerCollision,
+			wallCollisions[0], playerCollision,
 			wall_->GetScale(), player_->GetScale())) {
-			isHitPlayer[i] = 1;
+			isHitPlayer[0] = 1;
 		}
 		else {
-			isHitPlayer[i] = 0;
+			isHitPlayer[0] = 0;
 		}
 
 
-		if (CheakCollision(
-			wallCollisions[i], coreCollision,
-			wall_->GetScale(), core_->GetTransform()->scale)) {
-			isHitCore[i] = 1;
+		/*ステージ関連*/
+		//箱の回転
+		if (player_->GetPosition().x > stageObject->scale.x) {
+			stageObject->rotation = { 0.0f, 0.0f, radian };
+			isRotateZ = 1;
 		}
+		else if (player_->GetPosition().x < -stageObject->scale.x) {
+			stageObject->rotation = { 0.0f, 0.0f, -radian };
+			isRotateZ = 1;
+		}
+		else if (player_->GetPosition().z > stageObject->scale.z) {
+			stageObject->rotation = { -radian, 0.0f, 0.0f };
+			isRotateX = 1;
+		}
+		else if (player_->GetPosition().z < -stageObject->scale.z) {
+			stageObject->rotation = { radian, 0.0f, 0.0f };
+			isRotateX = 1;
+		}
+
+		//回転中
+		if (isRotateX || isRotateZ) {
+			core_->SetIsFall(1);
+			if (isRotateZ) {
+				stageObject->CreateMatRotZ(stageObject->rotation);
+				//core_->SetWorldTransform(worldTransform_);
+			}
+			else if (isRotateX) {
+				stageObject->CreateMatRotX(stageObject->rotation);
+				//core_->SetWorldTransform(worldTransform_);
+			}
+
+			//ステージ回転時、プレイヤーも一緒に回転する
+			player_->Rotate(stageObject);
+			wall_->Rotate(stageObject);
+			core_->Rotate(stageObject);
+			goal_->Rotate(stageObject);
+			//wall_->Rotate(worldTransform_);
+			rotateTimer += radian;
+
+			if (rotateTimer >= 90.0f) {
+				isRotateZ = 0;
+				isRotateX = 0;
+				rotateTimer = 0;
+			}
+		}
+		//回転後
 		else {
-			isHitCore[i] = 0;
-		}
-	}
-
-	if (CheakCollision(
-		wallCollisions[0], playerCollision,
-		wall_->GetScale(), player_->GetScale())) {
-		isHitPlayer[0] = 1;
-	}
-	else {
-		isHitPlayer[0] = 0;
-	}
-
-
-	/*ステージ関連*/
-	const float radian = 2.0f;
-	//箱の回転
-	if (player_->GetPosition().x > stageObject->scale.x) {
-		stageObject->rotation = { 0.0f, 0.0f, radian };
-		isRotateZ = 1;
-	}
-	else if (player_->GetPosition().x < -stageObject->scale.x) {
-		stageObject->rotation = { 0.0f, 0.0f, -radian };
-		isRotateZ = 1;
-	}
-	else if (player_->GetPosition().z > stageObject->scale.z) {
-		stageObject->rotation = { -radian, 0.0f, 0.0f };
-		isRotateX = 1;
-	}
-	else if (player_->GetPosition().z < -stageObject->scale.z) {
-		stageObject->rotation = { radian, 0.0f, 0.0f };
-		isRotateX = 1;
-	}
-
-	//回転中
-	if (isRotateX || isRotateZ) {
-		core_->SetIsFall(1);
-		if (isRotateZ) {
-			stageObject->CreateMatRotZ(stageObject->rotation);
-			//core_->SetWorldTransform(worldTransform_);
-		}
-		else if (isRotateX) {
-			stageObject->CreateMatRotX(stageObject->rotation);
-			//core_->SetWorldTransform(worldTransform_);
+			player_->Update(input, wall_->GetTransform(), isHitPlayer);
+			core_->Update(stageObject, isHitCore);
+			//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 		}
 
-		//ステージ回転時、プレイヤーも一緒に回転する
-		player_->Rotate(stageObject);
-		wall_->Rotate(stageObject);
-		core_->Rotate(stageObject);
-		goal_->Rotate(stageObject);
-		//wall_->Rotate(worldTransform_);
-		rotateTimer += radian;
+		////一周したら0に戻す
+		//if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
+		//	worldTransform_.rotation_.x = 0.0f;
+		//}
 
-		if (rotateTimer >= 90.0f) {
-			isRotateZ = 0;
-			isRotateX = 0;
-			rotateTimer = 0;
+		//if (worldTransform_.rotation_.z >= PI * 2 || worldTransform_.rotation_.z <= -PI * 2) {
+		//	worldTransform_.rotation_.z = 0.0f;
+		//}
+
+		//worldTransform_.TransferMatrix();
+#pragma endregion
+		if (input->PushKey(DIK_R)) { //クリア条件ができるまで使用
+			scene = 2;
 		}
+		break;
+	case 2:// クリア
+		if (input->PushKey(DIK_SPACE)) {
+			scene = 0;
+		}
+		break;
 	}
-	//回転後
-	else {
-		player_->Update(input, wall_->GetTransform(), isHitPlayer);
-		core_->Update(stageObject,isHitCore);
-		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
-	}
-
-	////一周したら0に戻す
-	//if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
-	//	worldTransform_.rotation_.x = 0.0f;
-	//}
-
-	//if (worldTransform_.rotation_.z >= PI * 2 || worldTransform_.rotation_.z <= -PI * 2) {
-	//	worldTransform_.rotation_.z = 0.0f;
-	//}
-
-	//worldTransform_.TransferMatrix();
+	
 }
 
 void GameScene::Draw() {
@@ -267,14 +286,25 @@ void GameScene::Draw() {
 
 	//3Dオブジェクト描画前処理
 	Object3d::PreDraw(dxCommon->GetCommandList());
-
-	//3Dオブジェクトの描画
-	stageObject->Draw();
-	//object3d2->Draw();
-	player_->Draw();
-	core_->Draw();
-	wall_->Draw();
-	goal_->Draw();
+	switch (scene)
+	{
+	case 0:// タイトル
+		break;
+	case 1:// ゲームプレイ
+#pragma region ゲームプレイ
+		//3Dオブジェクトの描画
+		stageObject->Draw();
+		//object3d2->Draw();
+		player_->Draw();
+		core_->Draw();
+		wall_->Draw();
+		goal_->Draw();
+#pragma endregion
+		break;
+	case 2:// クリア
+		break;
+	}
+	
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
