@@ -6,6 +6,8 @@
 class Wall
 {
 public:
+	Wall();
+
 	~Wall();
 
 	void Initialize();
@@ -19,13 +21,13 @@ public:
 	void SetStageNum(int num) { stageNum = num; }
 
 	int GetStageNum() { return stageNum; }
-	XMFLOAT3* GetPosition() { return &wallObject->position; }
+	XMFLOAT3 GetPosition() { return wallObject->position; }
 	XMFLOAT3 GetScale() { return wallObject->scale; }
 	Object3d* GetTransform() { return wallObject; }
 
 private:
 
-	Model* model_ = Model::LoadFromOBJ("woodCube");
+	Model* model_ = nullptr;
 	Object3d wallObject[totalBlockNum];
 
 	float stageSize = 11.0f;

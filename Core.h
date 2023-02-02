@@ -6,6 +6,8 @@
 class Core
 {
 public:
+	Core();
+
 	~Core();
 
 	void Initialize(float y);
@@ -28,10 +30,10 @@ private:
 	//速度用
 	XMFLOAT3 velocity_ = { 0.0f,0.0f,0.0f };
 	// モデル
-	Model* coreModel_ = Model::LoadFromOBJ("core");
-	Model* leadModel_ = Model::LoadFromOBJ("Enemy");
+	Model* coreModel_ = nullptr;
+	Model* leadModel_ = nullptr;
 	// 座標
-	Object3d* coreObject_ = Object3d::Create();
+	Object3d* coreObject_ = nullptr;
 
 	Object3d leadWorldTransformsX_[leadNum];
 	Object3d leadWorldTransformsY_[leadNum];

@@ -1,5 +1,9 @@
 #include "Wall.h"
 
+Wall::Wall() {
+	model_ = Model::LoadFromOBJ("woodCube");
+}
+
 Wall::~Wall() {
 	delete model_;
 }
@@ -8,6 +12,7 @@ void Wall::Initialize() {
 
 	//全ワールド行列初期化
 	for (int i = 0; i < totalBlockNum; i++) {
+		
 		wallObject[i].Initialize();
 		wallObject[i].SetModel(model_);
 		wallObject[i].scale = { blockSize,blockSize,blockSize };

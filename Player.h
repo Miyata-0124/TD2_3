@@ -8,9 +8,9 @@
 class Player
 {
 public:
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
+
+	Player();
+
 	~Player();
 
 	void Initialize(float y);
@@ -34,8 +34,8 @@ private:
 	//Input* input_ = nullptr;
 	//uint32_t textureHandle_ = 0;
 
-	Model* playerModel_ = Model::LoadFromOBJ("triangle_mat");
-	Object3d* playerObject_ = Object3d::Create();
+	Model* playerModel_ = nullptr;
+	Object3d* playerObject_ = nullptr;
 	//WorldTransform worldTransform_;
 	//ViewProjection viewProjection_;
 

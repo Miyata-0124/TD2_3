@@ -6,6 +6,8 @@
 class Goal
 {
 public:
+	Goal();
+
 	~Goal();
 
 	void Initialize(float y);

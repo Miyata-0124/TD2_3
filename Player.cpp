@@ -2,6 +2,11 @@
 //#include "Affine.h"
 #include "map.h"
 
+Player::Player() {
+	playerModel_ = Model::LoadFromOBJ("triangle_mat");
+	playerObject_ = Object3d::Create();
+}
+
 Player::~Player() {
 	delete playerModel_;
 	delete playerObject_;
@@ -9,8 +14,6 @@ Player::~Player() {
 
 void Player::Initialize(float y) {
 
-	
-	//playerObject_ = Object3d::Create();
 	playerObject_->SetModel(playerModel_);
 	playerObject_->position = { 0.0f,12.0f,-3.0f };
 	playerObject_->SetPosition(playerObject_->position);

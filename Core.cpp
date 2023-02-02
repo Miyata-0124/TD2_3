@@ -1,5 +1,12 @@
 #include "Core.h"
 #include "map.h"
+
+Core::Core() {
+	coreModel_ = Model::LoadFromOBJ("core");
+	leadModel_ = Model::LoadFromOBJ("Enemy");
+	coreObject_ = Object3d::Create();
+}
+
 Core::~Core() {
 	delete coreModel_;
 	delete leadModel_;
@@ -7,21 +14,12 @@ Core::~Core() {
 }
 void Core::Initialize(float y)
 {
-
-	coreModel_ = Model::LoadFromOBJ("Core");
-	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
 	coreObject_->position = { 0.0f,y+1.0f,0.0f };
 	coreObject_->SetPosition(coreObject_->position);
 	coreObject_->SetScale({ 1.0f,1.0f,1.0f });
 	coreObject_->Update();
-	/*textureHandle_ = TextureManager::Load("Core.png");
-	coreModel_ = Model::Create();*/
-	//worldTransform_.Initialize();
-	//worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
-	//worldTransform_.translation_ = { 0.0f, y + worldTransform_.scale_.y, 0.0f };//{0.0,7.5,0.0}
-	/*Affine::CreateAffine(worldTransform_);
-	worldTransform_.TransferMatrix();*/
+
 	for (int i = 0; i < leadNum; i++) {
 		leadWorldTransformsX_[i].Initialize();
 		leadWorldTransformsY_[i].Initialize();
