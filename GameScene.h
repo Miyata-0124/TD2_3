@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Wall.h"
 #include "Core.h"
+#include "Goal.h"
 
 class GameScene
 {
@@ -53,6 +54,7 @@ private:
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
 	Wall* wall_ = nullptr;
+	Goal* goal_ = nullptr;
 
 	int isRotateZ = 0;
 	int isRotateX = 0;

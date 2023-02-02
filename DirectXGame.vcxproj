@@ -101,6 +101,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunc.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="DirectXTex\DirectXTex.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="MathFunc.h" />

@@ -57,9 +57,12 @@ void GameScene::Initialize() {
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
+	//コアの生成
 	core_ = new Core();
 	core_->Initialize(stageObject->scale.y);
-
+	//ゴールの生成
+	goal_ = new Goal();
+	goal_->Initialize(stageObject->scale.y);
 	//壁ブロックの生成
 	wall_ = new Wall();
 	wall_->Initialize();
@@ -95,6 +98,7 @@ void GameScene::Finalize() {
 	delete player_;
 	delete core_;
 	delete wall_;
+	delete goal_;
 	//DirectX解放
 	delete dxCommon;
 	//入力解放
@@ -228,6 +232,7 @@ void GameScene::Update() {
 		player_->Rotate(stageObject);
 		wall_->Rotate(stageObject);
 		core_->Rotate(stageObject);
+		goal_->Rotate(stageObject);
 		//wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
 
@@ -269,6 +274,7 @@ void GameScene::Draw() {
 	player_->Draw();
 	core_->Draw();
 	wall_->Draw();
+	goal_->Draw();
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
