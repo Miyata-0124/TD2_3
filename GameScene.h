@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Wall.h"
 #include "Core.h"
+#include "Goal.h"
 
 class GameScene
 {
@@ -45,21 +46,27 @@ private:
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
 	Model* model2 = nullptr;
+	Model* model3 = nullptr;
 	//3Dオブジェクト生成
 	Object3d* stageObject = nullptr;
+	Object3d* taitleObject = nullptr;
 	//Object3d* object3d2 = nullptr;
 	//WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	Player* player_ = nullptr;
 	Core* core_ = nullptr;
 	Wall* wall_ = nullptr;
+	Goal* goal_ = nullptr;
 
+	int scene = 0;
 	int isRotateZ = 0;
 	int isRotateX = 0;
 	float rotateTimer = 0.0f;
+	const float radian = 2.0f;
 
 	XMFLOAT3 wallCollisions[totalBlockNum];
 	bool isHitPlayer[totalBlockNum] = { 0 };
 	bool isHitCore[totalBlockNum] = { 0 };
+	bool isHitGoal = 0;
 	bool isFall = 1;
 };

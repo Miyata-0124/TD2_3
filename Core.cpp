@@ -7,8 +7,9 @@ Core::~Core() {
 }
 void Core::Initialize(float y)
 {
-	//coreModel_ = Model::LoadFromOBJ("cube");
-	//coreObject_ = Object3d::Create();
+
+	coreModel_ = Model::LoadFromOBJ("Core");
+	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
 	coreObject_->position = { 0.0f,y+1.0f,0.0f };
 	coreObject_->SetPosition(coreObject_->position);
@@ -79,33 +80,35 @@ void Core::Initialize(float y)
 
 void Core::Update(Object3d* obj, bool *collision)
 {
-	//ƒRƒA‚ªƒXƒe[ƒW‚Ìã‚É‚ ‚é
+	//ã‚³ã‚¢ãŒã‚¹ãƒ†ãƒ¼ã‚¸ã®ä¸Šã«ã‚ã‚‹æ™‚
 	if (coreObject_->matWorld.r[3].m128_f32[0] < obj->scale.x && coreObject_->matWorld.r[3].m128_f32[0] > -obj->scale.x &&
 		coreObject_->matWorld.r[3].m128_f32[2]  < obj->scale.z && coreObject_->matWorld.r[3].m128_f32[2] > -obj->scale.z) {
-		//‘¬“x‚ğ0‚É‚·‚é
+		//é€Ÿåº¦ã‚’0ã«ã™ã‚‹
 		velocity_.y = 0;
 	}
 	else {
 		for (int i = 0; i < totalBlockNum; i++) {
-			//•Ç‚É“–‚½‚Á‚½‚ç
+			//å£ã«å½“ãŸã£ãŸã‚‰
 			if (collision[i]) {
-				//ˆÊ’u‚ğ­‚µ–ß‚µA‘¬“x‚ğ0‚É‚·‚é
+				//ä½ç½®ã‚’å°‘ã—æˆ»ã—ã€é€Ÿåº¦ã‚’0ã«ã™ã‚‹
 				isFall = 0;
-				coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y - 0.1f;
+
+				coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y - 0.1f ;
+        
 				velocity_.y = 0.0f;
 			}
 		}
-		//ƒXƒe[ƒW‚ª‰ñ“]‚µ‚Ä‚¢‚È‚¢‚Æ‚«
+		//ã‚¹ãƒ†ãƒ¼ã‚¸ãŒå›è»¢ã—ã¦ã„ãªã„ã¨ã
 		if ((obj->rotation.x != 0.0f || obj->rotation.z != 0.0f) && isFall)
 		{
-			//ˆê’è‚Ü‚Å‰Á‘¬‚µ‘±‚¯‚é
+			//ä¸€å®šã¾ã§åŠ é€Ÿã—ç¶šã‘ã‚‹
 			if (velocity_.y <= 0.5f && coreObject_->matWorld.r[3].m128_f32[1] > -obj->scale.y)
 			{
 				velocity_.y -= 0.01f;
 			}
 		}
 	}
-	//ˆê”Ô‰º‚Ü‚Ås‚Á‚½‚ç~‚Ü‚é
+	//ä¸€ç•ªä¸‹ã¾ã§è¡Œã£ãŸã‚‰æ­¢ã¾ã‚‹
 	if (coreObject_->matWorld.r[3].m128_f32[1] < -(obj->scale.y + 1.0f))
 	{
 		velocity_.y = 0.0f;
@@ -116,7 +119,7 @@ void Core::Update(Object3d* obj, bool *collision)
 	coreObject_->CreateMatTrans(velocity_);
 	coreObject_->TransferMatrix();
 
-	//w•W‚ÌƒAƒtƒBƒ“•ÏŠ·
+	//æŒ‡æ¨™ã®ã‚¢ãƒ•ã‚£ãƒ³å¤‰æ›
 	for (int i = 0; i < leadNum; i++) {
 
 		if ((leadWorldTransformsX_[0].matWorld.r[3].m128_f32[1] - leadWorldTransformsX_[10].matWorld.r[3].m128_f32[1]) < 2.0f &&

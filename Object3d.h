@@ -40,7 +40,7 @@ private: // 定数
 	static const float prizmHeight;			// 柱の高さ
 	static const int planeCount = division * 2 + division * 2;		// 面の数
 	static const int vertexCount = 4;		// 頂点数
-	static const int indexCount = 3*2;		// インデックス数
+	static const int indexCount = 3 * 2;		// インデックス数
 
 public: // 静的メンバ関数
 	/// <summary>
@@ -219,15 +219,27 @@ public: // メンバ関数
 
 		TransferMatrix();
 	}
-	void CreateMatRotY(const XMFLOAT3& rot) {
+
+
+	void CreateMatRotY(XMFLOAT3& rot) {
 		XMMATRIX matrotY;
 		matrotY = XMMatrixIdentity();
-		matrotY *= XMMatrixRotationY(XMConvertToRadians(rot.y));
-
+		matrotY *= XMMatrixRotationX(XMConvertToRadians(rot.y));
+    
 		matWorld *= matrotY;
 
 		TransferMatrix();
 	}
+	//void CreateMatRotY(Matrix4& matrix, Vector3 rot) {
+	//	Matrix4 matrotY;
+	//	//CreateMatIdentity(matrotY);
+	//	matrotY.m[1][1] = cos(rot.y);
+	//	matrotY.m[1][2] = sin(rot.y);
+	//	matrotY.m[2][1] = -sin(rot.y);
+	//	matrotY.m[2][2] = cos(rot.y);
+
+	//	matrix *= matrotY;
+	//}
 	void CreateMatRotZ(XMFLOAT3& rot) {
 
 		XMMATRIX matrotZ;
@@ -235,7 +247,7 @@ public: // メンバ関数
 		matrotZ *= XMMatrixRotationZ(XMConvertToRadians(rot.z));
 
 		matWorld *= matrotZ;
-	
+
 		TransferMatrix();
 	}
 
@@ -276,7 +288,7 @@ private: // メンバ変数
 
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	//ComPtr<ID3D12Resource> constBuffB1; // 定数バッファ
-	
+
 public:
 	//WorldTransform worldTransform;
 	// ローカルスケール
@@ -292,4 +304,3 @@ public:
 
 	XMMATRIX matScale, matRot, matTrans;
 };
-
