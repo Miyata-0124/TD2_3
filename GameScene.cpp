@@ -46,17 +46,21 @@ void GameScene::Initialize() {
 
 	stageObject = Object3d::Create();
 	taitleObject = Object3d::Create();
+	skydomeObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
 	model = Model::LoadFromOBJ("cube");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	model3 = Model::LoadFromOBJ("taitle");
+	skydomeModel = Model::LoadFromOBJ("skydome");
 	//オブジェクトにモデルをひもづける
 	stageObject->SetModel(model);
 	taitleObject->SetModel(model3);
+	skydomeObject->SetModel(skydomeModel);
 	//object3d2->SetModel(model2);
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
+	skydomeObject->SetScale({ 50.0f,50.0f,50.0f });
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
@@ -68,7 +72,7 @@ void GameScene::Initialize() {
 	goal_->Initialize(stageObject->scale.y);
 	//壁ブロックの生成
 	wall_ = new Wall();
-	wall_->SetStageNum(1);
+	wall_->SetStageNum(2);
 	wall_->Initialize();
 
 	viewProjection_.Initialize();
@@ -76,15 +80,9 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
-
 	taitleObject->Update();
+	skydomeObject->Update();
 
-	//worldTransform_.UpdateMatWorld();
-	//worldTransform_.Initialize();
-	//worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
-	//worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
-	//Affine::CreateAffine(worldTransform_);
-	//worldTransform_.UpdateMatWorld();
 }
 
 void GameScene::Finalize() {
@@ -97,11 +95,14 @@ void GameScene::Finalize() {
 	delete spriteCommon;
 	//3Dオブジェクト解放
 	delete stageObject;
+	delete skydomeObject;
 	delete taitleObject;
 	//delete object3d2;
 	//3Dモデル解放
 	delete model;
 	delete model2;
+	delete model3;
+	delete skydomeModel;
 	delete player_;
 	delete core_;
 	delete wall_;
@@ -128,9 +129,10 @@ void GameScene::Update() {
 		player_->Initialize(0.0f);
 		core_->Initialize(stageObject->scale.y);
 		wall_->SetBlock();
+		goal_->Initialize(0.0f);
 	}
 	//ステージ選択
-	if (input->TriggerKey(DIK_1) || input->TriggerKey(DIK_2) || input->TriggerKey(DIK_3)) {
+	/*if (input->TriggerKey(DIK_1) || input->TriggerKey(DIK_2) || input->TriggerKey(DIK_3)) {
 		player_->Initialize(0.0f);
 		core_->Initialize(stageObject->scale.y);
 
@@ -144,7 +146,7 @@ void GameScene::Update() {
 			wall_->SetStageNum(3);
 		}
 		wall_->SetBlock();
-	}
+	}*/
 
 	if (input->PushKey(DIK_UP)) {
 		viewProjection_.eye.y += 2.5f;
@@ -350,11 +352,11 @@ void GameScene::Draw() {
 		core_->Draw();
 		wall_->Draw();
 		goal_->Draw();
-
 		break;
 	case 2:// クリア
 		break;
 	}
+	skydomeObject->Draw();
 	
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();

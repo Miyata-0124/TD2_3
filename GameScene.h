@@ -47,9 +47,11 @@ private:
 	Model* model = nullptr;
 	Model* model2 = nullptr;
 	Model* model3 = nullptr;
+	Model* skydomeModel = nullptr;
 	//3Dオブジェクト生成
 	Object3d* stageObject = nullptr;
 	Object3d* taitleObject = nullptr;
+	Object3d* skydomeObject = nullptr;
 	//Object3d* object3d2 = nullptr;
 	//WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
