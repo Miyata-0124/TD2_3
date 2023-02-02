@@ -19,20 +19,22 @@ public:
 	void Rotate(Object3d* obj);
 	// 座標を渡す用
 	Object3d* GetTransform() { return coreObject_; }
-	Vector3 GetVelocity()const { return velocity_; }
+	XMFLOAT3 GetVelocity()const { return velocity_; }
 	/*void SetWorldTransform(WorldTransform worldTransform);*/
 
 private:
-	static const int leadNum = 30;
+	static const int leadNum = 50;
+	const float scale = 0.2f;
 	//速度用
-	Vector3 velocity_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 velocity_ = { 0.0f,0.0f,0.0f };
 	// モデル
-	Model* coreModel_ = nullptr;
+	Model* coreModel_ = Model::LoadFromOBJ("core");
+	Model* leadModel_ = Model::LoadFromOBJ("Enemy");
 	// 座標
-	Object3d* coreObject_ = nullptr;
-	/*WorldTransform worldTransform_;
-	WorldTransform leadWorldTransformsX_[leadNum];
-	WorldTransform leadWorldTransformsY_[leadNum];
-	WorldTransform leadWorldTransformsZ_[leadNum];*/
+	Object3d* coreObject_ = Object3d::Create();
+
+	Object3d leadWorldTransformsX_[leadNum];
+	Object3d leadWorldTransformsY_[leadNum];
+	Object3d leadWorldTransformsZ_[leadNum];
 	bool isFall = 0;
 };

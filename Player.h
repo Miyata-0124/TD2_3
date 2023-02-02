@@ -34,13 +34,16 @@ private:
 	//Input* input_ = nullptr;
 	//uint32_t textureHandle_ = 0;
 
-	Model* playerModel_ = nullptr;
-	Object3d* playerObject_ = nullptr;
+	Model* playerModel_ = Model::LoadFromOBJ("triangle_mat");
+	Object3d* playerObject_ = Object3d::Create();
 	//WorldTransform worldTransform_;
 	//ViewProjection viewProjection_;
 
 	const float MAX_SPEED = 0.2f;
 	float speedX = 0.0f;
 	float speedZ = 0.0f;
+
+	float scale = 0.0f;
+	float scaleVal = 0.01f;
 
 };

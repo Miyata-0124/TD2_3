@@ -16,26 +16,18 @@ public:
 
 	void Draw();
 
+	void SetStageNum(int num) { stageNum = num; }
+
+	int GetStageNum() { return stageNum; }
 	XMFLOAT3* GetPosition() { return &wallObject->position; }
 	XMFLOAT3 GetScale() { return wallObject->scale; }
 	Object3d* GetTransform() { return wallObject; }
 
 private:
 
-	Model* model_ = nullptr;
+	Model* model_ = Model::LoadFromOBJ("woodCube");
 	Object3d wallObject[totalBlockNum];
 
-	int face[mapWidth][mapHeight] = {
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-		{0,0,0,0,0,0,0,0,0},
-	};
-
 	float stageSize = 11.0f;
+	int stageNum = 1;
 };

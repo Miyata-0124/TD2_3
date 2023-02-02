@@ -219,15 +219,14 @@ public: // メンバ関数
 
 		TransferMatrix();
 	}
-	void CreateMatRotY(Matrix4& matrix, Vector3 rot) {
-		Matrix4 matrotY;
-		//CreateMatIdentity(matrotY);
-		matrotY.m[1][1] = cos(rot.y);
-		matrotY.m[1][2] = sin(rot.y);
-		matrotY.m[2][1] = -sin(rot.y);
-		matrotY.m[2][2] = cos(rot.y);
+	void CreateMatRotY(const XMFLOAT3& rot) {
+		XMMATRIX matrotY;
+		matrotY = XMMatrixIdentity();
+		matrotY *= XMMatrixRotationY(XMConvertToRadians(rot.y));
 
-		matrix *= matrotY;
+		matWorld *= matrotY;
+
+		TransferMatrix();
 	}
 	void CreateMatRotZ(XMFLOAT3& rot) {
 
@@ -258,7 +257,7 @@ public: // メンバ関数
 	void SetScale(const XMFLOAT3& scale) { this->scale = scale; }
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
-	void CreateMatTrans(const Vector3& trans)
+	void CreateMatTrans(const XMFLOAT3& trans)
 	{
 		XMMATRIX  matTrams;
 		matTrans = XMMatrixIdentity();

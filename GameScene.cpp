@@ -30,16 +30,16 @@ void GameScene::Initialize() {
 	//描画初期化ここから
 
 	//カメラの初期化
-	Object3d::SetEye({ 14.5f,23.0f,-14.5f });
-	Object3d::SetTarget({ 1, 0, -1 });
+	Object3d::SetEye({ 14.5f,25.0f,-14.5f });
+	Object3d::SetTarget({ 1.0f, 5.0f, -1.0f });
 
 	//スプライト共通部の初期化
 	spriteCommon = new SpriteCommon();
 	spriteCommon->Initialize(dxCommon);
 
 	//テクスチャ読み込み
-	spriteCommon->LoadTexture(1, "reimu.png");
-	spriteCommon->LoadTexture(0, "mario.jpg");
+	spriteCommon->LoadTexture(0, "text.png");
+	spriteCommon->LoadTexture(1, "mario.jpg");
 
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
@@ -57,11 +57,14 @@ void GameScene::Initialize() {
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
+
+	//コアの生成
 	core_ = new Core();
 	core_->Initialize(stageObject->scale.y);
 
 	//壁ブロックの生成
 	wall_ = new Wall();
+	wall_->SetStageNum(1);
 	wall_->Initialize();
 
 	viewProjection_.Initialize();
@@ -69,13 +72,6 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
-
-	//worldTransform_.UpdateMatWorld();
-	//worldTransform_.Initialize();
-	//worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
-	//worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
-	//Affine::CreateAffine(worldTransform_);
-	//worldTransform_.UpdateMatWorld();
 }
 
 void GameScene::Finalize() {
@@ -111,7 +107,30 @@ void GameScene::Update() {
 
 	//入力の更新
 	input->Update();
-	//sprite->Update(spriteCommon);
+	
+	//キー入力でリセット
+	if (input->TriggerKey(DIK_R) && isRotateX == false && isRotateZ == false) {
+		player_->Initialize(0.0f);
+		core_->Initialize(stageObject->scale.y);
+		wall_->SetBlock();
+	}
+	//ステージ選択
+	if (input->TriggerKey(DIK_1) || input->TriggerKey(DIK_2) || input->TriggerKey(DIK_3)) {
+		player_->Initialize(0.0f);
+		core_->Initialize(stageObject->scale.y);
+
+		if (input->TriggerKey(DIK_1)) {
+			wall_->SetStageNum(1);
+		}
+		else if (input->TriggerKey(DIK_2)) {
+			wall_->SetStageNum(2);
+		}
+		else if (input->TriggerKey(DIK_3)) {
+			wall_->SetStageNum(3);
+		}
+		wall_->SetBlock();
+	}
+
 	if (input->PushKey(DIK_UP)) {
 		viewProjection_.eye.y += 2.5f;
 		if (viewProjection_.eye.y > 50)
@@ -217,17 +236,16 @@ void GameScene::Update() {
 		core_->SetIsFall(1);
 		if (isRotateZ) {
 			stageObject->CreateMatRotZ(stageObject->rotation);
-			//core_->SetWorldTransform(worldTransform_);
 		}
 		else if (isRotateX) {
 			stageObject->CreateMatRotX(stageObject->rotation);
-			//core_->SetWorldTransform(worldTransform_);
 		}
 
 		//ステージ回転時、プレイヤーも一緒に回転する
 		player_->Rotate(stageObject);
 		wall_->Rotate(stageObject);
 		core_->Rotate(stageObject);
+		
 		//wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
 
@@ -239,21 +257,21 @@ void GameScene::Update() {
 	}
 	//回転後
 	else {
-		player_->Update(input, wall_->GetTransform(), isHitPlayer);
+		if (core_->GetVelocity().y == 0) {
+			player_->Update(input, wall_->GetTransform(), isHitPlayer);
+		}
 		core_->Update(stageObject,isHitCore);
-		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
 
-	////一周したら0に戻す
-	//if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
-	//	worldTransform_.rotation_.x = 0.0f;
-	//}
+	//一周したら0に戻す
+	if (stageObject->rotation.x >= PI * 2 || stageObject->rotation.x <= -PI * 2) {
+		stageObject->rotation.x = 0.0f;
+	}
 
-	//if (worldTransform_.rotation_.z >= PI * 2 || worldTransform_.rotation_.z <= -PI * 2) {
-	//	worldTransform_.rotation_.z = 0.0f;
-	//}
+	if (stageObject->rotation.z >= PI * 2 || stageObject->rotation.z <= -PI * 2) {
+		stageObject->rotation.z = 0.0f;
+	}
 
-	//worldTransform_.TransferMatrix();
 }
 
 void GameScene::Draw() {
@@ -277,13 +295,13 @@ void GameScene::Draw() {
 
 	////描画コマンドここから
 	spriteCommon->Update(dxCommon);
-	//sprite->SetPosition(position);
-	sprite1->SetPosition({ 100.0f,100.0f });
+	sprite->SetPosition({ 50.0f,25.0f });
 	sprite->SetIndex(0);
-	sprite1->SetIndex(1);
+	sprite->SetSize({ 250.0f,125.0f });
+	//sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
 
-	//sprite->Draw(spriteCommon);
+	sprite->Draw(spriteCommon);
 	//sprite1->Draw(spriteCommon);
 	////描画コマンドここまで
 
