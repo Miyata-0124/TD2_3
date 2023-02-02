@@ -179,6 +179,12 @@ void GameScene::Update() {
 		}
 		break;
 	case 1:// ゲームプレイ
+#pragma region SpriteMove
+		if (input->PushKey(DIK_TAB)) {
+
+		}
+#pragma endregion
+
 #pragma region Collision
 		/*当たり判定関連*/
 //プレイヤーの位置をとる
@@ -254,7 +260,6 @@ void GameScene::Update() {
 
 
 #pragma endregion
-
 
 		/*ステージ関連*/
 		//箱の回転
