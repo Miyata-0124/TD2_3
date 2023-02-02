@@ -45,14 +45,20 @@ void GameScene::Initialize() {
 	sprite1->Initialize(spriteCommon);
 
 	stageObject = Object3d::Create();
+	taitleObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
 	model = Model::LoadFromOBJ("cube");
 	model2 = Model::LoadFromOBJ("triangle_mat");
+	model3 = Model::LoadFromOBJ("taitle");
 	//オブジェクトにモデルをひもづける
 	stageObject->SetModel(model);
+	taitleObject->SetModel(model3);
 	//object3d2->SetModel(model2);
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
+	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
+	taitleObject->SetRotation({ 1.0f,50.0f,1.0f });
+	taitleObject->CreateMatRotY(taitleObject->rotation);
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
@@ -71,6 +77,7 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
+	taitleObject->Update();
 
 	//worldTransform_.UpdateMatWorld();
 	//worldTransform_.Initialize();
@@ -90,6 +97,7 @@ void GameScene::Finalize() {
 	delete spriteCommon;
 	//3Dオブジェクト解放
 	delete stageObject;
+	delete taitleObject;
 	//delete object3d2;
 	//3Dモデル解放
 	delete model;
@@ -308,6 +316,7 @@ void GameScene::Draw() {
 	switch (scene)
 	{
 	case 0:// タイトル
+		taitleObject->Draw();
 		break;
 	case 1:// ゲームプレイ
 #pragma region ゲームプレイ
