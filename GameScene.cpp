@@ -163,6 +163,13 @@ void GameScene::Update() {
 			core_->GetTransform()->matWorld.r[3].m128_f32[2],
 		};
 
+		XMFLOAT3 goalCollision =
+		{
+			goal_->GetTransform()->matWorld.r[3].m128_f32[0],
+			goal_->GetTransform()->matWorld.r[3].m128_f32[1],
+			goal_->GetTransform()->matWorld.r[3].m128_f32[2],
+		};
+
 		for (int i = 0; i < totalBlockNum; i++) {
 
 			//壁ブロックの位置をとる
@@ -192,6 +199,15 @@ void GameScene::Update() {
 			else {
 				isHitCore[i] = 0;
 			}
+		}
+		//ゴールとコアの当たり判定
+		if (CheakCollision(goalCollision, coreCollision,
+			goal_->GetScale(), core_->GetTransform()->scale)) {
+			isHitGoal = 1;
+		}
+		else
+		{
+			isHitGoal = 0;
 		}
 
 		if (CheakCollision(

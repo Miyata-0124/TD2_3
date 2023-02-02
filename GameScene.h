@@ -65,5 +65,6 @@ private:
 	XMFLOAT3 wallCollisions[totalBlockNum];
 	bool isHitPlayer[totalBlockNum] = { 0 };
 	bool isHitCore[totalBlockNum] = { 0 };
+	bool isHitGoal = 0;
 	bool isFall = 1;
 };

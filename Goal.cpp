@@ -70,8 +70,9 @@ void Goal::Initialize(float y)
 }
 
 //void Goal::Update()
-void Goal::Update(Object3d* obj)
+void Goal::Update(int scene, bool isHit)
 {
+
 	//コアがステージの上にある時
 	//if (worldTransform_.matWorld_.m[3][0] < worldTransform.scale_.x && worldTransform_.matWorld_.m[3][0] > -worldTransform.scale_.x &&
 	//	worldTransform_.matWorld_.m[3][2] < worldTransform.scale_.z && worldTransform_.matWorld_.m[3][2] > -worldTransform.scale_.z) {

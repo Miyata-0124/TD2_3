@@ -10,14 +10,15 @@ public:
 
 	void Initialize(float y);
 
-	void Update();
-	void Update(Object3d* obj);
+	void Update(int scene,bool isHit);
 
 	void Draw();
 
 	void Rotate(Object3d* obj);
 	// À•W‚ð“n‚·—p
 	/*WorldTransform GetWorldTransform() const { return worldTransform_; }*/
+	Object3d* GetTransform() { return goalObject_; }
+	XMFLOAT3 GetScale() { return goalObject_->scale; }
 	Vector3 GetVelocity()const { return velocity_; }
 	/*void SetWorldTransform(WorldTransform worldTransform);*/
 	void SetIsFall(bool fall) { isFall = fall; }
