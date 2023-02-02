@@ -17,64 +17,69 @@ void Player::Initialize(float y) {
 	playerObject_->SetPosition(playerObject_->position);
 	playerObject_->SetScale({ 1.0f,1.5f,1.0f });
 	playerObject_->Update();
-
-	//worldTransform_.Initialize();
-	//worldTransform_.scale_ = { 0.5f,1.0f,0.5f };
-	//worldTransform_.translation_ = { 1.0f,y + worldTransform_.scale_.y,1.0f };
-
-	//Affine::CreateAffine(worldTransform_);
-	//worldTransform_.UpdateMatWorld();
 }
 
-void Player::Update(Input* input) {
+void Player::Update(Input* input, Object3d* obj, bool* collision) {
 
-	//playerObject_->CreateMatRotZ(worldTransform_,worldTransform_.rotation_);
-	//playerObject_->CreateMatRotX(worldTransform_,worldTransform_.rotation_);
-	//worldTransform_.UpdateMatWorld();
-	//playerObject_->Update();
+	speedX = 0;
+	speedZ = 0;
 
-	//Ž©‹@‚ÌˆÚ“®
+	//自機の移動
 	if (input->PushKey(DIK_A)) {
 
-		playerObject_->position.x -= speed;
+		speedX = -MAX_SPEED;
 
-		/*for (int i = 0; i < totalBlockNum; i++) {
-			if (collision[i] && worldTransform[i].matWorld_.m[3][0] < worldTransform_.translation_.x) {
-				worldTransform_.translation_.x += speed;
+		for (int i = 0; i < totalBlockNum; i++) {
+
+			if (collision[i] && obj[i].GetMatrix().r[3].m128_f32[0] < playerObject_->position.x) {
+				speedX = 0;
 			}
-		}*/
-	}
 
+			//if (input->PushKey(DIK_W)) {
+			//	speedZ = MAX_SPEED;
+			//}
+			//else if (input->PushKey(DIK_S)) {
+			//	speedZ = -MAX_SPEED;
+			//}
+		}
+	}
 	if (input->PushKey(DIK_D)) {
 
-		playerObject_->position.x += speed;
+		speedX = MAX_SPEED;
 
-		/*for (int i = 0; i < totalBlockNum; i++) {
-			if (collision[i] && worldTransform[i].matWorld_.m[3][0] > worldTransform_.translation_.x) {
-				worldTransform_.translation_.x -= speed;
+		for (int i = 0; i < totalBlockNum; i++) {
+
+			if (collision[i] && obj[i].GetMatrix().r[3].m128_f32[0] > playerObject_->position.x) {
+				speedX = 0;
 			}
-		}*/
+		}
 	}
 	if (input->PushKey(DIK_W)) {
 
-		playerObject_->position.z += speed;
+		speedZ = MAX_SPEED;
 
-		/*for (int i = 0; i < totalBlockNum; i++) {
-			if (collision[i] && worldTransform[i].matWorld_.m[3][2] > worldTransform_.translation_.z) {
-				worldTransform_.translation_.z -= speed;
+		for (int i = 0; i < totalBlockNum; i++) {
+
+			if (collision[i] && obj[i].GetMatrix().r[3].m128_f32[2] > playerObject_->position.z) {
+				speedZ = 0;
 			}
-		}*/
+		}
 
 	}
 	if (input->PushKey(DIK_S)) {
-		playerObject_->position.z -= speed;
 
-		/*for (int i = 0; i < totalBlockNum; i++) {
-			if (collision[i] && worldTransform[i].matWorld_.m[3][2] < worldTransform_.translation_.z) {
-				worldTransform_.translation_.z += speed;
+		speedZ = -MAX_SPEED;
+
+		for (int i = 0; i < totalBlockNum; i++) {
+
+			if (collision[i] && obj[i].GetMatrix().r[3].m128_f32[2] < playerObject_->position.z) {
+				speedZ = 0;
 			}
-		}*/
+		}
 	}
+	playerObject_->position.x += speedX;
+	playerObject_->position.z += speedZ;
+
 
 	playerObject_->Update();
 }
@@ -86,26 +91,22 @@ void Player::Draw() {
 
 void Player::CheckRotate(float scale_x, float scale_z) {
 
-	//” ‚Ì‰ñ“]
+	//箱の回転
 	if (playerObject_->position.x > scale_x) {
-		playerObject_->position.x = -scale_x + speed;
+		playerObject_->position.x = -scale_x + 0.2f;
 	}
 	else if (playerObject_->position.x < -scale_x) {
-		playerObject_->position.x = scale_x - speed;
+		playerObject_->position.x = scale_x - 0.2f;
 	}
 	else if (playerObject_->position.z > scale_z) {
-		playerObject_->position.z = -scale_z + speed;
+		playerObject_->position.z = -scale_z + 0.2f;
 	}
 	else if (playerObject_->position.z < -scale_z) {
-		playerObject_->position.z = scale_z - speed;
+		playerObject_->position.z = scale_z - 0.2f;
 	}
-	//Affine::CreateAffine(worldTransform_);
+
 	playerObject_->TransferMatrix();
 }
-
-//WorldTransform Player::GetWorldTransform() {
-//	return worldTransform_;
-//}
 
 void Player::Rotate(Object3d* obj) {
 	playerObject_->CreateMatRotZ(obj->rotation);

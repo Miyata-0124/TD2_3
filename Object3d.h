@@ -240,6 +240,8 @@ public: // メンバ関数
 		TransferMatrix();
 	}
 
+	XMMATRIX& GetMatrix() { return matWorld; }
+
 	void TransferMatrix();
 
 	/// <summary>

@@ -59,6 +59,11 @@ void GameScene::Initialize() {
 	player_->Initialize(0.0f);
 	core_ = new Core();
 	core_->Initialize(stageObject->scale.y);
+
+	//壁ブロックの生成
+	wall_ = new Wall();
+	wall_->Initialize();
+
 	viewProjection_.Initialize();
 	viewProjection_.eye = { 20.0f,20.0f,-30.0f };
 	viewProjection_.UpdateView();
@@ -89,6 +94,7 @@ void GameScene::Finalize() {
 	delete model2;
 	delete player_;
 	delete core_;
+	delete wall_;
 	//DirectX解放
 	delete dxCommon;
 	//入力解放
@@ -129,6 +135,63 @@ void GameScene::Update() {
 	}
 	viewProjection_.UpdateView();
 
+	/*当たり判定関連*/
+	//プレイヤーの位置をとる
+	XMFLOAT3 playerCollision =
+	{
+		player_->GetTransform()->matWorld.r[3].m128_f32[0],
+		player_->GetTransform()->matWorld.r[3].m128_f32[1],
+		player_->GetTransform()->matWorld.r[3].m128_f32[2],
+	};
+
+	XMFLOAT3 coreCollision =
+	{
+		core_->GetTransform()->matWorld.r[3].m128_f32[0],
+		core_->GetTransform()->matWorld.r[3].m128_f32[1],
+		core_->GetTransform()->matWorld.r[3].m128_f32[2],
+	};
+
+	for (int i = 0; i < totalBlockNum; i++) {
+
+		//壁ブロックの位置をとる
+		wallCollisions[i] =
+		{
+			wall_->GetTransform()[i].matWorld.r[3].m128_f32[0],
+			wall_->GetTransform()[i].matWorld.r[3].m128_f32[1],
+			wall_->GetTransform()[i].matWorld.r[3].m128_f32[2],
+		};
+
+		//全ての壁ブロックとプレイヤーの当たり判定をとる
+		if (CheakCollision(
+			wallCollisions[i], playerCollision,
+			wall_->GetScale(), player_->GetScale())) {
+			isHitPlayer[i] = 1;
+		}
+		else {
+			isHitPlayer[i] = 0;
+		}
+
+
+		if (CheakCollision(
+			wallCollisions[i], coreCollision,
+			wall_->GetScale(), core_->GetTransform()->scale)) {
+			isHitCore[i] = 1;
+		}
+		else {
+			isHitCore[i] = 0;
+		}
+	}
+
+	if (CheakCollision(
+		wallCollisions[0], playerCollision,
+		wall_->GetScale(), player_->GetScale())) {
+		isHitPlayer[0] = 1;
+	}
+	else {
+		isHitPlayer[0] = 0;
+	}
+
+
 	/*ステージ関連*/
 	const float radian = 2.0f;
 	//箱の回転
@@ -151,7 +214,7 @@ void GameScene::Update() {
 
 	//回転中
 	if (isRotateX || isRotateZ) {
-		//core_->SetIsFall(1);
+		core_->SetIsFall(1);
 		if (isRotateZ) {
 			stageObject->CreateMatRotZ(stageObject->rotation);
 			//core_->SetWorldTransform(worldTransform_);
@@ -163,6 +226,7 @@ void GameScene::Update() {
 
 		//ステージ回転時、プレイヤーも一緒に回転する
 		player_->Rotate(stageObject);
+		wall_->Rotate(stageObject);
 		core_->Rotate(stageObject);
 		//wall_->Rotate(worldTransform_);
 		rotateTimer += radian;
@@ -175,8 +239,8 @@ void GameScene::Update() {
 	}
 	//回転後
 	else {
-		player_->Update(input);
-		core_->Update(stageObject);
+		player_->Update(input, wall_->GetTransform(), isHitPlayer);
+		core_->Update(stageObject,isHitCore);
 		//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 	}
 
@@ -204,6 +268,7 @@ void GameScene::Draw() {
 	//object3d2->Draw();
 	player_->Draw();
 	core_->Draw();
+	wall_->Draw();
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();
 
@@ -230,4 +295,21 @@ void GameScene::Draw() {
 
 
 	//DirectX毎フレーム処理 ここまで
+}
+
+//当たり判定
+bool GameScene::CheakCollision(XMFLOAT3 posA, XMFLOAT3 posB, XMFLOAT3 sclA, XMFLOAT3 sclB) {
+
+	float a = 1.1f;
+	sclA = { sclA.x * a,sclA.y * a ,sclA.z * a };
+	sclB = { sclB.x * a,sclB.y * a ,sclB.z * a };
+
+	if (posA.x - sclA.x < posB.x + sclB.x && posA.x + sclA.x > posB.x - sclB.x &&
+		posA.y - sclA.y < posB.y + sclB.y && posA.y + sclA.y > posB.y - sclB.y &&
+		posA.z - sclA.z < posB.z + sclB.z && posA.z + sclA.z > posB.z - sclB.z)
+	{
+		return true;
+	}
+
+	return false;
 }

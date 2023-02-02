@@ -10,17 +10,18 @@ public:
 
 	void Initialize(float y);
 
-	void Update();
-	void Update(Object3d* obj);
+	void Update(Object3d* obj,bool *collision);
 
 	void Draw();
 
+	void SetIsFall(bool fall) { isFall = fall; }
+
 	void Rotate(Object3d* obj);
 	// 座標を渡す用
-	/*WorldTransform GetWorldTransform() const { return worldTransform_; }*/
+	Object3d* GetTransform() { return coreObject_; }
 	Vector3 GetVelocity()const { return velocity_; }
 	/*void SetWorldTransform(WorldTransform worldTransform);*/
-	void SetIsFall(bool fall) { isFall = fall; }
+
 private:
 	static const int leadNum = 30;
 	//速度用

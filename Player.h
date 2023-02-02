@@ -15,13 +15,15 @@ public:
 
 	void Initialize(float y);
 
-	void Update(Input* input);
+	void Update(Input* input, Object3d* obj, bool* collision);
 
 	void Draw();
 
 	void CheckRotate(float scale_x, float scale_z);
 
 	XMFLOAT3 GetPosition() { return playerObject_->position; }
+	Object3d* GetTransform() { return playerObject_; }
+	XMFLOAT3 GetScale() { return playerObject_->scale; }
 
 	//WorldTransform GetWorldTransform();
 
@@ -37,7 +39,8 @@ private:
 	//WorldTransform worldTransform_;
 	//ViewProjection viewProjection_;
 
-	float speed = 0.2f;
+	const float MAX_SPEED = 0.2f;
+	float speedX = 0.0f;
+	float speedZ = 0.0f;
 
 };
-
