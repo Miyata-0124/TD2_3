@@ -8,7 +8,7 @@ void Goal::Initialize(float y)
 	goalModel_ = Model::LoadFromOBJ("Goal");
 	goalObject_ = Object3d::Create();
 	goalObject_->SetModel(goalModel_);
-	goalObject_->position = { 5.0f,y + 1.5f,0.0f };
+	goalObject_->position = { 7.0f,-y - 1.5f,-8.0f };
 	goalObject_->SetPosition(goalObject_->position);
 	goalObject_->SetScale({ 1.0f,1.0f,1.0f });
 	goalObject_->Update();

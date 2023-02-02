@@ -84,7 +84,7 @@ void Core::Update(Object3d* obj, bool *collision)
 			if (collision[i]) {
 				//ˆÊ’u‚ð­‚µ–ß‚µA‘¬“x‚ð0‚É‚·‚é
 				isFall = 0;
-				coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y ;
+				coreObject_->matWorld.r[3].m128_f32[1] -= velocity_.y - 0.1f ;
 				velocity_.y = 0.0f;
 			}
 		}
