@@ -53,7 +53,6 @@ void GameScene::Initialize() {
 	//object3d2->SetModel(model2);
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
-
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
@@ -283,12 +282,16 @@ void GameScene::Update() {
 
 		//worldTransform_.TransferMatrix();
 #pragma endregion
-		if (input->PushKey(DIK_R)) { //クリア条件ができるまで使用
+		if (isHitGoal) {
 			scene = 2;
 		}
 		break;
 	case 2:// クリア
 		if (input->PushKey(DIK_SPACE)) {
+			player_->Initialize(0.0f);
+			core_->Initialize(stageObject->scale.y);
+			goal_->Initialize(stageObject->scale.y);
+			wall_->Initialize();
 			scene = 0;
 		}
 		break;
