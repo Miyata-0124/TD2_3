@@ -5,7 +5,7 @@ Core::~Core() {
 }
 void Core::Initialize(float y)
 {
-	coreModel_ = Model::LoadFromOBJ("woodCube");
+	coreModel_ = Model::LoadFromOBJ("Core");
 	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
 	coreObject_->position = { 0.0f,y+1.5f,0.0f };
