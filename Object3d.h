@@ -220,11 +220,12 @@ public: // メンバ関数
 		TransferMatrix();
 	}
 
+
 	void CreateMatRotY(XMFLOAT3& rot) {
 		XMMATRIX matrotY;
 		matrotY = XMMatrixIdentity();
 		matrotY *= XMMatrixRotationX(XMConvertToRadians(rot.y));
-
+    
 		matWorld *= matrotY;
 
 		TransferMatrix();
@@ -268,7 +269,7 @@ public: // メンバ関数
 	void SetScale(const XMFLOAT3& scale) { this->scale = scale; }
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
-	void CreateMatTrans(const Vector3& trans)
+	void CreateMatTrans(const XMFLOAT3& trans)
 	{
 		XMMATRIX  matTrams;
 		matTrans = XMMatrixIdentity();

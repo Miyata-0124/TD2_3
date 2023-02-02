@@ -2,44 +2,44 @@
 //#include "Affine.h"
 
 void GameScene::Initialize() {
-	//ƒRƒ“ƒ\[ƒ‹‚Ö‚Ì•¶šo—Í
-	//ƒRƒ“ƒ\[ƒ‹EEEL‹`‚Åƒpƒ\ƒRƒ“‘S”Ê‚Ì“ü—ÍEo—Í—p‚Ì‘•’u‚Ì‚±‚Æ‚ğw‚µAå‚ÉƒL[ƒ{[ƒh‚âƒfƒBƒXƒvƒŒƒC‚Ì‚±‚Æ
+	//ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã¸ã®æ–‡å­—å‡ºåŠ›
+	//ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ãƒ»ãƒ»ãƒ»åºƒç¾©ã§ãƒ‘ã‚½ã‚³ãƒ³å…¨èˆ¬ã®å…¥åŠ›ãƒ»å‡ºåŠ›ç”¨ã®è£…ç½®ã®ã“ã¨ã‚’æŒ‡ã—ã€ä¸»ã«ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‚„ãƒ‡ã‚£ã‚¹ãƒ—ãƒ¬ã‚¤ã®ã“ã¨
 	//OutputDebugStringA("Hello,DirectX!!\n");
 
-	//WindowsAPI‚Ì‰Šú‰»
+	//WindowsAPIã®åˆæœŸåŒ–
 	winApp = new WinApp();
 	winApp->Initialize();
 
-	//DirectX‰Šú‰»ˆ— ‚±‚±‚©‚ç
-	//DirectXEEEƒ}ƒCƒNƒƒ\ƒtƒg‚ªŠJ”­‚µ‚½ƒQ[ƒ€Eƒ}ƒ‹ƒ`ƒƒfƒBƒAˆ——p‚ÌAPI‚ÌW‡
-	//APIEEEApplication Programming Interface‚Ì—ª
-	//ƒ\ƒtƒgƒEƒFƒA‚©‚çOS‚Ì‹@”\‚ğ—˜—p‚·‚é‚½‚ß‚Ìd—l‚Ü‚½‚ÍƒCƒ“ƒ^[ƒtƒF[ƒX(—¼Ò‚ÌŠÔ‚Åî•ñ‚âM†‚È‚Ç‚ğ‚â‚è‚Æ‚è‚·‚é‚½‚ß‚Ìè‡‚â‹K–ñ‚ğ’è‚ß‚½‚à‚Ì)‚Ì‘Ì
-	//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌŠJ”­‚ğ—eˆÕ‚É‚·‚é‚½‚ß‚Ìƒ\ƒtƒgƒEƒFƒA‘Œ¹‚Ì‚±‚Æ‚ğ‚¢‚¤
+	//DirectXåˆæœŸåŒ–å‡¦ç† ã“ã“ã‹ã‚‰
+	//DirectXãƒ»ãƒ»ãƒ»ãƒã‚¤ã‚¯ãƒ­ã‚½ãƒ•ãƒˆãŒé–‹ç™ºã—ãŸã‚²ãƒ¼ãƒ ãƒ»ãƒãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢å‡¦ç†ç”¨ã®APIã®é›†åˆ
+	//APIãƒ»ãƒ»ãƒ»Application Programming Interfaceã®ç•¥
+	//ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã‹ã‚‰OSã®æ©Ÿèƒ½ã‚’åˆ©ç”¨ã™ã‚‹ãŸã‚ã®ä»•æ§˜ã¾ãŸã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹(ä¸¡è€…ã®é–“ã§æƒ…å ±ã‚„ä¿¡å·ãªã©ã‚’ã‚„ã‚Šã¨ã‚Šã™ã‚‹ãŸã‚ã®æ‰‹é †ã‚„è¦ç´„ã‚’å®šã‚ãŸã‚‚ã®)ã®ç·ç§°
+	//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®é–‹ç™ºã‚’å®¹æ˜“ã«ã™ã‚‹ãŸã‚ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢è³‡æºã®ã“ã¨ã‚’ã„ã†
 	//HRESULT result;
 
-	//DirectX‚Ì‰Šú‰»
+	//DirectXã®åˆæœŸåŒ–
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
 
-	//“ü—Í‚Ì‰Šú‰»
+	//å…¥åŠ›ã®åˆæœŸåŒ–
 	input = new Input();
 	input->Initialize(winApp);
 
-	//3DƒIƒuƒWƒFƒNƒgÃ“I‰Šú‰»
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆé™çš„åˆæœŸåŒ–
 	Object3d::StaticInitialize(dxCommon->GetDevice(), WinApp::window_width, WinApp::window_height);
-	//•`‰æ‰Šú‰»‚±‚±‚©‚ç
+	//æç”»åˆæœŸåŒ–ã“ã“ã‹ã‚‰
 
-	//ƒJƒƒ‰‚Ì‰Šú‰»
-	Object3d::SetEye({ 14.5f,23.0f,-14.5f });
-	Object3d::SetTarget({ 1, 0, -1 });
+	//ã‚«ãƒ¡ãƒ©ã®åˆæœŸåŒ–
+	Object3d::SetEye({ 14.5f,25.0f,-14.5f });
+	Object3d::SetTarget({ 1.0f, 5.0f, -1.0f });
 
-	//ƒXƒvƒ‰ƒCƒg‹¤’Ê•”‚Ì‰Šú‰»
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨ã®åˆæœŸåŒ–
 	spriteCommon = new SpriteCommon();
 	spriteCommon->Initialize(dxCommon);
 
-	//ƒeƒNƒXƒ`ƒƒ“Ç‚İ‚İ
-	spriteCommon->LoadTexture(1, "reimu.png");
-	spriteCommon->LoadTexture(0, "mario.jpg");
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£èª­ã¿è¾¼ã¿
+	spriteCommon->LoadTexture(0, "text.png");
+	spriteCommon->LoadTexture(1, "mario.jpg");
 
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
@@ -50,24 +50,25 @@ void GameScene::Initialize() {
 	model = Model::LoadFromOBJ("cube");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	model3 = Model::LoadFromOBJ("taitle");
-	//ƒIƒuƒWƒFƒNƒg‚Éƒ‚ƒfƒ‹‚ğ‚Ğ‚à‚Ã‚¯‚é
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒ¢ãƒ‡ãƒ«ã‚’ã²ã‚‚ã¥ã‘ã‚‹
 	stageObject->SetModel(model);
 	taitleObject->SetModel(model3);
 	//object3d2->SetModel(model2);
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
-	//ƒvƒŒƒCƒ„[‚Ì¶¬
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ç”Ÿæˆ
 	player_ = new Player();
 	player_->Initialize(0.0f);
-	//ƒRƒA‚Ì¶¬
+	//ã‚³ã‚¢ã®ç”Ÿæˆ
 	core_ = new Core();
 	core_->Initialize(stageObject->scale.y);
-	//ƒS[ƒ‹‚Ì¶¬
+	//ã‚´ãƒ¼ãƒ«ã®ç”Ÿæˆ
 	goal_ = new Goal();
 	goal_->Initialize(stageObject->scale.y);
-	//•ÇƒuƒƒbƒN‚Ì¶¬
+	//å£ãƒ–ãƒ­ãƒƒã‚¯ã®ç”Ÿæˆ
 	wall_ = new Wall();
+	wall_->SetStageNum(1);
 	wall_->Initialize();
 
 	viewProjection_.Initialize();
@@ -75,6 +76,7 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
+
 	taitleObject->Update();
 
 	//worldTransform_.UpdateMatWorld();
@@ -86,29 +88,29 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Finalize() {
-	//WindowsAPI‚ÌI—¹ˆ—
+	//WindowsAPIã®çµ‚äº†å‡¦ç†
 	winApp->Finalize();
 
-	//ƒXƒvƒ‰ƒCƒg‰ğ•ú
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆè§£æ”¾
 	delete sprite;
 	delete sprite1;
 	delete spriteCommon;
-	//3DƒIƒuƒWƒFƒNƒg‰ğ•ú
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè§£æ”¾
 	delete stageObject;
 	delete taitleObject;
 	//delete object3d2;
-	//3Dƒ‚ƒfƒ‹‰ğ•ú
+	//3Dãƒ¢ãƒ‡ãƒ«è§£æ”¾
 	delete model;
 	delete model2;
 	delete player_;
 	delete core_;
 	delete wall_;
 	delete goal_;
-	//DirectX‰ğ•ú
+	//DirectXè§£æ”¾
 	delete dxCommon;
-	//“ü—Í‰ğ•ú
+	//å…¥åŠ›è§£æ”¾
 	delete input;
-	//WindowsAPI‰ğ•ú
+	//WindowsAPIè§£æ”¾
 	delete winApp;
 
 }
@@ -116,11 +118,34 @@ void GameScene::Finalize() {
 void GameScene::Update() {
 
 
-	//DirectX–ˆƒtƒŒ[ƒ€ˆ— ‚±‚±‚©‚ç
+	//DirectXæ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç† ã“ã“ã‹ã‚‰
 
-	//“ü—Í‚ÌXV
+	//å…¥åŠ›ã®æ›´æ–°
 	input->Update();
-	//sprite->Update(spriteCommon);
+	
+	//ã‚­ãƒ¼å…¥åŠ›ã§ãƒªã‚»ãƒƒãƒˆ
+	if (input->TriggerKey(DIK_R) && isRotateX == false && isRotateZ == false) {
+		player_->Initialize(0.0f);
+		core_->Initialize(stageObject->scale.y);
+		wall_->SetBlock();
+	}
+	//ã‚¹ãƒ†ãƒ¼ã‚¸é¸æŠ
+	if (input->TriggerKey(DIK_1) || input->TriggerKey(DIK_2) || input->TriggerKey(DIK_3)) {
+		player_->Initialize(0.0f);
+		core_->Initialize(stageObject->scale.y);
+
+		if (input->TriggerKey(DIK_1)) {
+			wall_->SetStageNum(1);
+		}
+		else if (input->TriggerKey(DIK_2)) {
+			wall_->SetStageNum(2);
+		}
+		else if (input->TriggerKey(DIK_3)) {
+			wall_->SetStageNum(3);
+		}
+		wall_->SetBlock();
+	}
+
 	if (input->PushKey(DIK_UP)) {
 		viewProjection_.eye.y += 2.5f;
 		if (viewProjection_.eye.y > 50)
@@ -145,15 +170,15 @@ void GameScene::Update() {
 	viewProjection_.UpdateView();
 	switch (scene)
 	{
-	case 0:// ƒ^ƒCƒgƒ‹
+	case 0:// ã‚¿ã‚¤ãƒˆãƒ«
 		if (input->PushKey(DIK_SPACE)) {
 			scene = 1;
 		}
 		break;
-	case 1:// ƒQ[ƒ€ƒvƒŒƒC
-#pragma region ƒQ[ƒ€ƒvƒŒƒC
-		/*“–‚½‚è”»’èŠÖ˜A*/
-//ƒvƒŒƒCƒ„[‚ÌˆÊ’u‚ğ‚Æ‚é
+	case 1:// ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤
+#pragma region ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤
+		/*å½“ãŸã‚Šåˆ¤å®šé–¢é€£*/
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½ç½®ã‚’ã¨ã‚‹
 		XMFLOAT3 playerCollision =
 		{
 			player_->GetTransform()->matWorld.r[3].m128_f32[0],
@@ -177,7 +202,7 @@ void GameScene::Update() {
 
 		for (int i = 0; i < totalBlockNum; i++) {
 
-			//•ÇƒuƒƒbƒN‚ÌˆÊ’u‚ğ‚Æ‚é
+			//å£ãƒ–ãƒ­ãƒƒã‚¯ã®ä½ç½®ã‚’ã¨ã‚‹
 			wallCollisions[i] =
 			{
 				wall_->GetTransform()[i].matWorld.r[3].m128_f32[0],
@@ -185,7 +210,7 @@ void GameScene::Update() {
 				wall_->GetTransform()[i].matWorld.r[3].m128_f32[2],
 			};
 
-			//‘S‚Ä‚Ì•ÇƒuƒƒbƒN‚ÆƒvƒŒƒCƒ„[‚Ì“–‚½‚è”»’è‚ğ‚Æ‚é
+			//å…¨ã¦ã®å£ãƒ–ãƒ­ãƒƒã‚¯ã¨ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å½“ãŸã‚Šåˆ¤å®šã‚’ã¨ã‚‹
 			if (CheakCollision(
 				wallCollisions[i], playerCollision,
 				wall_->GetScale(), player_->GetScale())) {
@@ -205,7 +230,7 @@ void GameScene::Update() {
 				isHitCore[i] = 0;
 			}
 		}
-		//ƒS[ƒ‹‚ÆƒRƒA‚Ì“–‚½‚è”»’è
+		//ã‚´ãƒ¼ãƒ«ã¨ã‚³ã‚¢ã®å½“ãŸã‚Šåˆ¤å®š
 		if (CheakCollision(goalCollision, coreCollision,
 			goal_->GetScale(), core_->GetTransform()->scale)) {
 			isHitGoal = 1;
@@ -225,8 +250,8 @@ void GameScene::Update() {
 		}
 
 
-		/*ƒXƒe[ƒWŠÖ˜A*/
-		//” ‚Ì‰ñ“]
+		/*ã‚¹ãƒ†ãƒ¼ã‚¸é–¢é€£*/
+		//ç®±ã®å›è»¢
 		if (player_->GetPosition().x > stageObject->scale.x) {
 			stageObject->rotation = { 0.0f, 0.0f, radian };
 			isRotateZ = 1;
@@ -244,19 +269,17 @@ void GameScene::Update() {
 			isRotateX = 1;
 		}
 
-		//‰ñ“]’†
-		if (isRotateX || isRotateZ) {
-			core_->SetIsFall(1);
-			if (isRotateZ) {
-				stageObject->CreateMatRotZ(stageObject->rotation);
-				//core_->SetWorldTransform(worldTransform_);
-			}
-			else if (isRotateX) {
-				stageObject->CreateMatRotX(stageObject->rotation);
-				//core_->SetWorldTransform(worldTransform_);
-			}
+		//å›è»¢ä¸­
+	if (isRotateX || isRotateZ) {
+		core_->SetIsFall(1);
+		if (isRotateZ) {
+			stageObject->CreateMatRotZ(stageObject->rotation);
+		}
+		else if (isRotateX) {
+			stageObject->CreateMatRotX(stageObject->rotation);
+		}
 
-			//ƒXƒe[ƒW‰ñ“]AƒvƒŒƒCƒ„[‚àˆê‚É‰ñ“]‚·‚é
+			//ã‚¹ãƒ†ãƒ¼ã‚¸å›è»¢æ™‚ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚‚ä¸€ç·’ã«å›è»¢ã™ã‚‹
 			player_->Rotate(stageObject);
 			wall_->Rotate(stageObject);
 			core_->Rotate(stageObject);
@@ -270,21 +293,24 @@ void GameScene::Update() {
 				rotateTimer = 0;
 			}
 		}
-		//‰ñ“]Œã
-		else {
+		//å›è»¢å¾Œ
+	else {
+		if (core_->GetVelocity().y == 0) {
 			player_->Update(input, wall_->GetTransform(), isHitPlayer);
-			core_->Update(stageObject, isHitCore);
-			//core_->Update(worldTransform_,wall_->GetWorldTransform(), isHitCore);
 		}
+		core_->Update(stageObject,isHitCore);
+	}
 
-		////ˆêü‚µ‚½‚ç0‚É–ß‚·
-		//if (worldTransform_.rotation_.x >= PI * 2 || worldTransform_.rotation_.x <= -PI * 2) {
-		//	worldTransform_.rotation_.x = 0.0f;
-		//}
 
-		//if (worldTransform_.rotation_.z >= PI * 2 || worldTransform_.rotation_.z <= -PI * 2) {
-		//	worldTransform_.rotation_.z = 0.0f;
-		//}
+		//ä¸€å‘¨ã—ãŸã‚‰0ã«æˆ»ã™
+	if (stageObject->rotation.x >= PI * 2 || stageObject->rotation.x <= -PI * 2) {
+		stageObject->rotation.x = 0.0f;
+	}
+
+	if (stageObject->rotation.z >= PI * 2 || stageObject->rotation.z <= -PI * 2) {
+		stageObject->rotation.z = 0.0f;
+	}
+
 
 		//worldTransform_.TransferMatrix();
 #pragma endregion
@@ -292,7 +318,7 @@ void GameScene::Update() {
 			scene = 2;
 		}
 		break;
-	case 2:// ƒNƒŠƒA
+	case 2:// ã‚¯ãƒªã‚¢
 		if (input->PushKey(DIK_SPACE)) {
 			player_->Initialize(0.0f);
 			core_->Initialize(stageObject->scale.y);
@@ -302,23 +328,22 @@ void GameScene::Update() {
 		}
 		break;
 	}
-	
 }
 
 void GameScene::Draw() {
-	//•`‰æ‘Oˆ—
+	//æç”»å‰å‡¦ç†
 	dxCommon->PreDraw();
 
-	//3DƒIƒuƒWƒFƒNƒg•`‰æ‘Oˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å‰å‡¦ç†
 	Object3d::PreDraw(dxCommon->GetCommandList());
 	switch (scene)
 	{
-	case 0:// ƒ^ƒCƒgƒ‹
+	case 0:// ã‚¿ã‚¤ãƒˆãƒ«
 		taitleObject->Draw();
 		break;
-	case 1:// ƒQ[ƒ€ƒvƒŒƒC
-#pragma region ƒQ[ƒ€ƒvƒŒƒC
-		//3DƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
+	case 1:// ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤
+#pragma region ã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤
+		//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
 		stageObject->Draw();
 		//object3d2->Draw();
 		player_->Draw();
@@ -327,39 +352,39 @@ void GameScene::Draw() {
 		goal_->Draw();
 #pragma endregion
 		break;
-	case 2:// ƒNƒŠƒA
+	case 2:// ã‚¯ãƒªã‚¢
 		break;
 	}
 	
-	//3DƒIƒuƒWƒFƒNƒg•`‰æŒãˆ—
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæç”»å¾Œå‡¦ç†
 	Object3d::PostDraw();
 
-	//ƒXƒvƒ‰ƒCƒg•`‰æ‘Oˆ—
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å‰å‡¦ç†
 	spriteCommon->PreDraw();
 
-	////•`‰æƒRƒ}ƒ“ƒh‚±‚±‚©‚ç
+	////æç”»ã‚³ãƒãƒ³ãƒ‰ã“ã“ã‹ã‚‰
 	spriteCommon->Update(dxCommon);
-	//sprite->SetPosition(position);
-	sprite1->SetPosition({ 100.0f,100.0f });
+	sprite->SetPosition({ 50.0f,25.0f });
 	sprite->SetIndex(0);
-	sprite1->SetIndex(1);
+	sprite->SetSize({ 250.0f,125.0f });
+	//sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
 
-	//sprite->Draw(spriteCommon);
+	sprite->Draw(spriteCommon);
 	//sprite1->Draw(spriteCommon);
-	////•`‰æƒRƒ}ƒ“ƒh‚±‚±‚Ü‚Å
+	////æç”»ã‚³ãƒãƒ³ãƒ‰ã“ã“ã¾ã§
 
-	//ƒXƒvƒ‰ƒCƒg•`‰æŒãˆ—
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆæç”»å¾Œå‡¦ç†
 	spriteCommon->PostDraw();
 
 
 	dxCommon->PostDraw();
 
 
-	//DirectX–ˆƒtƒŒ[ƒ€ˆ— ‚±‚±‚Ü‚Å
+	//DirectXæ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç† ã“ã“ã¾ã§
 }
 
-//“–‚½‚è”»’è
+//å½“ãŸã‚Šåˆ¤å®š
 bool GameScene::CheakCollision(XMFLOAT3 posA, XMFLOAT3 posB, XMFLOAT3 sclA, XMFLOAT3 sclB) {
 
 	float a = 1.1f;
