@@ -57,8 +57,6 @@ void GameScene::Initialize() {
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
-	taitleObject->SetRotation({ 1.0f,50.0f,1.0f });
-	taitleObject->CreateMatRotY(taitleObject->rotation);
 	//ƒvƒŒƒCƒ„[‚Ì¶¬
 	player_ = new Player();
 	player_->Initialize(0.0f);
