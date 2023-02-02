@@ -176,7 +176,7 @@ void GameScene::Update() {
 		}
 		break;
 	case 1:// ゲームプレイ
-#pragma region ゲームプレイ
+
 		/*当たり判定関連*/
 //プレイヤーの位置をとる
 		XMFLOAT3 playerCollision =
@@ -313,7 +313,7 @@ void GameScene::Update() {
 
 
 		//worldTransform_.TransferMatrix();
-#pragma endregion
+
 		if (isHitGoal) {
 			scene = 2;
 		}
@@ -342,7 +342,7 @@ void GameScene::Draw() {
 		taitleObject->Draw();
 		break;
 	case 1:// ゲームプレイ
-#pragma region ゲームプレイ
+
 		//3Dオブジェクトの描画
 		stageObject->Draw();
 		//object3d2->Draw();
@@ -350,7 +350,7 @@ void GameScene::Draw() {
 		core_->Draw();
 		wall_->Draw();
 		goal_->Draw();
-#pragma endregion
+
 		break;
 	case 2:// クリア
 		break;
