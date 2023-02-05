@@ -23,6 +23,12 @@ void Wall::Initialize() {
 	SetBlock();
 }
 
+void Wall::Update() {
+	for (int i = 0; i < totalBlockNum; i++) {
+		wallObject[i].TransferMatrix();
+	}
+}
+
 void Wall::SetBlock() {
 	//マップチップ通りに壁ブロックを配置
 	int num = 0;

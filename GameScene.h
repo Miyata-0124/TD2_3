@@ -29,6 +29,11 @@ public:
 
 	WinApp* GetWinApp() { return winApp; }
 
+	//イージング
+	float easeOutSine(float n) {
+		return 1 - pow(1 - n, 2);
+	}
+
 private:
 	const float PI = 3.14159f;
 
@@ -71,4 +76,8 @@ private:
 	bool isHitCore[totalBlockNum] = { 0 };
 	bool isHitGoal = 0;
 	bool isFall = 1;
+	int cameraPosition = 0;
+
+	//最大フレーム数
+	const float MAX_FLAME = 0.1f;
 };

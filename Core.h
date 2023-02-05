@@ -14,6 +14,8 @@ public:
 
 	void Update(Object3d* obj,bool *collision);
 
+	void LeadUpdate();
+
 	void Draw();
 
 	void SetIsFall(bool fall) { isFall = fall; }

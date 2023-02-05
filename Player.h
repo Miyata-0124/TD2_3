@@ -15,7 +15,11 @@ public:
 
 	void Initialize(float y);
 
-	void Update(Input* input, Object3d* obj, bool* collision);
+	void Update(Input* input, Object3d* obj, bool* collision, int cmrpos);
+
+	void TransfarMatrix();
+
+	void Move(Object3d* obj, bool* collision, bool up, bool down, bool right, bool left);
 
 	void Draw();
 

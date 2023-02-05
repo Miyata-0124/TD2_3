@@ -12,6 +12,8 @@ public:
 
 	void Initialize();
 
+	void Update();
+
 	void SetBlock();
 
 	void Rotate(Object3d* obj);

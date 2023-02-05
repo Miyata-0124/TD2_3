@@ -45,6 +45,7 @@ void GameScene::Initialize() {
 	sprite1->Initialize(spriteCommon);
 
 	stageObject = Object3d::Create();
+	stageObject->Initialize();
 	taitleObject = Object3d::Create();
 	skydomeObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
@@ -72,7 +73,7 @@ void GameScene::Initialize() {
 	goal_->Initialize(stageObject->scale.y);
 	//壁ブロックの生成
 	wall_ = new Wall();
-	wall_->SetStageNum(2);
+	wall_->SetStageNum(1);
 	wall_->Initialize();
 
 	viewProjection_.Initialize();
@@ -131,24 +132,9 @@ void GameScene::Update() {
 		wall_->SetBlock();
 		goal_->Initialize(0.0f);
 	}
-	//ステージ選択
-	/*if (input->TriggerKey(DIK_1) || input->TriggerKey(DIK_2) || input->TriggerKey(DIK_3)) {
-		player_->Initialize(0.0f);
-		core_->Initialize(stageObject->scale.y);
+	
 
-		if (input->TriggerKey(DIK_1)) {
-			wall_->SetStageNum(1);
-		}
-		else if (input->TriggerKey(DIK_2)) {
-			wall_->SetStageNum(2);
-		}
-		else if (input->TriggerKey(DIK_3)) {
-			wall_->SetStageNum(3);
-		}
-		wall_->SetBlock();
-	}*/
-
-	if (input->PushKey(DIK_UP)) {
+	/*if (input->PushKey(DIK_UP)) {
 		viewProjection_.eye.y += 2.5f;
 		if (viewProjection_.eye.y > 50)
 		{
@@ -169,7 +155,8 @@ void GameScene::Update() {
 	if (input->PushKey(DIK_RIGHT)) {
 		viewProjection_.eye = { 50, 0, 0 };
 	}
-	viewProjection_.UpdateView();
+	viewProjection_.UpdateView();*/
+
 	switch (scene)
 	{
 	case 0:// タイトル
@@ -298,9 +285,11 @@ void GameScene::Update() {
 		//回転後
 	else {
 		if (core_->GetVelocity().y == 0) {
-			player_->Update(input, wall_->GetTransform(), isHitPlayer);
+			player_->Update(input, wall_->GetTransform(), isHitPlayer,cameraPosition);
 		}
 		core_->Update(stageObject,isHitCore);
+		wall_->Update();
+
 	}
 
 
@@ -314,12 +303,61 @@ void GameScene::Update() {
 	}
 
 
-		//worldTransform_.TransferMatrix();
+	//worldTransform_.TransferMatrix();
 
-		if (isHitGoal) {
-			scene = 2;
+	if (isHitGoal) {
+		scene = 2;
+	}
+	goal_->Update();
+	player_->TransfarMatrix();
+	stageObject->TransferMatrix();
+	skydomeObject->TransferMatrix();
+	core_->LeadUpdate();
+
+	//カメラ関係
+	if (input->TriggerKey(DIK_RIGHT)) {
+		cameraPosition++;
+		if (cameraPosition > 3) {
+			cameraPosition = 0;
 		}
-		break;
+	}
+	else if (input->TriggerKey(DIK_LEFT)) {
+		cameraPosition--;
+		if (cameraPosition < 0) {
+			cameraPosition = 3;
+		}
+	}
+	if (cameraPosition == 0) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x - 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z + 14.5f),
+		});
+	}
+	else if (cameraPosition == 1) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x - 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z - 14.5f),
+		});
+	}
+	else if (cameraPosition == 2) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x + 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z - 14.5f),
+			});
+	}
+	else if (cameraPosition == 3) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x + 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z + 14.5f),
+			});
+	}
+
+	break;
+
 	case 2:// クリア
 		if (input->PushKey(DIK_SPACE)) {
 			player_->Initialize(0.0f);
