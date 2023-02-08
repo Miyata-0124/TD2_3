@@ -224,7 +224,7 @@ public: // メンバ関数
 	void CreateMatRotY(XMFLOAT3& rot) {
 		XMMATRIX matrotY;
 		matrotY = XMMatrixIdentity();
-		matrotY *= XMMatrixRotationX(XMConvertToRadians(rot.y));
+		matrotY *= XMMatrixRotationY(XMConvertToRadians(rot.y));
     
 		matWorld *= matrotY;
 

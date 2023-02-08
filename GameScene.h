@@ -46,7 +46,10 @@ private:
 	SpriteCommon* spriteCommon = nullptr;
 
 	Sprite* sprite = new Sprite();
-	Sprite* sprite1 = new Sprite();
+	Sprite* serectAsprite = new Sprite();
+	Sprite* serectDsprite = new Sprite();
+	Sprite* stageSerectSprite = new Sprite();
+	Sprite* numberSprite = new Sprite();
 
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
@@ -77,6 +80,8 @@ private:
 	bool isHitGoal = 0;
 	bool isFall = 1;
 	int cameraPosition = 0;
+	int stageSerectNum = 1;
+	int titleTimer = 0;
 
 	//最大フレーム数
 	const float MAX_FLAME = 0.1f;
