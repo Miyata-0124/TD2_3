@@ -47,6 +47,7 @@ private:
 
 	Sprite* sprite = new Sprite();
 	Sprite* sprite1 = new Sprite();
+	Sprite* sprite2 = new Sprite();
 
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
