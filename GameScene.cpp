@@ -48,6 +48,10 @@ void GameScene::Initialize() {
 	spriteCommon->LoadTexture(7, "stageSerect.png");
 	spriteCommon->LoadTexture(8, "serectA.png");
 	spriteCommon->LoadTexture(9, "serectD.png");
+  
+  spriteCommon->LoadTexture(10, "rule.png");
+	spriteCommon->LoadTexture(11, "push.png");
+	spriteCommon->LoadTexture(12, "gameclear.png");
 
 	sprite->Initialize(spriteCommon);
 	sprite->SetIndex(0);
@@ -71,13 +75,20 @@ void GameScene::Initialize() {
 	serectDsprite->Initialize(spriteCommon);
 	serectDsprite->SetPosition({900,400});
 	serectDsprite->SetIndex(9);
+  	sprite->Initialize(spriteCommon);
+	sprite10->Initialize(spriteCommon);
+	sprite10->SetPosition({ 980.0f,25.0f });
+	sprite11->Initialize(spriteCommon);
+	sprite12->Initialize(spriteCommon);
+
 
 	stageObject = Object3d::Create();
 	stageObject->Initialize();
 	taitleObject = Object3d::Create();
+	clearObject = Object3d::Create();
 	skydomeObject = Object3d::Create();
-
-	model = Model::LoadFromOBJ("cube");
+  
+	model = Model::LoadFromOBJ("stage");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	model3 = Model::LoadFromOBJ("taitle");
 	skydomeModel = Model::LoadFromOBJ("skydome");
@@ -89,9 +100,13 @@ void GameScene::Initialize() {
 	//object3d2->SetModel(model2);
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
+  
 	taitleObject->SetScale({ 8.0f,8.0f,8.0f });
 	taitleObject->SetPosition({ 0.0f,5.0f,0.0f });
+
 	skydomeObject->SetScale({ 50.0f,50.0f,50.0f });
+	taitleObject->SetRotation({ 1.0f,1.0f,1.0f });
+	clearObject->SetRotation({ 1.0f,1.0f,1.0f });
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
@@ -109,6 +124,9 @@ void GameScene::Initialize() {
 	wall_->Initialize();
 
 	stageObject->Update();
+
+	taitleObject->Update();
+	clearObject->Update();
 	skydomeObject->Update();
 
 	taitleObject->Update();
@@ -130,11 +148,16 @@ void GameScene::Finalize() {
 	delete serectDsprite;
 	delete stageSerectSprite;
 	delete numberSprite;
+
+	delete sprite10;
+	delete sprite11;
+	delete sprite12;
 	delete spriteCommon;
 	//3Dオブジェクト解放
 	delete stageObject;
 	delete skydomeObject;
 	delete taitleObject;
+	delete clearObject;
 	//delete object3d2;
 	//3Dモデル解放
 	delete model;
@@ -162,6 +185,7 @@ void GameScene::Update() {
 	//入力の更新
 	input->Update();
 	
+
 	switch (scene)
 	{
 	case 0:// タイトル
@@ -172,7 +196,18 @@ void GameScene::Update() {
 			titleTimer = 0;
 			taitleObject->rotation.y *= -1;
 		}
-	
+    
+	//キー入力でリセット
+	if (input->TriggerKey(DIK_R) && isRotateX == false && isRotateZ == false) {
+		player_->Initialize(0.0f);
+		core_->Initialize(stageObject->scale.y);
+		wall_->SetBlock();
+    
+		goal_->Initialize(0.0f);
+		goal_->Initialize(stageObject->scale.y);
+
+	}
+  
 		taitleObject->CreateMatRotY(taitleObject->rotation);
 
 		//キー入力で次のシーンへ
@@ -181,7 +216,7 @@ void GameScene::Update() {
 		}
 	
 		break;
-
+    
 	case 1:
 				//カメラのイージング
 		Object3d::SetEye({
@@ -202,6 +237,7 @@ void GameScene::Update() {
 		if (titleTimer >= 450) {
 			titleTimer = 0;
 			taitleObject->rotation.y *= -1;
+
 		}
 
 		taitleObject->CreateMatRotY(taitleObject->rotation);
@@ -262,7 +298,6 @@ void GameScene::Update() {
 
 
 		break;
-
 	case 2:// ゲームプレイ
 
 		//キー入力でリセット
@@ -276,8 +311,34 @@ void GameScene::Update() {
 		//キー入力でタイトルに戻る
 		if (input->TriggerKey(DIK_T) && isRotateX == false && isRotateZ == false) {
 			scene = 1;
+
+#pragma region SpriteMove
+		if (input->TriggerKey(DIK_TAB) && isRule == true) {
+			isRule = false;
+		}
+		else if (input->TriggerKey(DIK_TAB) && isRule == false) {
+			isRule = true;
 		}
 
+		if (isRule == true)
+		{
+			sprite1->SetPosition({
+				sprite1->GetPosition().x - easeOutSine(Rule_FLAME) * (sprite1->GetPosition().x - 1025.0f),
+				sprite1->GetPosition().y - easeOutSine(Rule_FLAME) * (sprite1->GetPosition().y - 0.0f)
+				}
+			);
+		}
+		else if(isRule == false && sprite1->GetPosition().x <= 1250.0f)
+		{
+			sprite1->SetPosition({
+				sprite1->GetPosition().x + easeOutSine(Rule_FLAME) * (sprite1->GetPosition().x + 5.5f),
+				sprite1->GetPosition().y + easeOutSine(Rule_FLAME) * (sprite1->GetPosition().y + 0.0f)
+				}
+			);
+		}
+#pragma endregion
+
+#pragma region Collision
 		/*当たり判定関連*/
 //プレイヤーの位置をとる
 		XMFLOAT3 playerCollision =
@@ -350,6 +411,8 @@ void GameScene::Update() {
 			isHitPlayer[0] = 0;
 		}
 
+
+#pragma endregion
 
 		/*ステージ関連*/
 		//箱の回転
@@ -506,8 +569,9 @@ void GameScene::Draw() {
 		wall_->Draw();
 		goal_->Draw();
 		break;
-
+    
 	case 3:// クリア
+  clearObject->Draw();
 		break;
 	}
 	skydomeObject->Draw();
@@ -520,6 +584,19 @@ void GameScene::Draw() {
 
 	////描画コマンドここから
 	spriteCommon->Update(dxCommon);
+  sprite->SetPosition({ 50.0f,25.0f });
+	sprite->SetIndex(0);
+	sprite->SetSize({ 250.0f,125.0f });
+
+	sprite10->SetIndex(1);
+	sprite10->SetSize({ 250.0f,125.0f });
+	sprite11->SetPosition({ 980.0f,560.0f });
+	sprite11->SetIndex(2);
+	sprite11->SetSize({ 250.0f,125.0f });
+
+	sprite12->SetPosition({ 0,0 });
+	sprite12->SetIndex(3);
+	sprite12->SetSize({ 1280.0f, 720.0f });
 	//numberSprite->SetIndex(1);
 	switch (scene)
 	{
@@ -539,6 +616,8 @@ void GameScene::Draw() {
 		break;
 
 	case 1:
+  sprite11->Draw(spriteCommon);
+		sprite->Draw(spriteCommon);
 		//スプライトのイージング
 		stageSerectSprite->SetPosition({
 			400.0f,
@@ -564,12 +643,14 @@ void GameScene::Draw() {
 
 	case 2:
 
-
+	sprite10->Draw(spriteCommon);
 		sprite->Draw(spriteCommon);
 		break;
 
 	case 3:
-
+		
+		sprite12->Draw(spriteCommon);
+		sprite11->Draw(spriteCommon);
 		break;
 	}
 

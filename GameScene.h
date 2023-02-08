@@ -15,21 +15,21 @@ class GameScene
 {
 public:
 
-	//‰Šú‰»
+	//åˆæœŸåŒ–
 	void Initialize();
-	//I—¹
+	//çµ‚äº†
 	void Finalize();
-	//–ˆƒtƒŒ[ƒ€ˆ—
+	//æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å‡¦ç†
 	void Update();
-	//•`‰æ
+	//æç”»
 	void Draw();
 
-	//“–‚½‚è”»’è
+	//å½“ãŸã‚Šåˆ¤å®š
 	bool CheakCollision(XMFLOAT3 posA, XMFLOAT3 posB, XMFLOAT3 sclA, XMFLOAT3 sclB);
 
 	WinApp* GetWinApp() { return winApp; }
 
-	//ƒC[ƒWƒ“ƒO
+	//ã‚¤ãƒ¼ã‚¸ãƒ³ã‚°
 	float easeOutSine(float n) {
 		return 1 - pow(1 - n, 2);
 	}
@@ -37,12 +37,12 @@ public:
 private:
 	const float PI = 3.14159f;
 
-	//ƒ|ƒCƒ“ƒ^
+	//ãƒã‚¤ãƒ³ã‚¿
 	WinApp* winApp = nullptr;
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
 
-	//ƒXƒvƒ‰ƒCƒg‹¤’Ê•”‚Ìƒ|ƒCƒ“ƒ^
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆå…±é€šéƒ¨ã®ãƒã‚¤ãƒ³ã‚¿
 	SpriteCommon* spriteCommon = nullptr;
 
 	Sprite* sprite = new Sprite();
@@ -50,15 +50,19 @@ private:
 	Sprite* serectDsprite = new Sprite();
 	Sprite* stageSerectSprite = new Sprite();
 	Sprite* numberSprite = new Sprite();
+	Sprite* sprite10 = new Sprite();
+	Sprite* sprite11 = new Sprite();
+	Sprite* sprite12 = new Sprite();
 
-	//OBJ‚©‚çƒ‚ƒfƒ‹ƒf[ƒ^‚ğ“Ç‚İ‚Ş
+	//OBJã‹ã‚‰ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
 	Model* model = nullptr;
 	Model* model2 = nullptr;
 	Model* model3 = nullptr;
 	Model* skydomeModel = nullptr;
-	//3DƒIƒuƒWƒFƒNƒg¶¬
+	//3Dã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	Object3d* stageObject = nullptr;
 	Object3d* taitleObject = nullptr;
+	Object3d* clearObject = nullptr;
 	Object3d* skydomeObject = nullptr;
 	//Object3d* object3d2 = nullptr;
 	//WorldTransform worldTransform_;
@@ -83,6 +87,8 @@ private:
 	int stageSerectNum = 1;
 	int titleTimer = 0;
 
-	//Å‘åƒtƒŒ[ƒ€”
+	bool isRule = true;
+	//æœ€å¤§ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
 	const float MAX_FLAME = 0.1f;
+	const float Rule_FLAME = 0.1f;
 };
