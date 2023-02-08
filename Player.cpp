@@ -15,7 +15,7 @@ Player::~Player() {
 void Player::Initialize(float y) {
 
 	playerObject_->SetModel(playerModel_);
-	playerObject_->position = { 0.0f,12.0f,-3.0f };
+	playerObject_->position = { 0.0f,12.0f,7.0f };
 	playerObject_->SetPosition(playerObject_->position);
 	playerObject_->SetScale({ 1.0f,1.5f,1.0f });
 	playerObject_->Update();

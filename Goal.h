@@ -24,6 +24,7 @@ public:
 	Vector3 GetVelocity()const { return velocity_; }
 	/*void SetWorldTransform(WorldTransform worldTransform);*/
 	void SetIsFall(bool fall) { isFall = fall; }
+	void SetPosition(const XMFLOAT3& pos) { goalObject_->position = pos; }
 private:
 	static const int leadNum = 30;
 	//‘¬“x—p
