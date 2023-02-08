@@ -50,6 +50,9 @@ private:
 	Sprite* serectDsprite = new Sprite();
 	Sprite* stageSerectSprite = new Sprite();
 	Sprite* numberSprite = new Sprite();
+	Sprite* clearSprite = new Sprite();
+	Sprite* nextSprite = new Sprite();
+	Sprite* ruleSprite = new Sprite();
 
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
@@ -83,6 +86,9 @@ private:
 	int stageSerectNum = 1;
 	int titleTimer = 0;
 
+	bool isRule = true;
+
 	//最大フレーム数
 	const float MAX_FLAME = 0.1f;
+	const float Rule_FLAME = 0.1f;
 };

@@ -49,9 +49,32 @@ void GameScene::Initialize() {
 	spriteCommon->LoadTexture(8, "serectA.png");
 	spriteCommon->LoadTexture(9, "serectD.png");
 
+	//UI
+	spriteCommon->LoadTexture(10, "gameclear.png");
+	spriteCommon->LoadTexture(11, "push.png");
+	spriteCommon->LoadTexture(12, "rule.png");
+
 	sprite->Initialize(spriteCommon);
 	sprite->SetIndex(0);
 	sprite->SetSize({ 250.0f,125.0f });
+
+	//クリア時の画像
+	clearSprite->Initialize(spriteCommon);
+	clearSprite->SetSize({ 1280.0f, 720.0f });
+	clearSprite->SetPosition({ 0.0f,0.0f });
+	clearSprite->SetIndex(10);
+
+	//シーン切り替え誘導用画像
+	nextSprite->Initialize(spriteCommon);
+	nextSprite->SetPosition({500.0f,540.0f});
+	nextSprite->SetSize({ 250.0f,125.0f });
+	nextSprite->SetIndex(11);
+
+	//ルール表示用画像
+	ruleSprite->Initialize(spriteCommon);
+	ruleSprite->SetPosition({ 980.0f,25.0f });
+	ruleSprite->SetSize({ 250.0f,125.0f });
+	ruleSprite->SetIndex(12);
 
 	//ステージ選択の文字
 	stageSerectSprite->Initialize(spriteCommon);
@@ -77,7 +100,7 @@ void GameScene::Initialize() {
 	taitleObject = Object3d::Create();
 	skydomeObject = Object3d::Create();
 
-	model = Model::LoadFromOBJ("cube");
+	model = Model::LoadFromOBJ("stage");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	model3 = Model::LoadFromOBJ("taitle");
 	skydomeModel = Model::LoadFromOBJ("skydome");
@@ -280,6 +303,30 @@ void GameScene::Update() {
 		if (input->TriggerKey(DIK_T) && isRotateX == false && isRotateZ == false) {
 			scene = 1;
 		}
+#pragma region SpriteMove
+		if (input->TriggerKey(DIK_TAB) && isRule == true) {
+			isRule = false;
+		}
+		else if (input->TriggerKey(DIK_TAB) && isRule == false) {
+			isRule = true;
+		}
+		if (isRule == true)
+		{
+			ruleSprite->SetPosition({
+				ruleSprite->GetPosition().x - easeOutSine(Rule_FLAME) * (ruleSprite->GetPosition().x - 1025.0f),
+				ruleSprite->GetPosition().y - easeOutSine(Rule_FLAME) * (ruleSprite->GetPosition().y - 0.0f)
+				}
+			);
+		}
+		else if (isRule == false && ruleSprite->GetPosition().x <= 1250.0f)
+		{
+			ruleSprite->SetPosition({
+				ruleSprite->GetPosition().x + easeOutSine(Rule_FLAME) * (ruleSprite->GetPosition().x + 5.5f),
+				ruleSprite->GetPosition().y + easeOutSine(Rule_FLAME) * (ruleSprite->GetPosition().y + 0.0f)
+				}
+			);
+		}
+#pragma endregion
 
 		/*当たり判定関連*/
 //プレイヤーの位置をとる
@@ -539,6 +586,7 @@ void GameScene::Draw() {
 			stageSerectSprite->GetPosition().y + 200.0f,
 			});
 		numberSprite->Draw(spriteCommon);
+		nextSprite->Draw(spriteCommon);
 		break;
 
 	case 1:
@@ -567,12 +615,12 @@ void GameScene::Draw() {
 
 	case 2:
 
-
+		ruleSprite->Draw(spriteCommon);
 		sprite->Draw(spriteCommon);
 		break;
 
 	case 3:
-
+		clearSprite->Draw(spriteCommon);
 		break;
 	}
 
