@@ -51,7 +51,7 @@ void GameScene::Initialize() {
 	taitleObject = Object3d::Create();
 	skydomeObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
-	model = Model::LoadFromOBJ("cube");
+	model = Model::LoadFromOBJ("stage");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	model3 = Model::LoadFromOBJ("taitle");
 	skydomeModel = Model::LoadFromOBJ("skydome");
@@ -430,10 +430,19 @@ void GameScene::Draw() {
 	sprite2->SetSize({ 250.0f,125.0f });
 	//sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
-
-	sprite->Draw(spriteCommon);
-	sprite1->Draw(spriteCommon);
-	sprite2->Draw(spriteCommon);
+	switch (scene)
+	{
+	case 0:
+		sprite2->Draw(spriteCommon);
+		break;
+	case 1:
+		sprite->Draw(spriteCommon);
+		sprite1->Draw(spriteCommon);
+		break;
+	case 2:
+		break;
+	}
+	
 	//sprite1->Draw(spriteCommon);
 	////描画コマンドここまで
 
