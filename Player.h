@@ -8,14 +8,18 @@
 class Player
 {
 public:
-	/// <summary>
-	/// デストラクタ
-	/// </summary>
+
+	Player();
+
 	~Player();
 
 	void Initialize(float y);
 
-	void Update(Input* input, Object3d* obj, bool* collision);
+	void Update(Input* input, Object3d* obj, bool* collision, int cmrpos);
+
+	void TransfarMatrix();
+
+	void Move(Object3d* obj, bool* collision, bool up, bool down, bool right, bool left);
 
 	void Draw();
 
@@ -34,8 +38,8 @@ private:
 	//Input* input_ = nullptr;
 	//uint32_t textureHandle_ = 0;
 
-	Model* playerModel_ = Model::LoadFromOBJ("triangle_mat");
-	Object3d* playerObject_ = Object3d::Create();
+	Model* playerModel_ = nullptr;
+	Object3d* playerObject_ = nullptr;
 	//WorldTransform worldTransform_;
 	//ViewProjection viewProjection_;
 

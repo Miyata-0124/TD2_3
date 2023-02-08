@@ -6,11 +6,13 @@
 class Goal
 {
 public:
+	Goal();
+
 	~Goal();
 
 	void Initialize(float y);
 
-	void Update(int scene,bool isHit);
+	void Update();
 
 	void Draw();
 

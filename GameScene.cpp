@@ -45,18 +45,23 @@ void GameScene::Initialize() {
 	sprite1->Initialize(spriteCommon);
 
 	stageObject = Object3d::Create();
+	stageObject->Initialize();
 	taitleObject = Object3d::Create();
+	skydomeObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
 	model = Model::LoadFromOBJ("cube");
 	model2 = Model::LoadFromOBJ("triangle_mat");
 	model3 = Model::LoadFromOBJ("taitle");
+	skydomeModel = Model::LoadFromOBJ("skydome");
 	//オブジェクトにモデルをひもづける
 	stageObject->SetModel(model);
 	taitleObject->SetModel(model3);
+	skydomeObject->SetModel(skydomeModel);
 	//object3d2->SetModel(model2);
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
+	skydomeObject->SetScale({ 50.0f,50.0f,50.0f });
 	taitleObject->SetRotation({ 1.0f,1.0f,1.0f });
 	//プレイヤーの生成
 	player_ = new Player();
@@ -77,15 +82,9 @@ void GameScene::Initialize() {
 	viewProjection_.UpdateView();
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
-
 	taitleObject->Update();
+	skydomeObject->Update();
 
-	//worldTransform_.UpdateMatWorld();
-	//worldTransform_.Initialize();
-	//worldTransform_.scale_ = { 7.0f,7.0f,7.0f };
-	//worldTransform_.translation_ = { 0.0f,0.0f,0.0f };
-	//Affine::CreateAffine(worldTransform_);
-	//worldTransform_.UpdateMatWorld();
 }
 
 void GameScene::Finalize() {
@@ -98,11 +97,14 @@ void GameScene::Finalize() {
 	delete spriteCommon;
 	//3Dオブジェクト解放
 	delete stageObject;
+	delete skydomeObject;
 	delete taitleObject;
 	//delete object3d2;
 	//3Dモデル解放
 	delete model;
 	delete model2;
+	delete model3;
+	delete skydomeModel;
 	delete player_;
 	delete core_;
 	delete wall_;
@@ -129,26 +131,14 @@ void GameScene::Update() {
 		player_->Initialize(0.0f);
 		core_->Initialize(stageObject->scale.y);
 		wall_->SetBlock();
+    
+		goal_->Initialize(0.0f);
 		goal_->Initialize(stageObject->scale.y);
-	}
-	//ステージ選択
-	if (input->TriggerKey(DIK_1) || input->TriggerKey(DIK_2) || input->TriggerKey(DIK_3)) {
-		player_->Initialize(0.0f);
-		core_->Initialize(stageObject->scale.y);
 
-		if (input->TriggerKey(DIK_1)) {
-			wall_->SetStageNum(1);
-		}
-		else if (input->TriggerKey(DIK_2)) {
-			wall_->SetStageNum(2);
-		}
-		else if (input->TriggerKey(DIK_3)) {
-			wall_->SetStageNum(3);
-		}
-		wall_->SetBlock();
 	}
+	
 
-	if (input->PushKey(DIK_UP)) {
+	/*if (input->PushKey(DIK_UP)) {
 		viewProjection_.eye.y += 2.5f;
 		if (viewProjection_.eye.y > 50)
 		{
@@ -169,7 +159,8 @@ void GameScene::Update() {
 	if (input->PushKey(DIK_RIGHT)) {
 		viewProjection_.eye = { 50, 0, 0 };
 	}
-	viewProjection_.UpdateView();
+	viewProjection_.UpdateView();*/
+
 	switch (scene)
 	{
 	case 0:// タイトル
@@ -307,9 +298,11 @@ void GameScene::Update() {
 		//回転後
 	else {
 		if (core_->GetVelocity().y == 0) {
-			player_->Update(input, wall_->GetTransform(), isHitPlayer);
+			player_->Update(input, wall_->GetTransform(), isHitPlayer,cameraPosition);
 		}
 		core_->Update(stageObject,isHitCore);
+		wall_->Update();
+
 	}
 
 
@@ -323,12 +316,61 @@ void GameScene::Update() {
 	}
 
 
-		//worldTransform_.TransferMatrix();
+	//worldTransform_.TransferMatrix();
 
-		if (isHitGoal) {
-			scene = 2;
+	if (isHitGoal) {
+		scene = 2;
+	}
+	goal_->Update();
+	player_->TransfarMatrix();
+	stageObject->TransferMatrix();
+	skydomeObject->TransferMatrix();
+	core_->LeadUpdate();
+
+	//カメラ関係
+	if (input->TriggerKey(DIK_RIGHT)) {
+		cameraPosition++;
+		if (cameraPosition > 3) {
+			cameraPosition = 0;
 		}
-		break;
+	}
+	else if (input->TriggerKey(DIK_LEFT)) {
+		cameraPosition--;
+		if (cameraPosition < 0) {
+			cameraPosition = 3;
+		}
+	}
+	if (cameraPosition == 0) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x - 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z + 14.5f),
+		});
+	}
+	else if (cameraPosition == 1) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x - 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z - 14.5f),
+		});
+	}
+	else if (cameraPosition == 2) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x + 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z - 14.5f),
+			});
+	}
+	else if (cameraPosition == 3) {
+		Object3d::SetEye({
+	Object3d::GetEye().x - easeOutSine(MAX_FLAME) * (Object3d::GetEye().x + 14.5f),
+	Object3d::GetEye().y - easeOutSine(MAX_FLAME) * (Object3d::GetEye().y - 25.0f),
+	Object3d::GetEye().z - easeOutSine(MAX_FLAME) * (Object3d::GetEye().z + 14.5f),
+			});
+	}
+
+	break;
+
 	case 2:// クリア
 		if (input->PushKey(DIK_SPACE)) {
 			player_->Initialize(0.0f);
@@ -361,11 +403,11 @@ void GameScene::Draw() {
 		core_->Draw();
 		wall_->Draw();
 		goal_->Draw();
-
 		break;
 	case 2:// クリア
 		break;
 	}
+	skydomeObject->Draw();
 	
 	//3Dオブジェクト描画後処理
 	Object3d::PostDraw();

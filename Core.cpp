@@ -1,5 +1,12 @@
 #include "Core.h"
 #include "map.h"
+
+Core::Core() {
+	coreModel_ = Model::LoadFromOBJ("core");
+	leadModel_ = Model::LoadFromOBJ("Enemy");
+	coreObject_ = Object3d::Create();
+}
+
 Core::~Core() {
 	delete coreModel_;
 	delete leadModel_;
@@ -7,21 +14,12 @@ Core::~Core() {
 }
 void Core::Initialize(float y)
 {
-
-	coreModel_ = Model::LoadFromOBJ("Core");
-	coreObject_ = Object3d::Create();
 	coreObject_->SetModel(coreModel_);
 	coreObject_->position = { 0.0f,y+1.0f,0.0f };
 	coreObject_->SetPosition(coreObject_->position);
 	coreObject_->SetScale({ 1.0f,1.0f,1.0f });
 	coreObject_->Update();
-	/*textureHandle_ = TextureManager::Load("Core.png");
-	coreModel_ = Model::Create();*/
-	//worldTransform_.Initialize();
-	//worldTransform_.scale_ = { 0.5f,0.5f,0.5f };
-	//worldTransform_.translation_ = { 0.0f, y + worldTransform_.scale_.y, 0.0f };//{0.0,7.5,0.0}
-	/*Affine::CreateAffine(worldTransform_);
-	worldTransform_.TransferMatrix();*/
+
 	for (int i = 0; i < leadNum; i++) {
 		leadWorldTransformsX_[i].Initialize();
 		leadWorldTransformsY_[i].Initialize();
@@ -34,22 +32,6 @@ void Core::Initialize(float y)
 		leadWorldTransformsX_[i].SetModel(leadModel_);
 		leadWorldTransformsY_[i].SetModel(leadModel_);
 		leadWorldTransformsZ_[i].SetModel(leadModel_);
-		/*leadWorldTransformsX_[i % 30].position =
-		{
-			-leadNum / 6.0f + i,
-			coreObject_->matWorld.r[3].m128_f32[1],
-			coreObject_->matWorld.r[3].m128_f32[2]
-		};
-		leadWorldTransformsX_[(30 + i) % 60].position =
-		{
-			coreObject_->matWorld.r[3].m128_f32[0],
-			-leadNum / 6.0f + i,
-			coreObject_->matWorld.r[3].m128_f32[2]
-		};
-		if (i < leadNum / 3 * 1) {
-		}
-		if (i >= 30 && i < 60) {
-		}*/
 
 		leadWorldTransformsX_[i].position =
 		{
@@ -128,7 +110,7 @@ void Core::Update(Object3d* obj, bool *collision)
 			leadWorldTransformsX_[i].matWorld.r[3].m128_f32[1] = coreObject_->matWorld.r[3].m128_f32[1];
 			leadWorldTransformsX_[i].CreateMatTrans({ velocity_.x,velocity_.y,velocity_.z });
 			//leadWorldTransformsX_[i].CreateMatRotX(coreObject_->rotation);
-			//leadWorldTransformsX_[i].TransferMatrix();
+			leadWorldTransformsX_[i].TransferMatrix();
 		}
 		if ((leadWorldTransformsY_[0].matWorld.r[3].m128_f32[1] - leadWorldTransformsY_[10].matWorld.r[3].m128_f32[1]) < 2.0f &&
 			(leadWorldTransformsY_[0].matWorld.r[3].m128_f32[1] - leadWorldTransformsY_[10].matWorld.r[3].m128_f32[1]) > -2.0f) {
@@ -178,21 +160,11 @@ void Core::Rotate(Object3d* obj)
 			leadWorldTransformsZ_[i].TransferMatrix();
 	}
 }
-//void Core::SetWorldTransform(WorldTransform worldTransform)
-//{
-//	Affine::CreateMatRotZ(worldTransform_, worldTransform.rotation_);
-//	Affine::CreateMatRotX(worldTransform_, worldTransform.rotation_);
-//	worldTransform_.TransferMatrix();
-//
-//	for (int i = 0; i < leadNum; i++) {
-//		Affine::CreateMatRotZ(leadWorldTransformsX_[i], worldTransform.rotation_);
-//		Affine::CreateMatRotX(leadWorldTransformsX_[i], worldTransform.rotation_);
-//		leadWorldTransformsX_[i].TransferMatrix();
-//		Affine::CreateMatRotZ(leadWorldTransformsY_[i], worldTransform.rotation_);
-//		Affine::CreateMatRotX(leadWorldTransformsY_[i], worldTransform.rotation_);
-//		leadWorldTransformsY_[i].TransferMatrix();
-//		Affine::CreateMatRotZ(leadWorldTransformsZ_[i], worldTransform.rotation_);
-//		Affine::CreateMatRotX(leadWorldTransformsZ_[i], worldTransform.rotation_);
-//		leadWorldTransformsZ_[i].TransferMatrix();
-//	}
-//}
+
+void Core::LeadUpdate() {
+	for (int i = 0; i < leadNum; i++) {
+		leadWorldTransformsX_[i].TransferMatrix();
+		leadWorldTransformsY_[i].TransferMatrix();
+		leadWorldTransformsZ_[i].TransferMatrix();
+	}
+}

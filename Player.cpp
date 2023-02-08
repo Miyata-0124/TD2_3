@@ -2,6 +2,11 @@
 //#include "Affine.h"
 #include "map.h"
 
+Player::Player() {
+	playerModel_ = Model::LoadFromOBJ("triangle_mat");
+	playerObject_ = Object3d::Create();
+}
+
 Player::~Player() {
 	delete playerModel_;
 	delete playerObject_;
@@ -9,8 +14,6 @@ Player::~Player() {
 
 void Player::Initialize(float y) {
 
-	
-	//playerObject_ = Object3d::Create();
 	playerObject_->SetModel(playerModel_);
 	playerObject_->position = { 0.0f,12.0f,-3.0f };
 	playerObject_->SetPosition(playerObject_->position);
@@ -18,7 +21,11 @@ void Player::Initialize(float y) {
 	playerObject_->Update();
 }
 
-void Player::Update(Input* input, Object3d* obj, bool* collision) {
+void Player::TransfarMatrix() {
+	playerObject_->TransferMatrix();
+}
+
+void Player::Update(Input* input, Object3d* obj, bool* collision, int cmrpos) {
 
 	speedX = 0;
 	speedZ = 0;
@@ -38,7 +45,30 @@ void Player::Update(Input* input, Object3d* obj, bool* collision) {
 	}
 
 	//自機の移動
-	if (input->PushKey(DIK_A)) {
+	//カメラの向きによって移動方向を変える
+	if (cmrpos == 0) {
+		Move(obj, collision, input->PushKey(DIK_A), input->PushKey(DIK_D), input->PushKey(DIK_W), input->PushKey(DIK_S));
+	}
+	else if (cmrpos == 1) {
+		Move(obj, collision, input->PushKey(DIK_W), input->PushKey(DIK_S), input->PushKey(DIK_D), input->PushKey(DIK_A));
+	}
+	else if (cmrpos == 2) {
+		Move(obj, collision, input->PushKey(DIK_D), input->PushKey(DIK_A), input->PushKey(DIK_S), input->PushKey(DIK_W));
+	}
+	else if (cmrpos == 3) {
+		Move(obj, collision, input->PushKey(DIK_S), input->PushKey(DIK_W), input->PushKey(DIK_A), input->PushKey(DIK_D));
+	}
+
+	playerObject_->position.x += speedX;
+	playerObject_->position.z += speedZ;
+	playerObject_->position.y = 13.0f - scale;
+
+	playerObject_->SetScale({ scale,3.0f - scale,scale });
+	playerObject_->Update();
+}
+
+void Player::Move(Object3d* obj, bool* collision, bool left, bool right, bool up, bool down ) {
+	if (left) {
 
 		speedX = -MAX_SPEED;
 
@@ -48,15 +78,9 @@ void Player::Update(Input* input, Object3d* obj, bool* collision) {
 				speedX = 0;
 			}
 
-			//if (input->PushKey(DIK_W)) {
-			//	speedZ = MAX_SPEED;
-			//}
-			//else if (input->PushKey(DIK_S)) {
-			//	speedZ = -MAX_SPEED;
-			//}
 		}
 	}
-	if (input->PushKey(DIK_D)) {
+	if (right) {
 
 		speedX = MAX_SPEED;
 
@@ -67,7 +91,7 @@ void Player::Update(Input* input, Object3d* obj, bool* collision) {
 			}
 		}
 	}
-	if (input->PushKey(DIK_W)) {
+	if (up) {
 
 		speedZ = MAX_SPEED;
 
@@ -79,7 +103,7 @@ void Player::Update(Input* input, Object3d* obj, bool* collision) {
 		}
 
 	}
-	if (input->PushKey(DIK_S)) {
+	if (down) {
 
 		speedZ = -MAX_SPEED;
 
@@ -90,13 +114,8 @@ void Player::Update(Input* input, Object3d* obj, bool* collision) {
 			}
 		}
 	}
-	playerObject_->position.x += speedX;
-	playerObject_->position.z += speedZ;
-	playerObject_->position.y = 13.0f - scale;
-
-	playerObject_->SetScale({ scale,3.0f - scale,scale });
-	playerObject_->Update();
 }
+
 
 void Player::Draw() {
 	playerObject_->Draw();

@@ -1,5 +1,9 @@
 #include "Wall.h"
 
+Wall::Wall() {
+	model_ = Model::LoadFromOBJ("woodCube");
+}
+
 Wall::~Wall() {
 	delete model_;
 }
@@ -8,6 +12,7 @@ void Wall::Initialize() {
 
 	//全ワールド行列初期化
 	for (int i = 0; i < totalBlockNum; i++) {
+		
 		wallObject[i].Initialize();
 		wallObject[i].SetModel(model_);
 		wallObject[i].scale = { blockSize,blockSize,blockSize };
@@ -16,6 +21,12 @@ void Wall::Initialize() {
 	}
 
 	SetBlock();
+}
+
+void Wall::Update() {
+	for (int i = 0; i < totalBlockNum; i++) {
+		wallObject[i].TransferMatrix();
+	}
 }
 
 void Wall::SetBlock() {
@@ -32,14 +43,14 @@ void Wall::SetBlock() {
 				mapBehind[j][i] = map1Behind[j][i];
 				mapBottom[j][i] = map1Bottom[j][i];
 			}
-			//else if (stageNum == 2) {//ステージ2
-			//	mapTop[j][i] = map2Top[j][i];
-			//	mapRight[j][i] = map2Right[j][i];
-			//	mapLeft[j][i] = map2Left[j][i];
-			//	mapFront[j][i] = map2Front[j][i];
-			//	mapBehind[j][i] = map2Behind[j][i];
-			//	mapBottom[j][i] = map2Bottom[j][i];
-			//}
+			else if (stageNum == 2) {//ステージ2
+				mapTop[j][i] = map2Top[j][i];
+				mapRight[j][i] = map2Right[j][i];
+				mapLeft[j][i] = map2Left[j][i];
+				mapFront[j][i] = map2Front[j][i];
+				mapBehind[j][i] = map2Behind[j][i];
+				mapBottom[j][i] = map2Bottom[j][i];
+			}
 			//else if (stageNum == 3) {//ステージ3
 			//	mapTop[j][i] = map3Top[j][i];
 			//	mapRight[j][i] = map3Right[j][i];
