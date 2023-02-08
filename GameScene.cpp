@@ -39,7 +39,7 @@ void GameScene::Initialize() {
 
 	//テクスチャ読み込み
 	spriteCommon->LoadTexture(0, "text.png");
-	spriteCommon->LoadTexture(1, "mario.jpg");
+	spriteCommon->LoadTexture(1, "rule.png");
 
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
@@ -62,6 +62,7 @@ void GameScene::Initialize() {
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
 	skydomeObject->SetScale({ 50.0f,50.0f,50.0f });
+	taitleObject->SetRotation({ 1.0f,1.0f,1.0f });
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
@@ -130,7 +131,10 @@ void GameScene::Update() {
 		player_->Initialize(0.0f);
 		core_->Initialize(stageObject->scale.y);
 		wall_->SetBlock();
+    
 		goal_->Initialize(0.0f);
+		goal_->Initialize(stageObject->scale.y);
+
 	}
 	
 
@@ -160,12 +164,19 @@ void GameScene::Update() {
 	switch (scene)
 	{
 	case 0:// タイトル
+		taitleObject->CreateMatRotY(taitleObject->rotation);
 		if (input->PushKey(DIK_SPACE)) {
 			scene = 1;
 		}
 		break;
 	case 1:// ゲームプレイ
+#pragma region SpriteMove
+		if (input->PushKey(DIK_TAB)) {
 
+		}
+#pragma endregion
+
+#pragma region Collision
 		/*当たり判定関連*/
 //プレイヤーの位置をとる
 		XMFLOAT3 playerCollision =
@@ -238,6 +249,8 @@ void GameScene::Update() {
 			isHitPlayer[0] = 0;
 		}
 
+
+#pragma endregion
 
 		/*ステージ関連*/
 		//箱の回転
@@ -407,10 +420,14 @@ void GameScene::Draw() {
 	sprite->SetPosition({ 50.0f,25.0f });
 	sprite->SetIndex(0);
 	sprite->SetSize({ 250.0f,125.0f });
+	sprite1->SetPosition({ 980.0f,25.0f });
+	sprite1->SetIndex(1);
+	sprite1->SetSize({ 250.0f,125.0f });
 	//sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
 
 	sprite->Draw(spriteCommon);
+	sprite1->Draw(spriteCommon);
 	//sprite1->Draw(spriteCommon);
 	////描画コマンドここまで
 
