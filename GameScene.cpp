@@ -434,9 +434,10 @@ void GameScene::Draw() {
 	{
 	case 0:
 		sprite2->Draw(spriteCommon);
+		sprite->Draw(spriteCommon);
 		break;
 	case 1:
-		sprite->Draw(spriteCommon);
+		
 		sprite1->Draw(spriteCommon);
 		break;
 	case 2:
