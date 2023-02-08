@@ -59,6 +59,30 @@ void Wall::SetBlock() {
 				mapBehind[j][i] = map3Behind[j][i];
 				mapBottom[j][i] = map3Bottom[j][i];
 			}
+			else if (stageNum == 4) {//ステージ4
+				mapTop[j][i] = map4Top[j][i];
+				mapRight[j][i] = map4Right[j][i];
+				mapLeft[j][i] = map4Left[j][i];
+				mapFront[j][i] = map4Front[j][i];
+				mapBehind[j][i] = map4Behind[j][i];
+				mapBottom[j][i] = map4Bottom[j][i];
+			}
+			else if (stageNum == 5) {//ステージ5
+				mapTop[j][i] = map5Top[j][i];
+				mapRight[j][i] = map5Right[j][i];
+				mapLeft[j][i] = map5Left[j][i];
+				mapFront[j][i] = map5Front[j][i];
+				mapBehind[j][i] = map5Behind[j][i];
+				mapBottom[j][i] = map5Bottom[j][i];
+			}
+			else if (stageNum == 6) {//ステージ6
+				mapTop[j][i] = map6Top[j][i];
+				mapRight[j][i] = map6Right[j][i];
+				mapLeft[j][i] = map6Left[j][i];
+				mapFront[j][i] = map6Front[j][i];
+				mapBehind[j][i] = map6Behind[j][i];
+				mapBottom[j][i] = map6Bottom[j][i];
+			}
 
 			//上
 			if (mapTop[j][i] == 1) {
