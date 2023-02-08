@@ -44,6 +44,7 @@ void GameScene::Initialize() {
 
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
+	sprite1->SetPosition({ 980.0f,25.0f });
 	sprite2->Initialize(spriteCommon);
 
 	stageObject = Object3d::Create();
@@ -173,8 +174,28 @@ void GameScene::Update() {
 		break;
 	case 1:// ゲームプレイ
 #pragma region SpriteMove
-		if (input->PushKey(DIK_TAB)) {
+		if (input->TriggerKey(DIK_TAB) && isRule == true) {
+			isRule = false;
+		}
+		else if (input->TriggerKey(DIK_TAB) && isRule == false) {
+			isRule = true;
+		}
 
+		if (isRule == true)
+		{
+			sprite1->SetPosition({
+				sprite1->GetPosition().x - easeOutSine(Rule_FLAME) * (sprite1->GetPosition().x - 1025.0f),
+				sprite1->GetPosition().y - easeOutSine(Rule_FLAME) * (sprite1->GetPosition().y - 0.0f)
+				}
+			);
+		}
+		else if(isRule == false && sprite1->GetPosition().x<=1250.0f)
+		{
+			sprite1->SetPosition({
+				sprite1->GetPosition().x + easeOutSine(Rule_FLAME) * (sprite1->GetPosition().x + 5.5f),
+				sprite1->GetPosition().y + easeOutSine(Rule_FLAME) * (sprite1->GetPosition().y + 0.0f)
+				}
+			);
 		}
 #pragma endregion
 
@@ -422,7 +443,7 @@ void GameScene::Draw() {
 	sprite->SetPosition({ 50.0f,25.0f });
 	sprite->SetIndex(0);
 	sprite->SetSize({ 250.0f,125.0f });
-	sprite1->SetPosition({ 980.0f,25.0f });
+
 	sprite1->SetIndex(1);
 	sprite1->SetSize({ 250.0f,125.0f });
 	sprite2->SetPosition({ 980.0f,560.0f });

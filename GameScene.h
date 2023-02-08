@@ -79,6 +79,8 @@ private:
 	bool isFall = 1;
 	int cameraPosition = 0;
 
+	bool isRule;
 	//Å‘åƒtƒŒ[ƒ€”
 	const float MAX_FLAME = 0.1f;
+	const float Rule_FLAME = 0.1f;
 };
