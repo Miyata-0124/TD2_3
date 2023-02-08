@@ -1,7 +1,7 @@
 #include "Wall.h"
 
 Wall::Wall() {
-	model_ = Model::LoadFromOBJ("woodCube");
+	model_ = Model::LoadFromOBJ("wall");
 }
 
 Wall::~Wall() {
