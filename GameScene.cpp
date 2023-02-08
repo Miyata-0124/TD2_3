@@ -248,12 +248,18 @@ void GameScene::Update() {
 				goal_->SetPosition({ -8.0f,-1.0f,-11.5f });
 			}
 			else if (wall_->GetStageNum() == 3) {
-				goal_->SetPosition({ 8.0f,-11.5f,-8.0f });
+				goal_->SetPosition({ -8.5f,-1.0f,-11.5f });
+			}
+			else if (wall_->GetStageNum() == 4) {
+				goal_->SetPosition({ 11.0f,-9.0f,3.5f });
 			}
 			else if (wall_->GetStageNum() == 5) {
 				goal_->SetPosition({ 11.5f,-9.0f,3.0f });
 			}
+			else if (wall_->GetStageNum() == 6) {
+				goal_->SetPosition({ 8.0f,-11.5f,-8.0f });
 
+			}
 			goal_->Initialize(stageObject->scale.y);
 			Object3d::SetTarget({ 1.0f, 5.0f, -1.0f });
 			Object3d::SetEye({ 13.5f,15.0f,-25.5f });
