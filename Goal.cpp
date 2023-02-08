@@ -12,13 +12,11 @@ Goal::~Goal() {
 }
 void Goal::Initialize(float y)
 {
-	
 	goalObject_->SetModel(goalModel_);
-	goalObject_->position = { -7.0f,0.0f,-11.5f };
+	goalObject_->position = { 7.0f,-y - 1.5f,-8.0f };
 	goalObject_->SetPosition(goalObject_->position);
 	goalObject_->SetScale({ 1.0f,1.0f,1.0f });
 	goalObject_->Update();
-	
 }
 
 //void Goal::Update()

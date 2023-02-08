@@ -40,9 +40,11 @@ void GameScene::Initialize() {
 	//テクスチャ読み込み
 	spriteCommon->LoadTexture(0, "text.png");
 	spriteCommon->LoadTexture(1, "rule.png");
+	spriteCommon->LoadTexture(2, "push.png");
 
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
+	sprite2->Initialize(spriteCommon);
 
 	stageObject = Object3d::Create();
 	stageObject->Initialize();
@@ -423,11 +425,15 @@ void GameScene::Draw() {
 	sprite1->SetPosition({ 980.0f,25.0f });
 	sprite1->SetIndex(1);
 	sprite1->SetSize({ 250.0f,125.0f });
+	sprite2->SetPosition({ 980.0f,560.0f });
+	sprite2->SetIndex(2);
+	sprite2->SetSize({ 250.0f,125.0f });
 	//sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
 
 	sprite->Draw(spriteCommon);
 	sprite1->Draw(spriteCommon);
+	sprite2->Draw(spriteCommon);
 	//sprite1->Draw(spriteCommon);
 	////描画コマンドここまで
 
