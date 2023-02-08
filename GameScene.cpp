@@ -41,15 +41,18 @@ void GameScene::Initialize() {
 	spriteCommon->LoadTexture(0, "text.png");
 	spriteCommon->LoadTexture(1, "rule.png");
 	spriteCommon->LoadTexture(2, "push.png");
+	spriteCommon->LoadTexture(3, "gameclear.png");
 
 	sprite->Initialize(spriteCommon);
 	sprite1->Initialize(spriteCommon);
 	sprite1->SetPosition({ 980.0f,25.0f });
 	sprite2->Initialize(spriteCommon);
+	sprite3->Initialize(spriteCommon);
 
 	stageObject = Object3d::Create();
 	stageObject->Initialize();
 	taitleObject = Object3d::Create();
+	clearObject = Object3d::Create();
 	skydomeObject = Object3d::Create();
 	//object3d2 = Object3d::Create();
 	model = Model::LoadFromOBJ("stage");
@@ -64,8 +67,10 @@ void GameScene::Initialize() {
 
 	stageObject->SetScale({ 10.0f,10.0f,10.0f });
 	taitleObject->SetScale({ 10.0f,10.0f,10.0f });
+	clearObject->SetScale({ 10.0f,10.0f,10.0f });
 	skydomeObject->SetScale({ 50.0f,50.0f,50.0f });
 	taitleObject->SetRotation({ 1.0f,1.0f,1.0f });
+	clearObject->SetRotation({ 1.0f,1.0f,1.0f });
 	//プレイヤーの生成
 	player_ = new Player();
 	player_->Initialize(0.0f);
@@ -86,6 +91,7 @@ void GameScene::Initialize() {
 	//Affine::CreateAffine(worldTransform_);
 	stageObject->Update();
 	taitleObject->Update();
+	clearObject->Update();
 	skydomeObject->Update();
 
 }
@@ -97,11 +103,14 @@ void GameScene::Finalize() {
 	//スプライト解放
 	delete sprite;
 	delete sprite1;
+	delete sprite2;
+	delete sprite3;
 	delete spriteCommon;
 	//3Dオブジェクト解放
 	delete stageObject;
 	delete skydomeObject;
 	delete taitleObject;
+	delete clearObject;
 	//delete object3d2;
 	//3Dモデル解放
 	delete model;
@@ -173,6 +182,10 @@ void GameScene::Update() {
 		}
 		break;
 	case 1:// ゲームプレイ
+		if (input->TriggerKey(DIK_N))
+		{
+			scene = 2;
+		}
 #pragma region SpriteMove
 		if (input->TriggerKey(DIK_TAB) && isRule == true) {
 			isRule = false;
@@ -428,6 +441,7 @@ void GameScene::Draw() {
 		goal_->Draw();
 		break;
 	case 2:// クリア
+		clearObject->Draw();
 		break;
 	}
 	skydomeObject->Draw();
@@ -449,6 +463,10 @@ void GameScene::Draw() {
 	sprite2->SetPosition({ 980.0f,560.0f });
 	sprite2->SetIndex(2);
 	sprite2->SetSize({ 250.0f,125.0f });
+
+	sprite3->SetPosition({ 0,0 });
+	sprite3->SetIndex(3);
+	sprite3->SetSize({ 1280.0f, 720.0f });
 	//sprite1->SetIndex(1);
 	//sprite1->SetTextureSize({ 500.0f,450.0f });
 	switch (scene)
@@ -462,6 +480,9 @@ void GameScene::Draw() {
 		sprite1->Draw(spriteCommon);
 		break;
 	case 2:
+		
+		sprite3->Draw(spriteCommon);
+		sprite2->Draw(spriteCommon);
 		break;
 	}
 	

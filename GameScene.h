@@ -48,6 +48,7 @@ private:
 	Sprite* sprite = new Sprite();
 	Sprite* sprite1 = new Sprite();
 	Sprite* sprite2 = new Sprite();
+	Sprite* sprite3 = new Sprite();
 
 	//OBJからモデルデータを読み込む
 	Model* model = nullptr;
@@ -57,6 +58,7 @@ private:
 	//3Dオブジェクト生成
 	Object3d* stageObject = nullptr;
 	Object3d* taitleObject = nullptr;
+	Object3d* clearObject = nullptr;
 	Object3d* skydomeObject = nullptr;
 	//Object3d* object3d2 = nullptr;
 	//WorldTransform worldTransform_;
