@@ -189,7 +189,7 @@ void GameScene::Update() {
 				}
 			);
 		}
-		else if(isRule == false && sprite1->GetPosition().x<=1250.0f)
+		else if(isRule == false && sprite1->GetPosition().x <= 1250.0f)
 		{
 			sprite1->SetPosition({
 				sprite1->GetPosition().x + easeOutSine(Rule_FLAME) * (sprite1->GetPosition().x + 5.5f),
