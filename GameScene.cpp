@@ -227,6 +227,9 @@ void GameScene::Update() {
 			else if (wall_->GetStageNum() == 3) {
 				goal_->SetPosition({ 8.0f,-11.5f,-8.0f });
 			}
+			else if (wall_->GetStageNum() == 5) {
+				goal_->SetPosition({ 11.5f,-9.0f,3.0f });
+			}
 
 			goal_->Initialize(stageObject->scale.y);
 			Object3d::SetTarget({ 1.0f, 5.0f, -1.0f });
