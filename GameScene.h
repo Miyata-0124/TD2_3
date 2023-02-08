@@ -85,6 +85,8 @@ private:
 	int cameraPosition = 0;
 	int stageSerectNum = 1;
 	int titleTimer = 0;
+	int transparentTimer = 0;
+	int isTransparent = 0;
 
 	bool isRule = true;
 

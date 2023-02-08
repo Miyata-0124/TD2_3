@@ -586,6 +586,17 @@ void GameScene::Draw() {
 			stageSerectSprite->GetPosition().y + 200.0f,
 			});
 		numberSprite->Draw(spriteCommon);
+
+		transparentTimer++;
+		if (transparentTimer < 25) {
+			nextSprite->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
+		else if (transparentTimer >= 25 && transparentTimer < 50) {
+			nextSprite->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+		}
+		else if (transparentTimer > 50) {
+			transparentTimer = 0;
+		}
 		nextSprite->Draw(spriteCommon);
 		break;
 
