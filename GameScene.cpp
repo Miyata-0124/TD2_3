@@ -638,6 +638,17 @@ void GameScene::Draw() {
 
 	case 3:
 		clearSprite->Draw(spriteCommon);
+		transparentTimer++;
+		if (transparentTimer < 25) {
+			nextSprite->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+		}
+		else if (transparentTimer >= 25 && transparentTimer < 50) {
+			nextSprite->SetColor({ 1.0f,1.0f,1.0f,0.0f });
+		}
+		else if (transparentTimer > 50) {
+			transparentTimer = 0;
+		}
+		nextSprite->Draw(spriteCommon);
 		break;
 	}
 
